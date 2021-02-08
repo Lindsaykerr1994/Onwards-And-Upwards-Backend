@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="">
+    <h1>Welcome Back, Tony</h1>
+    <h2>Today is <span id="show-date"></span></h2>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+    <script>
+        $(document).ready(function(){
+            console.log("hello");
+        })
+    </script>
+{% endblock%}
