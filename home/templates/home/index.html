@@ -1,27 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+{% endblock %}
+
 {% block page_header %}
     <div class="container header-container">
         <div class="row">
             <div class="col">
-                
+
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
-<div class="">
-    <h1>Welcome Back, Tony</h1>
-    <h2>Today is <span id="show-date"></span></h2>
+<div class="body-container container-fluid">
+    <div class="welcome-container row my-3">
+        <div class="col">
+            <h1>Welcome Back, Tony</h1>
+            <h3>Today is <span id="show-date"></span></h3>
+        </div>
+    </div>
+    <div class="appointment-container row my-3">
+        <div class="col-12 mx-auto">
+            <h4 class="d-inline-block">Upcoming Appointments</h4>
+            <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+            <table class="table table-hover">
+                <thead>
+                    <th></th>
+                    <th>Ref. No.</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Activity</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        
+                    </tr>
+                </tbody>
+            </table>
+            <a href="{% url 'all_appointments' %}" class="float-right link-specs">View All</a>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block postloadjs %}
     <script>
-        $(document).ready(function(){
-            console.log("hello");
-        })
+        
+        function updateTime() {
+            var date = new Date;
+            var now = moment().format("dddd, MMM Do, YYYY, h:mm A");
+            $("#show-date").text(now);
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
     </script>
 {% endblock%}

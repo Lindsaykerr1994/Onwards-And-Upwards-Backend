@@ -2,5 +2,48 @@
 {% load static %}
 
 {% block content %}
-    <h1>Test</h1>
+    <div class="body-container container-fluid">
+        <div id="welcome-container" class="row">
+            <div class="col">
+                <h3 class="d-inline-block">All Appointments</h3>
+                <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right">
+                    <i class="fas fa-plus-circle"></i>
+                </a>
+            </div>
+        </div>
+        <div id="upcoming-appointments" class="row">
+            <div class="col">
+                <h4>Upcoming Appointments</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <th></th>
+                        <th>Ref. No.</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Activity</th>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="past-appointments" class="row">
+            <div class="col">
+                <h4>Past Appointments</h4>
+                <table class="table table-hover">
+                    <thead>
+                        <th></th>
+                        <th>Ref. No.</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Activity</th>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 {% endblock %}

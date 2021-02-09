@@ -1,0 +1,9 @@
+tbody {
+    max-height: 185px;
+}
+tr {
+    height: 37px !important;
+}
+td {
+    padding: 6px !important;
+}

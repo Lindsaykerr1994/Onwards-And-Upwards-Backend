@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="body-container container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>Add Appointment</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div id="new-app-form" class="col-11 mx-auto">
+                <form method="POST" class="onwards-form mx-auto">
+                    <div class="">
+                        <p>Client Details</p>
+                        <select>
+                            <!-- How to specificy a new client -->
+                            <option selected disabled>Select A Client</option>
+                        </select>
+                        <input type="text" id="id_client_first_name" name="first_name" placeholder="First Name">
+                        <input type="text" id="id_client_last_name" name="last_name" placeholder="Last Name">
+                        <input type="email" id="id_client_email" name="email" placeholder="Email Address">
+                        <input type="text" id="id_client_phone" name="phone" placeholder="Phone Number">
+                    </div>
+                    <div class="">
+                        <p>Appointment Details</p>
+                        <select>
+                            <option selected disabled>Select An Activity</option>
+                        </select>
+                        <select>
+                            <option selected disabled>Select A Course</option>
+                        </select>
+                        <p>Solo / Group</p>
+                        <p>Number Of Participants</p>
+                        <input type="text" id="id_date" name="date" placeholder="Select A Date">
+                        <input type="text" id="id_time" name="time" placeholder="Select A Time">
+                        <input type="text" id="id_location" name="location" placeholder="Select A Location">
+                        <input type="text" id="id_price" name="price" placeholder="Select A Price">
+                        <label for="override_price">Override Price?</label>
+                        <input type="checkbox" id="id_override_price" name="override_price">
+                        <input type="submit" class="d-block">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

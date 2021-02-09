@@ -1,0 +1,5 @@
+[{"pk":1,"model":"activities.activity","fields":{"name":"indoor bouldering","friendly_name":"Indoor Climbing - Bouldering"}},
+{"pk":2,"model":"activities.activity","fields":{"name":"indoor toproping","friendly_name":"Indoor Climbing - Top-Roping"}},
+{"pk":3,"model":"activities.activity","fields":{"name":"outdoor bouldering","friendly_name":"Outdoor Climbing - Bouldering"}},
+{"pk":4,"model":"activities.activity","fields":{"name":"outdoor bouldering","friendly_name":"Outdoor Climbing - Top-Roping"}},{"pk":5,"model":"activities.activity","fields":{"name":"kayaking","friendly_name":"Kayaking"}},
+{"pk":6,"model":"activities.activity","fields":{"name":"canoeing","friendly_name":"Canoeing"}},{"pk":7,"model":"activities.activity","fields":{"name":"hiking","friendly_name":"Hiking"}}]
