@@ -1,6 +1,6 @@
 from django.shortcuts import render
+from activities.models import Activity, Course
 
-# Create your views here.
 
 
 def all_appointments(request):
@@ -8,4 +8,10 @@ def all_appointments(request):
 
 
 def add_app(request):
-    return render(request, 'appointments/add_app.html')
+    activities = Activity.objects.all()
+    courses = Course.objects.all()
+    context = {
+        'activities': activities,
+        'courses': courses
+    }
+    return render(request, 'appointments/add_app.html', context)

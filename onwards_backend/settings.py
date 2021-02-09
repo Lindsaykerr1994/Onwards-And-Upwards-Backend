@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'home',
     'activities',
     'appointments',
+    'clients',
 ]
 
 MIDDLEWARE = [

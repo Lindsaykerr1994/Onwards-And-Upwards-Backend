@@ -30,9 +30,15 @@
                         <p>Appointment Details</p>
                         <select>
                             <option selected disabled>Select An Activity</option>
+                            {% for activity in activities %}
+                            <option value="{{ activity.pk }}">{{ activity.friendly_name }}</option>
+                            {% endfor %}
                         </select>
                         <select>
                             <option selected disabled>Select A Course</option>
+                            {% for course in courses %}
+                            <option data-activity="{{ course.activity.pk }}" value="{{ course.course_code }}">{{ course.friendly_name }}</option>
+                            {% endfor %}
                         </select>
                         <p>Solo / Group</p>
                         <p>Number Of Participants</p>
