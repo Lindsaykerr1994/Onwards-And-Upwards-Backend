@@ -68,7 +68,7 @@
                             {% if request.user.is_authenticated %}
                                 {% if request.user.is_superuser %}
                                     <a href="{% url 'all_appointments' %}" class="dropdown-item">Appointments</a>
-                                    <a href="" class="dropdown-item">Clients</a>
+                                    <a href="{% url 'all_clients' %}" class="dropdown-item">Clients</a>
                                 {% endif %}
                                 <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
                             {% else %}

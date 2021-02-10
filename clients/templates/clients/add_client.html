@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+    <div class="body-container container-fluid">
+        <div class="row">
+            <div class="col">
+                Add Client
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block postloadjs %}
+    <script>
+        $(document).ready(function(){
+            console.log("hello");
+        })
+    </script>
+{% endblock %} 
