@@ -7,8 +7,28 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div class="row">
-            <div class="col">
-                All Clients
+            <div class="col mx-auto">
+                <h3 class="d-inline-block">All Clients</h3>
+                <a href="{% url 'add_client' %}" id="new-client-btn" class="d-inline-block float-right">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col mx-auto">
+                <table class="table table-hover">
+                    <thead>
+                        <th></th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Email Add.</th>
+                        <th>Phone No.</th>
+                        <th>Next Appt.</th>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

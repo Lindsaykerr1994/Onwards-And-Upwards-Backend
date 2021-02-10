@@ -26,8 +26,11 @@
     <div class="appointment-container row my-3">
         <div class="col-12 mx-auto">
             <h4 class="d-inline-block">Upcoming Appointments</h4>
+            <a href="{% url 'add_client' %}" id="new-client-btn" class="d-inline-block float-right">
+                <i class="fas fa-user-plus"></i>
+            </a>
             <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right">
-                <i class="fas fa-plus-circle"></i>
+                <i class="fas fa-calendar-plus"></i>
             </a>
             <table class="table table-hover">
                 <thead>

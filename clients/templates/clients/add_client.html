@@ -2,13 +2,24 @@
 {% load static %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
 {% block content %}
     <div class="body-container container-fluid">
         <div class="row">
-            <div class="col">
-                Add Client
+            <div class="col-10 mx-auto">
+                <h3>Add Client</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div id="new-client-form" class="col-11 mx-auto">
+                <form method="POST" class="onwards-form mx-auto">
+                    <input type="text" id="id_first_name" name="first_name" placeholder="First Name">
+                    <input type="text" id="id_last_name" name="last_name" placeholder="Last Name">
+                    <input type="email" id="id_email_address" name="email" placeholder="Email Address">
+                    <input type="text" id="id_phone_number" name="phone_number" placeholder="Phone Number">
+                </form>
             </div>
         </div>
     </div>

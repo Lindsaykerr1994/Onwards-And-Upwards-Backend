@@ -24,7 +24,7 @@ body {
 .appointment-container h4 {
     width: fit-content;
 }
-#new-appt-btn {
+#new-appt-btn, #new-client-btn {
     margin-right: 15px;
     font-size: 24px;
     color: #000;
