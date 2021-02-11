@@ -6,11 +6,99 @@
 
 {% block content %}
     <div class="body-container container-fluid">
-        <div class="row">
+        <div class="header-container row">
             <div class="col">
-                View Client
+                <h3>View Client</h3>
+                <h4>{{ client.last_name }}, {{ client.first_name }}</h4>
             </div>
         </div>
+        <div id="view-client-container" class="row">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6">
+                        <p>Full Name:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ client.first_name }} {{ client.last_name }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Email Address:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            {% if client.email_address %}
+                            {{ client.email_address }}
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Phone Number:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            {% if client.phone_number %}
+                            {{ client.phone_number }}
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Address:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            {% if client.street_address1 %}
+                            {{ client.street_address1 }}
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </p>
+                        {% if client.street_address2 %}
+                        <p>{{ client.street_address2 }}</p>
+                        {% endif %}
+                        {% if client.postcode %}
+                        <p>{{ client.postcode }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Additional Information:
+                        </div>
+                        <div class="col-6">
+                            {% if client.additional_info %}
+                                {{ client.additional_info }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Root Of Inquiry
+                        </div>
+                        <div class="col-6">
+                            {{ client.root_of_inquiry }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Risk Acknowledgement Forms
+                        </div>
+                        <!-- Risk Acknowledgement Forms Go Here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div if="edit-client-container" class="row"></div>
     </div>
 {% endblock %}
 

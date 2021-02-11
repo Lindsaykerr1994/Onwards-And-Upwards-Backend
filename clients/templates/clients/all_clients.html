@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tables.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -26,7 +27,32 @@
                         <th>Next Appt.</th>
                     </thead>
                     <tbody>
-                        
+                        {% for client in clients %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'view_client' client.pk %}">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </td>
+                            <td>{{ client.last_name }}</td>
+                            <td>{{ client.first_name }}</td>
+                            {% if client.email_address %}
+                            <td>{{ client.email_address }}</td>
+                            {% else %}
+                            <td>N/A</td>
+                            {% endif %}
+                            {% if client.phone_number %}
+                            <td>{{ client.phone_number }}</td>
+                            {% else %}
+                            <td>N/A</td>
+                            {% endif %}
+                            {% if client.next_appt %}
+                            <td>{{ client.next_appt }}</td>
+                            {% else %}
+                            <td>N/A</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

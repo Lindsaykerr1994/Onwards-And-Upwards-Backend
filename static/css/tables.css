@@ -7,3 +7,6 @@ tr {
 td {
     padding: 6px !important;
 }
+td a {
+    color: #000 !important;
+}

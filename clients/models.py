@@ -10,7 +10,8 @@ class Client(models.Model):
     street_address2 = models.CharField(max_length=254, null=True, blank=True)
     postcode = models.CharField(max_length=10, null=True, blank=True)
     additional_info = models.TextField(null=True, blank=True)
-    root_of_inquiry = models.CharField(max_length=254, null=True, blank=True)
+    root_of_inquiry = models.CharField(max_length=254, null=False, blank=False,
+                                       default="Other")
 
     def __str__(self):
         return (self.last_name + ", " + self.first_name)
