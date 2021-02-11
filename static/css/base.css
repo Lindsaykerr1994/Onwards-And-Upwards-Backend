@@ -37,6 +37,9 @@ body {
     color: #000;
     text-decoration: none;
 }
+.text-black {
+    color: #000 !important;
+}
 @media (min-width: 1200px) {
   .container {
     max-width: 80%;
