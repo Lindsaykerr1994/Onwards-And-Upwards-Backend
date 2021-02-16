@@ -2,18 +2,23 @@
 {% load static %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/forms.css' %}"
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
 {% block content %}
     <div class="body-container container-fluid">
         <div class="header-container row">
-            <div class="col">
+            <div class="col-11">
                 <h3>View Client</h3>
                 <h4>{{ client.last_name }}, {{ client.first_name }}</h4>
             </div>
+            <div class="col-1">
+                <a href="{% url 'edit_client' client.id %}">
+                    <i class="fas fa-user-edit"></i>
+                </a>
+            </div>
         </div>
-        <div id="view-client-container" class="row d-none">
+        <div id="view-client-container" class="row">
             <div class="col-10 mx-auto">
                 <div class="row">
                     <div class="col-6">
@@ -100,59 +105,6 @@
                     </div>
                     <!-- Risk Acknowledgement Forms Go Here -->
                 </div>
-            </div>
-        </div>
-        <div id="edit-client-container" class="row">
-            <div class="col-10 mx-auto">
-                <form method="POST" class="onwards-form small-form">
-                    <div class="row">
-                        <div class="col-6">
-                            <p>Full Name:</p>
-                        </div>
-                        <div id="name-form-container" class="col-6">
-                            <input type="text" name="
-                            first_name" id="id_first_name" placeholder="First Name" value="{{ client.first_name }}">
-                            <input type="text" name="last_name" id="id_last_name" placeholder="Last Name" value="{{ client.last_name }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <p>Email Address:</p>
-                        </div>
-                        <div class="col-6">
-                            <input type="email" name="email_address" id="id_email_address" placeholder="Email Address" {% if client.email_address %} value="{{ client.email_address }}" {% endif %}>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <p>Phone Number:</p>
-                        </div>
-                        <div class="col-6">
-                            <input type="text" name="phone_number" id="id_phone_number" placeholder="Phone Number" {% if client.phone_number %} value="{{ client.phone_number }}" {% endif %}>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <p>Address:</p>
-                        </div>
-                        <div class="col-6">
-                            <input type="text" name="street_address1" id="id_street_address1" placeholder="Address Line 1" {% if client.street_address1 %} value="{{ client.street_address1 }}" {% endif %}>
-                            <input type="text" name="street_address2" id="id_street_address2" placeholder="Address Line 2" {% if client.street_address2 %} value="{{ client.street_address2 }}" {% endif %}>
-                            <input type="text" name="town_or_city" id="id_town_or_city" placeholder="Town Or City" {% if client.town_or_city %} value="{{ client.town_or_city }}" {% endif %}>
-                            <input type="text" name="postcode" id="id_postcode" placeholder="Postcode" {% if client.postcode %} value="{{ client.postcode }}" {% endif %}>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">Additional Information:</div>
-                        <div class="col-6">
-                            <textarea name="additional_info" id="id_additional_info" value="{{ client.additional_notes }}"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">Risk Acknowledgement Forms</div>
-                        <div class="col-6"></div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

@@ -44,7 +44,7 @@
                     <tr>
                         <!-- Limit To Next 5 or 10 Appointments 
                             {% for appointment in appointment %}
-                                {% if forloop.counter => 5 %}
+                                {% if forloop.counter >= 5 %}
                                     <tr></tr>
                                 {% endif %}
                             {% endfor %}

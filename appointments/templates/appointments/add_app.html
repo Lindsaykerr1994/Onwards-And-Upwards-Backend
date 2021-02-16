@@ -33,20 +33,22 @@
                     </div>
                     <div class="">
                         <p>Appointment Details</p>
-                        <select>
+                        <select id="id_activity_select">
                             <option selected disabled>Select An Activity</option>
                             {% for activity in activities %}
-                            <option value="{{ activity.pk }}">{{ activity.friendly_name }}</option>
+                            <option  value="{{ activity.pk }}">{{ activity.friendly_name }}</option>
                             {% endfor %}
                         </select>
-                        <select>
-                            <option selected disabled>Select A Course</option>
+                        <select id="id_course">
+                            <option selected disabled value="0">Select A Course</option>
                             {% for course in courses %}
-                            <option data-activity="{{ course.activity.pk }}" value="{{ course.course_code }}">{{ course.friendly_name }}</option>
+                                <option data-activity="{{ course.activity.pk }}" data-solo="{{ course.solo }}" value="{{ course.course_code }}">{{ course.friendly_name }} {% if course.solo %} {% endif %}</option>
                             {% endfor %}
                         </select>
-                        <p>Solo / Group</p>
-                        <p>Number Of Participants</p>
+                        <label for="id_solo">Solo/ Group
+                            <input type="checkbox" id="id_solo" name="solo" checked="true">
+                        </label>
+                        <input type="number" id="id_number_participants" name="number_participants" placeholder="Number Of Participants">
                         <input type="text" id="id_date" name="date" placeholder="Select A Date">
                         <input type="text" id="id_time" name="time" placeholder="Select A Time">
                         <input type="text" id="id_location" name="location" placeholder="Select A Location">
@@ -75,6 +77,40 @@
             $("#id_client_email").val(emailAdd);
             var phoneNum = clientOpt. attr("data-phone");
             $("#id_client_phone").val(phoneNum)
+        })
+        $("#id_activity_select").change(function(){
+            var activity = $("#id_activity_select").val();
+            $("#id_course option").addClass("d-none");
+            if($("#id_solo").attr("checked",true)){
+                options = $(`#id_course option[data-activity="${activity}"][data-solo="True"]`);
+                
+            } else {
+                options = $(`#id_course option[data-activity="${activity}"][data-solo="False"]`);
+            }
+            options.removeClass("d-none");
+            if($("#id_course").val()!==null){
+                $("#id_course").val("0");
+            }      
+        });
+        $("#id_solo").change(function(){
+            if($("#id_course").val()!==null){
+                var course = $("#id_course").val();
+                var option = $(`#id_course option:selected`);
+                var optionText = $(option).text();
+                var solo = $(option).attr("data-solo");
+                if(solo==="True"){
+                    solo = "False";
+                } else {
+                    solo = "True";
+                }
+                var activity =  $(option).attr("data-activity");
+                var altOption = $(`#id_course option[data-activity=${activity}][data-solo="${solo}"]`).filter(function () { return $(this).html() == optionText; });
+                var altOptionVal = altOption.val();
+                $("#id_course").val(altOptionVal);
+                $("#id_course option").addClass("d-none");
+                $(`#id_course option[data-activity=${activity}][data-solo=${solo}]`).removeClass("d-none");
+
+            }
         })
     </script>
 {% endblock %}

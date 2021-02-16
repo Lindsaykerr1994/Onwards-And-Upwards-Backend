@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="body-container container-fluid">
+        <div class="header-container row">
+            <div class="col">
+                <h3>Editing Client</h3>
+                <h4>{{ client.last_name }}, {{ client.first_name }}</h4>
+            </div>
+        </div>
+        <div id="edit-client-container" class="row">
+            <div class="col-10 mx-auto">
+                <form method="POST" class="onwards-form small-form"  action="{% url 'edit_client' client.pk %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    {{ field }}
+                    {% endfor %}
+                    <input type="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block postloadjs %}
+{% endblock %}
