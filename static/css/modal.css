@@ -1,0 +1,10 @@
+.modal{
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: calc(50vw - 200px);
+    height: auto;
+    width: 400px;
+    background-color: red;
+    color: white;
+}

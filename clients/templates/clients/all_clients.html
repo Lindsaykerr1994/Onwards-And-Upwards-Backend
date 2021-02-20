@@ -3,6 +3,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +11,7 @@
         <div class="row">
             <div class="col mx-auto">
                 <h3 class="d-inline-block">All Clients</h3>
-                <a href="{% url 'add_client' %}" id="new-client-btn" class="d-inline-block float-right">
+                <a href="{% url 'add_client' %}" class="d-inline-block float-right icon-btn">
                     <i class="fas fa-user-plus"></i>
                 </a>
             </div>
@@ -25,6 +26,7 @@
                         <th>Email Add.</th>
                         <th>Phone No.</th>
                         <th>Next Appt.</th>
+                        <th>Delete?</th>
                     </thead>
                     <tbody>
                         {% for client in clients %}
@@ -50,6 +52,9 @@
                             <td>{{ client.next_appt }}</td>
                             {% else %}
                             <td>N/A</td>
+                            <td data-clientid="{{ client.pk }}" class="delete-btn text-danger">
+                                <i class="fas fa-trash"></i>
+                            </td>
                             {% endif %}
                         </tr>
                         {% endfor %}
@@ -58,12 +63,35 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="delete-modal">
+        <p>Are you sure you wish to delete this client?</p>
+        <p>Last Name, First Name</p>
+        <button>Cancel</button>
+        <button class="confirm-delete-btn">Confirm</button>
+    </div>
 {% endblock %}
 
 {% block postloadjs %}
     <script>
-        $(document).ready(function(){
-            console.log("hello");
+        $(".delete-btn").click(function(){
+            var clientId = $(this).attr("data-clientid");
+            console.log(clientId);
+            currentURL = window.location.href;
+            newUrl = `${currentURL}delete_client/${clientId}`;
+            var modal = document.getElementById("delete-modal");
+            console.log(modal);
+            modal.style.display = "block";
+            $(".confirm-delete-btn").click(function(){
+                window.location = newUrl;
+            });
+            /* When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+            modal.style.display = "none";
+            } 
+
+            // When the user clicks anywhere outside of the modal, close it
+            
+            } */
         })
     </script>
 {% endblock %} 

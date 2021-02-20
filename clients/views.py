@@ -25,7 +25,8 @@ def view_client(request, client_id):
         return redirect(reverse('home'))
     client = get_object_or_404(Client, pk=client_id)
     context = {
-        'client': client
+        'client': client,
+        'root_of_inquiry': client.get_root_of_inquiry_display()
     }
     return render(request, 'clients/view_client.html', context)
 
@@ -35,9 +36,19 @@ def add_client(request):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
-    if request.GET:
-        print("Add client functionality")
+    if request.method == "POST":
+        form = ClientForm(request.POST)
+        if form.is_valid():
+            client = form.save()
+            messages.success(request, 'Successfully added client')
+            return redirect(reverse('view_client', args=[client.id]))
+        else:
+            messages.error(request,
+                           ('Please check that form is valid'))
+    else:
+        form = ClientForm()
     context = {
+        "form": form
     }
     return render(request, 'clients/add_client.html', context)
 
@@ -65,3 +76,15 @@ def edit_client(request, client_id):
         "client": client
     }
     return render(request, template, context)
+
+
+@login_required
+def delete_client(request, client_id):
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+
+    client = get_object_or_404(Client, pk=client_id)
+    client.delete()
+    messages.success(request, 'Client deleted!')
+    return redirect(reverse('all_clients'))

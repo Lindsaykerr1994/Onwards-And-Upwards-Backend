@@ -8,14 +8,22 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div class="header-container row">
-            <div class="col-11">
-                <h3>View Client</h3>
-                <h4>{{ client.last_name }}, {{ client.first_name }}</h4>
-            </div>
-            <div class="col-1">
-                <a href="{% url 'edit_client' client.id %}">
-                    <i class="fas fa-user-edit"></i>
-                </a>
+            <div class="col">
+                <div class="row">
+                    <div class="col-11">
+                        <h3><a href="{% url 'all_clients' %}">All Clients</a><i class="fas fa-chevron-right"></i>View Client</h3>
+                    </div>
+                    <div class="col-1 d-flex align-items-center text-center">
+                        <a href="{% url 'edit_client' client.id %}" class="icon-btn">
+                            <i class="fas fa-user-edit"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h4>{{ client.last_name }}, {{ client.first_name }}</h4>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="view-client-container" class="row">
@@ -96,7 +104,7 @@
                         <p>Root Of Inquiry</p>
                     </div>
                     <div class="col-6">
-                        <p>{{ client.root_of_inquiry }}</p>
+                        <p>{{ root_of_inquiry }}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -111,4 +119,9 @@
 {% endblock %}
 
 {% block postloadjs %}
+    <script>
+        $(document).ready(function(){
+            console.log("hey")
+        })
+    </script>
 {% endblock %}
