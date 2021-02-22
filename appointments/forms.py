@@ -16,6 +16,7 @@ class AppointmentForm(forms.ModelForm):
             'client': 'Client',
             'appointment_date': 'Date',
             'appointment_time': 'Time',
+            'appointment_participants': 'Number Of Participants',
             'appointment_location': 'Location',
             'appointment_price': 'Price'
         }

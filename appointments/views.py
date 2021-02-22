@@ -33,13 +33,15 @@ def add_app(request):
     if request.method == "POST":
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            client = form.save()
+            appointment = form.save()
             messages.success(request, 'Successfully added client')
-            return redirect(reverse('view_appointment', args=[client.id]))
+            return redirect(reverse('view_appointment',
+                                    args=[appointment.appointment_number]))
         else:
             messages.error(request,
                            ('Please check that form is valid'))
     else:
+        form = AppointmentForm()
         activities = Activity.objects.all()
         courses = Course.objects.all()
         clients = Client.objects.all()
@@ -47,6 +49,7 @@ def add_app(request):
         'activities': activities,
         'courses': courses,
         'clients': clients,
+        'form': form
     }
     return render(request, 'appointments/add_app.html', context)
 
