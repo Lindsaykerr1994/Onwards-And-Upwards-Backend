@@ -32,25 +32,32 @@ def add_app(request):
         return redirect(reverse('home'))
     if request.method == "POST":
         form = AppointmentForm(request.POST)
+        clientNum = request.POST.get('client_select')
+        if clientNum is None:
+            print("no client selected")
         if form.is_valid():
-            appointment = form.save()
+            print("form is valid")
+            """appointment = form.save()
             messages.success(request, 'Successfully added client')
             return redirect(reverse('view_appointment',
-                                    args=[appointment.appointment_number]))
+                                    args=[appointment.appointment_number]))"""
         else:
             messages.error(request,
                            ('Please check that form is valid'))
+        context = {
+            'form': form
+        }
     else:
         form = AppointmentForm()
         activities = Activity.objects.all()
         courses = Course.objects.all()
         clients = Client.objects.all()
-    context = {
-        'activities': activities,
-        'courses': courses,
-        'clients': clients,
-        'form': form
-    }
+        context = {
+            'activities': activities,
+            'courses': courses,
+            'clients': clients,
+            'form': form
+        }
     return render(request, 'appointments/add_app.html', context)
 
 

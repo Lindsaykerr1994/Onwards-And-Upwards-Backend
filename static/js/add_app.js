@@ -1,5 +1,11 @@
-$("#client_select").change(function(){
-    var clientNo = $(this).val();
+$("#client_select").change(handleClientChange);
+$("#id_activity_select").change(handleActivityChange);
+$("#id_solo").change(handleSoloChange);
+$("#id_course").change(handleCourseChange);
+$("#id_number_participants").change(handleNumberChange);
+
+function handleClientChange() {
+    var clientNo = $("#client_select").val();
     var clientOpt = $(`#client_select option[value='${clientNo}']`);
     var firstName = clientOpt.attr("data-first-name");
     $("#id_client_first_name").val(firstName);
@@ -9,11 +15,11 @@ $("#client_select").change(function(){
     $("#id_client_email").val(emailAdd);
     var phoneNum = clientOpt. attr("data-phone");
     $("#id_client_phone").val(phoneNum)
-});
-$("#id_activity_select").change(function(){
+};
+function handleActivityChange() {
     var activity = $("#id_activity_select").val();
     $("#id_course option").addClass("d-none");
-    if($("#id_solo").attr("checked",true)){
+    if($("#id_solo").is(":checked")){
         options = $(`#id_course option[data-activity="${activity}"][data-solo="True"]`);
         
     } else {
@@ -23,13 +29,32 @@ $("#id_activity_select").change(function(){
     if($("#id_course").val()!==null){
         $("#id_course").val("0");
     };  
-});
-$("#id_solo").change(function(){
+}
+function handleCourseChange() {
+    var code = $("#id_course").val();
+    calculatePrice(code);
+}
+function handleSoloChange() {
+    var num = $("#id_number_participants").val();
+    if(Number.isNaN(num)){
+    } else {
+        var isSolo = $("#id_solo").is(":checked");
+        if(isSolo){
+            if(num>=2){
+                num = 1;
+                $("#id_number_participants").val(num);
+            }
+        } else {
+            if(num<2){
+                num = 2;
+                $("#id_number_participants").val(num);
+            }
+        }
+    }
     if($("#id_course").val()!==null){
         var i, altOption;
         var option = $(`#id_course option:selected`);
         var optionText = $(option).text().trim();
-        console.log(optionText)
         var solo = $(option).attr("data-solo");
         if(solo==="True"){
             solo = "False";
@@ -43,24 +68,44 @@ $("#id_solo").change(function(){
             if(text == optionText){
                 altOption = altOptions[i];
             }
-            
         }
         var altOptionVal = altOption.value;
         $("#id_course").val(altOptionVal);
         $("#id_course option").addClass("d-none");
         $(`#id_course option[data-activity=${activity}][data-solo=${solo}]`).removeClass("d-none");
         calculatePrice(altOptionVal);
-
     }
-});
-$("#id_course").change(function(){
+}
+function handleNumberChange() {
+    var num = $("#id_number_participants").val();
+    var solo = $("#id_solo").is(":checked");
+    if (num > 1){
+        if(solo===true){
+            $("#id_solo").attr("checked",false);
+        }
+    } else {
+        if(solo===false){
+            $("#id_solo").attr("checked",true);
+        }
+    }
+    handleSoloChange();
     var code = $("#id_course").val();
     calculatePrice(code);
-})
+}
 function calculatePrice(code) {
+    var NOP = parseInt($("#id_number_participants").val());
+    if(Number.isNaN(NOP)){
+        if($("#id_solo").is(":checked")){
+            NOP = 1;
+        } else {
+            NOP = 2;
+        }
+    }
     var option = $(`#id_course option[value="${code}"]`);
     var price = parseInt($(option).attr("data-price"));
-    var NOP = parseInt($("#id_number_participants").val());
     var cost = price*NOP;
-    console.log(cost);
+    if(Number.isNaN(cost)){
+        return;
+    }
+    $("#id_price").val(cost);
 }
