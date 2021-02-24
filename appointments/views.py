@@ -22,7 +22,6 @@ def view_appoinment(request, appointment_number):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
-    print("looking for appointment")
     appointment = Appointment.objects.get(appointment_number=appointment_number)
     context = {
         'appointment': appointment

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+    <div class="body-container container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3 class="d-inline-block">Onwards And Upwards Checkout</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ appointment.appointment_number }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script>
+
+    </script>
+{% endblock %}

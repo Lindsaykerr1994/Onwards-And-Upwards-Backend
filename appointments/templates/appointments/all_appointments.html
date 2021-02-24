@@ -71,6 +71,7 @@
     </div>
 {% endblock %}
 {% block postloadjs %}
+    {{ block.super }}
     <script>
         $(".delete-btn").click(function(){
             var appId = $(this).attr("data-appid");
