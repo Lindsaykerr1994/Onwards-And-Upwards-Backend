@@ -1,9 +1,6 @@
 html {
     height: 100%;
 }
-body {
-    height: calc(100vh - 100px);
-}
 
 .icon {
     align-items: center;

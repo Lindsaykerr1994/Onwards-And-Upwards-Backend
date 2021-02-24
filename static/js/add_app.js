@@ -20,9 +20,11 @@ function handleActivityChange() {
     var activity = $("#id_activity_select").val();
     $("#id_course option").addClass("d-none");
     if($("#id_solo").is(":checked")){
+        console.log("show solo courses")
         options = $(`#id_course option[data-activity="${activity}"][data-solo="True"]`);
         
     } else {
+        console.log("show group")
         options = $(`#id_course option[data-activity="${activity}"][data-solo="False"]`);
     };
     options.removeClass("d-none");
@@ -32,6 +34,15 @@ function handleActivityChange() {
 }
 function handleCourseChange() {
     var code = $("#id_course").val();
+    var NOP = parseInt($("#id_number_participants").val());
+    if(Number.isNaN(NOP)){
+        if($("#id_solo").is(":checked")){
+            $("#id_number_participants").val(1)
+        } else {
+            $("#id_number_participants").val(2)
+        }
+       
+    }
     calculatePrice(code);
 }
 function handleSoloChange() {
@@ -52,6 +63,7 @@ function handleSoloChange() {
         }
     }
     if($("#id_course").val()!==null){
+        console.log("course selected");
         var i, altOption;
         var option = $(`#id_course option:selected`);
         var optionText = $(option).text().trim();
@@ -74,6 +86,17 @@ function handleSoloChange() {
         $("#id_course option").addClass("d-none");
         $(`#id_course option[data-activity=${activity}][data-solo=${solo}]`).removeClass("d-none");
         calculatePrice(altOptionVal);
+    } else {
+        activity = $("#id_activity_select").val();
+        console.log(activity);
+        $(`#id_course option`).addClass("d-none");
+        if($("#id_solo").is(":checked")){
+            console.log("show solo courses")
+            $(`#id_course option[data-activity="${activity}"][data-solo="True"]`).removeClass("d-none");
+        } else {
+            console.log("show group")
+            $(`#id_course option[data-activity="${activity}"][data-solo="False"]`).removeClass("d-none");
+        } 
     }
 }
 function handleNumberChange() {

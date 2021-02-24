@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="body-container container-fluid">
         <div id="welcome-container" class="row">
@@ -21,9 +26,21 @@
                         <th>Date</th>
                         <th>Client</th>
                         <th>Activity</th>
+                        <th></th>
                     </thead>
                     <tbody>
-                        
+                        {% for appointment in appointments %}
+                            <tr>
+                                <td><a href="{% url 'view_app' appointment.appointment_number %}"><i class="fas fa-search"></i></a></td>
+                                <td>{{ appointment.appointment_number }}</td>
+                                <td>{{ appointment.appointment_date }}</td>
+                                <td>{{ appointment.client }}</td>
+                                <td>{{ appointment.activity }}</td>
+                                <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -46,4 +63,30 @@
             </div>
         </div>
     </div>
+    <div class="modal" id="delete-modal">
+        <p>Are you sure you wish to delete this client?</p>
+        <p>Last Name, First Name</p>
+        <button>Cancel</button>
+        <button class="confirm-delete-btn">Confirm</button>
+    </div>
 {% endblock %}
+{% block postloadjs %}
+    <script>
+        $(".delete-btn").click(function(){
+            var appId = $(this).attr("data-appid");
+            console.log(clientId);
+            currentURL = window.location.href;
+            newUrl = `${currentURL}delete_appointment/${appId}`;
+            var modal = document.getElementById("delete-modal");
+            console.log(modal);
+            modal.style.display = "block";
+            $(".confirm-delete-btn").click(function(){
+                window.location = newUrl;
+            });
+            /* When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+            modal.style.display = "none";
+            } */
+        })
+    </script>
+{% endblock %} 
