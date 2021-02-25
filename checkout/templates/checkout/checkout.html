@@ -10,11 +10,46 @@
         <div class="row">
             <div class="col">
                 <h3 class="d-inline-block">Onwards And Upwards Checkout</h3>
+                <h4>Checkout Form For Appointment: {{ appointment.appointment_number }}</h4>
             </div>
         </div>
-        <div id="appointment-details" class="row">
-            <div class="col">
-                <h4>Checkout Form For Appointment: {{ appointment.appointment_number }}</h4>
+        <div class="row">
+            <div class="col-6" id="checkout-form">
+                <form method="POST" class="onwards-form mx-auto">
+                    {% csrf_token %}
+                    <p>Personal Details:</p>
+                    <input type="text" name="first_name" placeholder="First Name">
+                    <input type="text" name="last_name" placeholder="Last Name">
+                    <input type="text" name="email" placeholder="Email Address">
+                    <input type="text" name="phone_number" placeholder="Phone Number">
+                    <p>Billing Details: </p>
+                    <input type="text" name="street_address1" placeholder="Street Address 1">
+                    <input type="text" name="street_address2" placeholder="Street Address 2">
+                    <input type="text" name="town_or_city" placeholder="Town Or City">
+                    <input type="text" name="postcode" placeholder="Post Code">
+                    <input type="text" name="county" placeholder="County">
+                    <input type="text" name="country" placeholder="Country">
+                    <div class="row">
+                        <div class="col-6">
+                            <p>Total:</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-right">{{ appointment.appointment_price }}</p>
+                        </div>
+                    </div>
+                    <fieldset>
+                        <legend class="">Payment</legend>
+                        <!-- A Stripe card element will go here -->
+                        <div class="mb-3" id="card-element"></div>
+                        <!-- Used to display form errors -->
+                        <div class="mb-3 text-danger" id="card-errors" role="alert"></div>
+                        <!-- Pass the client secret to the view so we can get the payment intent id -->
+                        <input type="hidden" value="" name="client_secret">
+                    </fieldset>
+                    <input type="submit">
+                </form>
+            </div>
+            <div class="col-6" id="appointment-details">
                 <div class="row">
                     <div class="col-6">
                         Appointment Date:
@@ -49,32 +84,12 @@
                 </div>
             </div>
         </div>
-        <div id="payment-details" class="row">
-            <div class="col">
-                Checkout Form
-                <form method="POST" class="onwards-form mx-auto">
-                    {% csrf_token %}
-                    <input type="text" name="" placeholder="First Name">
-                    <input type="text" name="" placeholder="Last Name">
-                    <input type="text" name="" placeholder="Email Address">
-                    <input type="text" name="" placeholder="Phone Number">
-                    <input type="text" name="" placeholder="Street Address 1">
-                    <input type="text" name="" placeholder="Street Address 2">
-                    <input type="text" name="" placeholder="Town Or City">
-                    <input type="text" name="" placeholder="Post Code">
-                    <input type="text" name="" placeholder="Country">
-                    <p>{{ appointment.appointment_price }}</p>
-                    <p>({{ appointment.course.add_notes }})</p>
-                    <input type="submit">
-                </form>
-            </div>
-        </div>
     </div>
 {% endblock %}
 
 {% block postloadjs %}
     {{ block.super }}
-    <script>
+    <script src="{% static 'js/stripe.js' %}">
 
     </script>
 {% endblock %}

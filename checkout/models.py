@@ -3,7 +3,7 @@ from django.db import models
 from appointments.models import Appointment
 
 
-class Checkout(models.Model):
+class Payment(models.Model):
     receipt_no = models.CharField(max_length=32, null=False, editable=False)
     appointment_no = models.ForeignKey(Appointment, null=False, blank=False,
                                        on_delete=models.CASCADE)
@@ -39,3 +39,23 @@ class Checkout(models.Model):
 
     def __str__(self):
         return self.receipt_no
+
+
+class RiskAcknowledgement(models.Model):
+    acknowledgement_no = models.CharField(max_length=32, null=False,
+                                          blank=False)
+    appointment_no = models.ForeignKey(Appointment, null=False,
+                                       blank=False, on_delete=models.CASCADE,
+                                       related_name='riskacknowledgement')
+    date_created = models.DateField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Override the original save method to set the lineitem total
+        and update the order total.
+        """
+        self.lineitem_total = self.product.price * self.quantity
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.acknowledgement_no
