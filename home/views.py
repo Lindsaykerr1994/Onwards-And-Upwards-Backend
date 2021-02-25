@@ -1,7 +1,10 @@
 from django.shortcuts import render
-
-# Create your views here.
+from appointments.models import Appointment
 
 
 def index(request):
-    return render(request, 'home/index.html')
+    appointments = Appointment.objects.all()
+    context = {
+        'appointments': appointments
+    }
+    return render(request, 'home/index.html', context)

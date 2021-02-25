@@ -15,6 +15,7 @@ class Appointment(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
+    isSolo = models.BooleanField(default=True)
     appointment_participants = models.SmallIntegerField(null=False,
                                                         blank=False, default=1)
     appointment_location = models.CharField(max_length=254, null=True,

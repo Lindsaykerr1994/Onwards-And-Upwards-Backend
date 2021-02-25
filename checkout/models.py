@@ -48,14 +48,8 @@ class RiskAcknowledgement(models.Model):
                                        blank=False, on_delete=models.CASCADE,
                                        related_name='riskacknowledgement')
     date_created = models.DateField(auto_now_add=True)
-
-    def save(self, *args, **kwargs):
-        """
-        Override the original save method to set the lineitem total
-        and update the order total.
-        """
-        self.lineitem_total = self.product.price * self.quantity
-        super().save(*args, **kwargs)
+    form_pdf_url = models.URLField(max_length=1024, null=True, blank=True)
+    form_pdf = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return self.acknowledgement_no

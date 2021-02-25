@@ -6,7 +6,7 @@ class AppointmentForm(forms.ModelForm):
 
     class Meta:
         model = Appointment
-        exclude = ('appointment_number', 'created_date')
+        exclude = ('appointment_number', 'created_date', 'isSolo', 'isPaid')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

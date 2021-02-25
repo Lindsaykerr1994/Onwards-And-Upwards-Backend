@@ -14,13 +14,16 @@
                     </div>
                     <div class="col-1 d-flex align-items-center text-center">
                         <a href="{% url 'edit_app' appointment.appointment_number %}" class="icon-btn">
-                            <i class="fas fa-user-edit"></i>
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'delete_app' appointment.appointment_number %}" class="icon-btn">
+                            <i class="fas fa-trash text-danger"></i>
                         </a>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <h4>{{ appointment.appointment_number }}</h4>
+                        <h4>{{ appointment.appointment_number }} - {{ appointment.created_date }}</h4>
                     </div>
                 </div>
             </div>
@@ -28,18 +31,112 @@
         <div id="view-client-container" class="row">
             <div class="col-10 mx-auto">
                 <div class="row">
-                    {{ appointment.appointment_date }} - {{ appointment.appointment_time }}
-                    {{ appointment.appointment_location }}
-                    {{ appointment.appointment_participants }}
+                    <div class="col-6">
+                        <h4>Appointment Details:</h4>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Activity:</p>
+                                <p>Course:</p>
+                            </div>
+                            <div class="col-6">
+                                <p>{{ appointment.activity }}</p>
+                                <p>{{ appointment.course }} ({{ appointment.course.course_code }})</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Date:</p>
+                            </div>
+                            <div class="col-6">
+                                {{ appointment.appointment_date }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Time:</p>
+                            </div>
+                            <div class="col-6">
+                                {{ appointment.appointment_time }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Location:</p>
+                            </div>
+                            <div class="col-6">
+                                {{ appointment.appointment_location }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Number Of Participants:</p>
+                            </div>
+                            <div class="col-6">
+                                {% if appointment.isSolo %}
+                                    Solo
+                                {% else %}
+                                    {{ appointment.appointment_participants }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h4>Client Details:</h4>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Full Name:</p>
+                            </div>
+                            <div class="col-6">
+                                <a href="{% url 'view_client' appointment.client.id %}">{{ appointment.client }}</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Email Address:</p>
+                            </div>
+                            <div class="col-6">
+                                <p>{{ appointment.client.email_address }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Phone Number:</p>
+                            </div>
+                            <div class="col-6">
+                                <p>{{ appointment.client.phone_number }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
-                    {{ appointment.activity }} - {{ appointment.course}}
-                </div>
-                <div class="row">
-                    {{ appointment.client }}
-                </div>
-                <div class="row">
-
+                    <div class="col-6">
+                        <h4>Participants Details:</h4>
+                        <p>Participant Info Will Go Here</p>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Full Name:</p>
+                            </div>
+                            <div class="col-6">
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Date Of Birth:</p>
+                            </div>
+                            <div class="col-6">
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Risk Acknowledgement Form:</p>
+                            </div>
+                            <div class="col-6">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
