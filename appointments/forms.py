@@ -6,7 +6,7 @@ class AppointmentForm(forms.ModelForm):
 
     class Meta:
         model = Appointment
-        exclude = ('appointment_number', 'created_date', 'isSolo', 'isPaid')
+        exclude = ('created_date','appointment_number')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,7 +18,9 @@ class AppointmentForm(forms.ModelForm):
             'appointment_time': 'Time',
             'appointment_participants': 'Number Of Participants',
             'appointment_location': 'Location',
-            'appointment_price': 'Price'
+            'isSolo': 'Solo/Group',
+            'appointment_price': 'Price',
+            'isPaid': 'Paid? '
         }
         for field in self.fields:
             if self.fields[field].required:

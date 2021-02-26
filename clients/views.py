@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+import datetime
 from .models import Client
 from .forms import ClientForm
 from activities.models import Activity, Course
@@ -25,11 +26,23 @@ def view_client(request, client_id):
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     client = get_object_or_404(Client, pk=client_id)
-    up_appointments = Appointment.objects.all()
+    all_apps = Appointment.objects.all()
+    apps = all_apps.filter(client=client.pk)
+    today = datetime.date.today()
+    up_apps = []
+    past_apps = []
+    for app in apps:
+        if app.appointment_date > today:
+            up_apps.append(app)
+    for app in apps:
+        if app.appointment_date < today:
+            past_apps.append(app)
+    print(up_apps, past_apps)
     context = {
         'client': client,
         'root_of_inquiry': client.get_root_of_inquiry_display(),
-        'up_appointments': up_appointments
+        'up_appointments': up_apps,
+        'past_appointments': past_apps,
     }
     return render(request, 'clients/view_client.html', context)
 

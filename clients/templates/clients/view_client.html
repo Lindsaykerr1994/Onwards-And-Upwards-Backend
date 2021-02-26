@@ -14,6 +14,9 @@
                         <h3><a href="{% url 'all_clients' %}">All Clients</a><i class="fas fa-chevron-right"></i>View Client</h3>
                     </div>
                     <div class="col-1 d-flex align-items-center text-center">
+                        <a href="{% url 'add_app_w_client' client.id %}" class="icon-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                        </a>
                         <a href="{% url 'edit_client' client.id %}" class="icon-btn">
                             <i class="fas fa-user-edit"></i>
                         </a>
@@ -108,14 +111,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
-                        Upcoming Appointments
-                    </div>
-                    <div class="col-6">
+                    <div class="col-12">
+                        <p><b>Upcoming Appointments</b></p>
                         {% if up_appointments %}
                         <table class="table">
                             <thead>
                                 <th></th>
+                                <th>Ref No.</th>
                                 <th>Date</th>
                                 <th>Activity</th>
                             </thead>
@@ -127,6 +129,7 @@
                                                 <i class="fas fa-search"></i>
                                             </a>
                                         </td>
+                                        <td>{{ app.appointment_number }}</td>
                                         <td>{{ app.appointment_date }}</td>
                                         <td>{{ app.activity }} - {{ app.course }}</td>
                                     </tr>
@@ -134,19 +137,39 @@
                             </tbody>
                         </table>
                         {% else %}
-                        <p>This client has no past appointments</p>
+                        <p>This client has no upcoming appointments</p>
                         {% endif %}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         Past Appointments
-                    </div>
-                    <div class="col-6">
                         {% if past_appointments %}
-                        <p>Past Appointments Go Here</p>
+                            <p>Past Appointments Go Here</p>
+                            <table class="table">
+                            <thead>
+                                <th></th>
+                                <th>Ref No.</th>
+                                <th>Date</th>
+                                <th>Activity</th>
+                            </thead>
+                            <tbody>
+                                {% for app in past_appointments %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'view_app' app.appointment_number %}">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </td>
+                                        <td>{{ app.appointment_number }}</td>
+                                        <td>{{ app.appointment_date }}</td>
+                                        <td>{{ app.activity }} - {{ app.course }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                         {% else %}
-                        <p>This client has no past appointments</p>
+                            <p>This client has no past appointments</p>
                         {% endif %}
                     </div>
                 </div>

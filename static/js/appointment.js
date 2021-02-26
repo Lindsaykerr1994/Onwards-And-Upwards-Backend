@@ -20,11 +20,8 @@ function handleActivityChange() {
     var activity = $("#id_activity_select").val();
     $("#id_course option").addClass("d-none");
     if($("#id_solo").is(":checked")){
-        console.log("show solo courses")
         options = $(`#id_course option[data-activity="${activity}"][data-solo="True"]`);
-        
     } else {
-        console.log("show group")
         options = $(`#id_course option[data-activity="${activity}"][data-solo="False"]`);
     };
     options.removeClass("d-none");

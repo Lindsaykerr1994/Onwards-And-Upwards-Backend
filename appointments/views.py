@@ -37,7 +37,6 @@ def add_app(request):
     if request.method == "POST":
         form = AppointmentForm(request.POST)
         clientNum = request.POST.get('client_select')
-        print(clientNum)
         if clientNum is None:
             client_data = {
                 'first_name': request.POST['first_name'],
@@ -70,7 +69,7 @@ def add_app(request):
             appNum = ap+client.last_name[0:3].upper()+courseCode
             appointment = form.save()
             appointment.appointment_number = appNum
-            appointment.client = clientNum
+            appointment.client = client
             appointment.save(update_fields=["appointment_number", "client"])
             messages.success(request, 'Successfully added appointment')
             return redirect(reverse('view_app',
@@ -79,23 +78,63 @@ def add_app(request):
             print(form.errors, "errors in form")
             messages.error(request,
                         ('Please check that form is valid'))
-        context = {
-            'form': form
-        }
     else:
         form = AppointmentForm()
-        activities = Activity.objects.all()
-        courses = Course.objects.all()
-        clients = Client.objects.all()
-        context = {
-            'activities': activities,
-            'courses': courses,
-            'clients': clients,
-            'form': form
-        }
+    activities = Activity.objects.all()
+    courses = Course.objects.all()
+    clients = Client.objects.all()
+    context = {
+        'activities': activities,
+        'courses': courses,
+        'clients': clients,
+        'form': form
+    }
     return render(request, 'appointments/add_app.html', context)
 
 
+@login_required
+def add_app_w_client(request, client_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Sorry, I don't want you doing that.")
+        return redirect(reverse('home'))
+    client = Client.objects.get(pk=client_id)
+    if request.method == "POST":
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            app_date = request.POST['appointment_date']
+            app_date = app_date.split("-")
+            ap = app_date[2]+app_date[1]+app_date[0][2:4]
+            courseCode = request.POST['course']
+            courseCode = int(courseCode)
+            if courseCode < 10:
+                courseCode = "0"+str(courseCode)
+            else:
+                courseCode = str(courseCode)
+            appNum = ap+client.last_name[0:3].upper()+courseCode
+            appointment = form.save()
+            appointment.appointment_number = appNum
+            appointment.client = client
+            appointment.save(update_fields=["appointment_number", "client"])
+            messages.success(request, 'Successfully added appointment')
+            return redirect(reverse('view_app',
+                                    args=[appointment.appointment_number]))
+        else:
+            print(form.errors, "errors in form")
+            messages.error(request,
+                           ('Please check that form is valid'))
+    else:
+        form = AppointmentForm()
+    activities = Activity.objects.all()
+    courses = Course.objects.all()
+    context = {
+        'activities': activities,
+        'courses': courses,
+        'client': client,
+        'form': form
+    }
+    return render(request, 'appointments/add_app.html', context)
+
+#
 @login_required
 def edit_app(request, appointment_number):
     if not request.user.is_superuser:
@@ -106,20 +145,41 @@ def edit_app(request, appointment_number):
     if request.method == "POST":
         form = AppointmentForm(request.POST, instance=appointment)
         if form.is_valid():
+            app_date = request.POST['appointment_date']
+            app_date = app_date.split("/")
+            ap = app_date[0]+app_date[1]+app_date[2][2:4]
+            print(ap)
+            client = appointment.client
+            courseCode = request.POST['course']
+            courseCode = int(courseCode)
+            if courseCode < 10:
+                courseCode = "0"+str(courseCode)
+            else:
+                courseCode = str(courseCode)
+            appNum = ap+client.last_name[0:3].upper()+courseCode
+            appointment.appointment_number = appNum
+            appointment.save(update_fields=["appointment_number"])
             form.save()
-            print("Editted client successfully")
-            return redirect(reverse('view_client',
+
+            print("Edited appointment successfully")
+            return redirect(reverse('view_app',
                                     args=[appointment.appointment_number]))
-            """ Use email functionality to update client """
+            """ Use email functionality to inform client """
         else:
             print("Error, we'll sort it out", form.errors)
     else:
         form = AppointmentForm(instance=appointment)
         print("you are editting appointment: {appointment.appointment_number}")
+    clients = Client.objects.all()
+    activities = Activity.objects.all()
+    courses = Course.objects.all()
     template = 'appointments/edit_app.html'
     context = {
         "form": form,
-        "appointment": appointment
+        "appointment": appointment,
+        "clients": clients,
+        "activities": activities,
+        "courses": courses
     }
     return render(request, template, context)
 
