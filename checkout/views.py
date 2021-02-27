@@ -1,9 +1,13 @@
 import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
-from django.shortcuts import render
+from django.shortcuts import render, reverse, redirect, get_object_or_404
+from django.conf import settings
+from django.contrib import messages
 from appointments.models import Appointment
+from .models import Payment
 from .forms import PaymentForm
+import stripe
 
 
 def checkout(request, appointment_number):
@@ -14,11 +18,8 @@ def checkout(request, appointment_number):
         print("Redirect to already paid template")
     else:
         if request.method == "POST":
-            first_name = request.POST['first_name']
-            last_name = request.POST['last_name']
-            full_name = first_name + " " + last_name
             form_data = {
-                'full_name': full_name,
+                'full_name': request.POST['full_name'],
                 'email': request.POST['email'],
                 'phone_number': request.POST['phone_number'],
                 'country': request.POST['country'],
@@ -26,19 +27,45 @@ def checkout(request, appointment_number):
                 'town_or_city': request.POST['town_or_city'],
                 'street_address1': request.POST['street_address1'],
                 'street_address2': request.POST['street_address2'],
-                'county': request.POST['county'],
+                'county': request.POST['county']
             }
-            form = CheckoutForm(form_data)
+            form = PaymentForm(form_data)
             if form.is_valid():
-                print("Form is all good here")
+                payment = form.save()
+                payment.appointment = appointment
+                payment.checkout_total = appointment.appointment_price
+                payment.save(update_fields=["appointment", "checkout_total"])
+                return redirect(reverse('checkout_success',
+                                args=[payment.receipt_no]))
             else:
-                print("form is not valid", form.errors)
+                print(form.errors)
         else:
-            print("You know how we be, just loading pages on pages")
+            total = appointment.appointment_price
+            stripe_total = round(total * 100)
+            stripe.api_key = stripe_secret_key
+            intent = stripe.PaymentIntent.create(
+                amount=stripe_total,
+                currency=settings.STRIPE_CURRENCY,
+            )
+            form = PaymentForm()
+
+        if not stripe_public_key:
+            messages.warning(request, 'Stripe Public Key is missing')
         context = {
-            'appointment': appointment
+            'form': form,
+            'appointment': appointment,
+            'stripe_public_key': stripe_public_key,
+            'client_secret': intent.client_secret
         }
     return render(request, 'checkout/checkout.html', context)
+
+
+def checkout_success(request, receipt_no):
+    payment = get_object_or_404(Payment, receipt_no=receipt_no)
+    context = {
+        'payment': payment
+    }
+    return render(request, 'checkout/checkout_success.html', context)
 
 
 def create_riskack_form(request, appointment_number):

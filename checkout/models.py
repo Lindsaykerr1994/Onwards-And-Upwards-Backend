@@ -5,8 +5,8 @@ from appointments.models import Appointment
 
 class Payment(models.Model):
     receipt_no = models.CharField(max_length=32, null=False, editable=False)
-    appointment_no = models.ForeignKey(Appointment, null=False, blank=False,
-                                       on_delete=models.CASCADE)
+    appointment = models.ForeignKey(Appointment, null=True, blank=True,
+                                    on_delete=models.SET_NULL)
     full_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=False, blank=False)
