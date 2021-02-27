@@ -56,10 +56,13 @@ form.addEventListener('submit', function(ev) {
 
     // From using {% csrf_token %} in the form
     var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+    var appointment_no = $('input[name="appointment_number"]').val();
     var postData = {
         'csrfmiddlewaretoken': csrfToken,
         'client_secret': clientSecret,
+        'appointment_no': appointment_no
     };
+    console.log(postData)
     var url = '/checkout/cache_checkout_data/';
     $.post(url, postData).done(function () {
         stripe.confirmCardPayment(clientSecret, {

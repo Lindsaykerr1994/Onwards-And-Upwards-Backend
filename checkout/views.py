@@ -15,9 +15,11 @@ import stripe
 def cache_checkout_data(request):
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
+        appointment_number = request.POST.get('appointment_no')
         stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe.PaymentIntent.modify(pid, metadata={
             'save_info': False,
+            'appointment_number': appointment_number
         })
         return HttpResponse(status=200)
     except Exception as e:
@@ -49,9 +51,12 @@ def checkout(request, appointment_number):
             form = PaymentForm(form_data)
             if form.is_valid():
                 payment = form.save()
+                pid = request.POST.get('client_secret').split('_secret')[0]
+                payment.stripe_pid = pid
                 payment.appointment = appointment
                 payment.checkout_total = appointment.appointment_price
-                payment.save(update_fields=["appointment", "checkout_total"])
+                payment.save(update_fields=["appointment", "checkout_total",
+                             "stripe_pid"])
                 return redirect(reverse('checkout_success',
                                 args=[payment.receipt_no]))
             else:
