@@ -14,6 +14,8 @@ class Participant(models.Model):
     first_name = models.CharField(max_length=32, null=False, blank=False)
     last_name = models.CharField(max_length=32, null=False, blank=False)
     date_of_birth = models.DateField()
+    email_address = models.EmailField(max_length=254, null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     address_line = models.CharField(max_length=254, null=False, blank=False)
     postcode = models.CharField(max_length=10, null=False, blank=False)
     emergency_contact_name = models.CharField(max_length=64, null=False,

@@ -15,6 +15,8 @@ class ParticipantForm(forms.ModelForm):
             'first_name': 'First Name',
             'last_name': 'Last Name',
             'date_of_birth': 'Date Of Birth',
+            'email_address': 'Email Address',
+            'phone_number': 'Phone Number',
             'address_line': 'Address',
             'postcode': 'Post Code',
             'emergency_contact_name': 'Name',

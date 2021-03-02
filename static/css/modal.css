@@ -1,7 +1,7 @@
 .modal{
     display: none;
-    position: absolute;
-    top: 50px;
+    position: fixed;
+    top: 100px;
     left: calc(50vw - 200px);
     height: auto;
     width: 400px;
