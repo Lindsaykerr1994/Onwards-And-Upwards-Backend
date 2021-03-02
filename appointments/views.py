@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import AppointmentForm
 from .models import Appointment
+from django.db.models import Q
 from activities.models import Activity, Course
 from clients.models import Client
 from clients.forms import ClientForm
@@ -11,8 +12,44 @@ from clients.forms import ClientForm
 @login_required
 def all_appointments(request):
     appointments = Appointment.objects.all()
+    query = None
+    activities = None
+    sort = None
+    direction = None
+
+    if request.GET:
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort']
+            sort = sortkey
+            if sortkey == 'name':
+                sortkey = 'last_name'
+            if sortkey == 'date':
+                sortkey = 'appointment_date'
+            if 'direction' in request.GET:
+                direction = request.GET['direction']
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}'
+            appointments = appointments.order_by(sortkey)
+
+        if 'activity' in request.GET:
+            activities = request.GET['activity'].split(',')
+            appointments = appointments.filter(activity__name__in=activities)
+            activities = Activity.objects.filter(name__in=activities)
+
+        if 'q' in request.GET:
+            query = request.GET['q']
+            if not query:
+                messages.error(request,
+                               ("You didn't enter any search criteria!"))
+                return redirect(reverse('all_appointments'))
+            queries = Q(client__last_name__icontains=query) | Q(client__first_name__icontains=query) | Q(course__name__icontains=query) | Q(activity__name__icontains=query)
+            appointments = appointments.filter(queries)
+
+    current_sorting = f'{sort}_{direction}'
     context = {
-        'appointments': appointments
+        'appointments': appointments,
+        'current_sorting': current_sorting,
+        'search_term': query
     }
     return render(request, 'appointments/all_appointments.html', context)
 

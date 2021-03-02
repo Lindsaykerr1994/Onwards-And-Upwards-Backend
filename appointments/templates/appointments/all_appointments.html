@@ -9,16 +9,40 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div id="welcome-container" class="row">
-            <div class="col">
+            <div class="col-12 col-lg-6">
                 <h3 class="d-inline-block">All Appointments</h3>
-                <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right">
-                    <i class="fas fa-calendar-plus"></i>
-                </a>
+            </div>
+            <div class="col-2 d-none d-lg-block"></div>
+            <div class="col-12 col-lg-4">
+                <form method="GET" action="{% url 'all_appointments' %}" class="search-form">
+                    <div class="input-group w-100">
+                        <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search">
+                        <div class="input-group-append">
+                            <button class="form-control btn btn-black border border-black rounded-0" type="submit">
+                                <span class="icon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {% if search_term %}
+                    <p>Searching for: "{{ search_term }}"</p>
+                {% endif %}
             </div>
         </div>
-        <div id="upcoming-appointments" class="row">
+        <div id="upcoming-appointments" class="row my-3">
             <div class="col">
-                <h4>Upcoming Appointments</h4>
+                <div class="row">
+                    <div class="col-10">
+                        <h4>Upcoming Appointments</h4>
+                    </div>
+                    <div class="col-2">
+                        <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right icon-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                        </a>
+                    </div>
+                </div>
                 <table class="table table-hover">
                     <thead>
                         <th></th>
@@ -35,7 +59,7 @@
                                 <td>{{ appointment.appointment_number }}</td>
                                 <td>{{ appointment.appointment_date }}</td>
                                 <td>{{ appointment.client }}</td>
-                                <td>{{ appointment.activity }}</td>
+                                <td>{{ appointment.activity }} - {{ appointment.course }}</td>
                                 <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
                                     <i class="fas fa-trash text-danger"></i>
                                 </td>

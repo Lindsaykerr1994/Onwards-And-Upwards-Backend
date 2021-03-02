@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Q
 import datetime
 from .models import Client
 from .forms import ClientForm
@@ -14,8 +15,38 @@ def all_clients(request):
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     clients = Client.objects.all()
+    query = None
+    sort = None
+    direction = None
+
+    if request.GET:
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort']
+            sort = sortkey
+            if sortkey == 'name':
+                sortkey = 'last_name'
+            if sortkey == 'date':
+                sortkey = 'appointment_date'
+            if 'direction' in request.GET:
+                direction = request.GET['direction']
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}'
+            clients = clients.order_by(sortkey)
+
+        if 'q' in request.GET:
+            query = request.GET['q']
+            if not query:
+                messages.error(request,
+                               ("You didn't enter any search criteria!"))
+                return redirect(reverse('all_clients'))
+            queries = Q(last_name__icontains=query) | Q(first_name__icontains=query)
+            clients = clients.filter(queries)
+
     context = {
-        'clients': clients
+        'clients': clients,
+        'current_sorting': sort,
+        'current_direction': direction,
+        'search_term': query
     }
     return render(request, 'clients/all_clients.html', context)
 

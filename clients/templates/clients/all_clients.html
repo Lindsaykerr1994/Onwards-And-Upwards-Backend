@@ -8,23 +8,89 @@
 
 {% block content %}
     <div class="body-container container-fluid">
-        <div class="row">
-            <div class="col mx-auto">
+        <div class="welcome-container row">
+            <div class="col-12 col-lg-6">
                 <h3 class="d-inline-block">All Clients</h3>
-                <a href="{% url 'add_client' %}" class="d-inline-block float-right icon-btn">
-                    <i class="fas fa-user-plus"></i>
-                </a>
+            </div>
+            <div class="col-2 d-none d-lg-block"></div>
+            <div class="col-12 col-lg-4">
+                <form method="GET" action="{% url 'all_clients' %}" class="search-form">
+                    <div class="input-group w-100">
+                        <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search">
+                        <div class="input-group-append">
+                            <button class="form-control btn btn-black border border-black rounded-0" type="submit">
+                                <span class="icon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {% if search_term %}
+                <p>Searching for: "{{ search_term }}"</p>
+                {% endif %}
             </div>
         </div>
-        <div class="row">
+        <div class="row my-3">
             <div class="col mx-auto">
+                <div class="row">
+                    <div class="col-2 offset-10">
+                        <a href="{% url 'add_client' %}" class="d-inline-block float-right icon-btn">
+                            <i class="fas fa-user-plus"></i>
+                        </a>
+                    </div>
+                </div>
                 <table class="table table-hover">
                     <thead>
                         <th></th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Email Add.</th>
-                        <th>Phone No.</th>
+                        <th data-sort="last_name" 
+                            {% if current_sorting == 'last_name' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>
+                            Last Name
+                        </th>
+                        <th data-sort="first_name" 
+                            {% if current_sorting == 'first_name' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>
+                            First Name
+                        </th>
+                        <th data-sort="email_address" 
+                            {% if current_sorting == 'email_address' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>
+                            Email Add.
+                        </th>
+                        <th data-sort="phone_number" 
+                            {% if current_sorting == 'phone_number' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>
+                            Phone No.
+                        </th>
                         <th>Next Appt.</th>
                         <th>Delete?</th>
                     </thead>
@@ -72,6 +138,7 @@
 {% endblock %}
 
 {% block postloadjs %}
+    {{ block.super }}
     <script>
         $(".delete-btn").click(function(){
             var clientId = $(this).attr("data-clientid");
@@ -88,6 +155,17 @@
             span.onclick = function() {
             modal.style.display = "none";
             } */
+        })
+    </script>
+    <script type="text/javascript">
+        $('thead th').click(function() {
+            var selector = $(this);
+            var currentUrl = new URL(window.location);
+            var sort = selector.attr("data-sort");
+            var direction = selector.attr("data-dir")
+            currentUrl.searchParams.set("sort", sort);
+            currentUrl.searchParams.set("direction", direction);
+            window.location.replace(currentUrl);
         })
     </script>
 {% endblock %} 
