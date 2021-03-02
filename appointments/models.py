@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from activities.models import Activity, Course
 from clients.models import Client

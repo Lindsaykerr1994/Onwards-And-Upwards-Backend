@@ -1,0 +1,50 @@
+import uuid
+from django.db import models
+from appointments.models import Appointment
+from clients.models import Client
+
+
+class Participant(models.Model):
+    form_number = models.CharField(max_length=32, null=False, editable=False)
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE,
+                                    null=True, blank=True)
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True,
+                               blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    first_name = models.CharField(max_length=32, null=False, blank=False)
+    last_name = models.CharField(max_length=32, null=False, blank=False)
+    date_of_birth = models.DateField()
+    address_line = models.CharField(max_length=254, null=False, blank=False)
+    postcode = models.CharField(max_length=10, null=False, blank=False)
+    emergency_contact_name = models.CharField(max_length=64, null=False,
+                                              blank=False)
+    emergency_contact_number = models.CharField(max_length=20, null=False,
+                                                blank=False)
+    dec_illness = models.CharField(max_length=254, null=True, blank=True)
+    dec_medication = models.CharField(max_length=254, null=True, blank=True)
+    dec_abs_cond = models.BooleanField(default=False)
+    acknowledgement_of_risk = models.BooleanField(default=False)
+    # This needs to be default false so that the client
+    # has to manually change it.
+    signed_by = models.CharField(max_length=64, null=False, blank=False)
+    date_signed = models.DateField()
+    risk_form = models.FileField(null=True, blank=True)
+
+    def _generate_form_number(self):
+        """
+        Generate a random, unique order number using UUID
+        """
+        return uuid.uuid4().hex.upper()
+
+    def save(self, *args, **kwargs):
+        """
+        Override the original save method to set the order number
+        if it hasn't been set already.
+        """
+        if not self.form_number:
+            self.form_number = self._generate_form_number()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Form {self.form_number} for Appointment\
+            {self.appointment}'

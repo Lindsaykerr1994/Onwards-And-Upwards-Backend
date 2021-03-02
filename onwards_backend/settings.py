@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'appointments',
     'clients',
     'checkout',
+    'riskforms',
 ]
 
 MIDDLEWARE = [
@@ -152,9 +153,6 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-RISKFORM_URL = '/forms/'
-RISKFORM_ROOT = os.path.join(BASE_DIR, 'riskform')
 
 STRIPE_CURRENCY = 'gbp'
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
