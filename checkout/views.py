@@ -55,6 +55,8 @@ def checkout(request, appointment_number):
                 payment.stripe_pid = pid
                 payment.appointment = appointment
                 payment.checkout_total = appointment.appointment_price
+                appointment.isPaid = True
+                appointment.save(update_fields=['isPaid'])
                 payment.save(update_fields=["appointment", "checkout_total",
                              "stripe_pid"])
                 return redirect(reverse('checkout_success',

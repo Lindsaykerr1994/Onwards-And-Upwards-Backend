@@ -171,7 +171,7 @@ def add_app_w_client(request, client_id):
     }
     return render(request, 'appointments/add_app.html', context)
 
-#
+
 @login_required
 def edit_app(request, appointment_number):
     if not request.user.is_superuser:
@@ -232,3 +232,16 @@ def delete_app(request, appointment_number):
     appointment.delete()
     messages.success(request, 'Appointment deleted!')
     return redirect(reverse('all_clients'))
+
+
+@login_required
+def mark_as_paid(request, appointment_number):
+    if not request.user.is_superuser:
+        messages.error(request, "Sorry, I don't want you doing that.")
+        return redirect(reverse('home'))
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    appointment.isPaid = True
+    appointment.save(update_fields=["isPaid"])
+    messages.success(request, 'Marked as paid!')
+    return redirect(reverse('view_app',
+                            args=[appointment.appointment_number]))

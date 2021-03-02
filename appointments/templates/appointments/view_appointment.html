@@ -79,6 +79,26 @@
                                 {% endif %}
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Paid?</p>
+                            </div>
+                            <div class="col-6">
+                                {% if appointment.isPaid %}
+                                    <i class="fas fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="fas fa-times-circle text-danger"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button><a href="">Send Payment Request</a></button>
+                            </div>
+                            <div class="col-6">
+                                <button><a href="{% url 'mark_as_paid' appointment.appointment_number %}">Mark as Paid</a></button>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-6">
                         <h4>Client Details:</h4>

@@ -71,6 +71,8 @@ class StripeWH_Handler:
                     checkout_total=checkout_total,
                     stripe_pid=pid,
                 )
+                appointment.isPaid = True
+                appointment.save(update_fields=['isPaid'])
             except Exception as e:
                 if payment:
                     payment.delete()

@@ -11,5 +11,7 @@ urlpatterns = [
     path('edit_appointment/<appointment_number>', views.edit_app,
          name="edit_app"),
     path('delete_appointment/<appointment_number>', views.delete_app,
-         name="delete_app")
+         name="delete_app"),
+    path('mark_as_paid/<appointment_number>', views.mark_as_paid,
+         name="mark_as_paid")
 ]
