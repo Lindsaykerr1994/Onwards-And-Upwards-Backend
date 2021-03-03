@@ -45,7 +45,7 @@
                     <select id="id_course" name="course">
                         <option selected disabled value="0">Select A Course</option>
                         {% for course in courses %}
-                            <option class="d-none" data-activity="{{ course.activity.pk }}" data-solo="{{ course.solo }}" data-price="{{ course.price }}" value="{{ course.course_code }}">{{ course.friendly_name }} {% if course.solo %} {% endif %}</option>
+                            <option class="d-none" data-activity="{{ course.activity.pk }}" data-solo="{{ course.solo }}" data-price="{{ course.price }}" value="{{ course.pk }}">{{ course.friendly_name }} {% if course.solo %} {% endif %}</option>
                         {% endfor %}
                     </select>
                     <label for="id_solo">Solo/ Group

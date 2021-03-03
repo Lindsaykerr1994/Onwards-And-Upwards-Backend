@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import AppointmentForm
 from .models import Appointment
 from django.db.models import Q
+import datetime
 from activities.models import Activity, Course
 from clients.models import Client
 from clients.forms import ClientForm
@@ -44,11 +45,20 @@ def all_appointments(request):
                 return redirect(reverse('all_appointments'))
             queries = Q(client__last_name__icontains=query) | Q(client__first_name__icontains=query) | Q(course__name__icontains=query) | Q(activity__name__icontains=query)
             appointments = appointments.filter(queries)
-
-    current_sorting = f'{sort}_{direction}'
+    today = datetime.date.today()
+    up_apps = []
+    past_apps = []
+    for app in appointments:
+        if app.appointment_date > today:
+            up_apps.append(app)
+    for app in appointments:
+        if app.appointment_date < today:
+            past_apps.append(app)
     context = {
-        'appointments': appointments,
-        'current_sorting': current_sorting,
+        'up_apps': up_apps,
+        'past_apps': past_apps,
+        'current_sorting': sort,
+        'current_direction': direction,
         'search_term': query
     }
     return render(request, 'appointments/all_appointments.html', context)
@@ -59,7 +69,8 @@ def view_appoinment(request, appointment_number):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
-    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    appointment = get_object_or_404(Appointment,
+                                    appointment_number=appointment_number)
     context = {
         'appointment': appointment
     }
@@ -90,15 +101,16 @@ def add_app(request):
                 print(clientForm.errors)
                 messages.error(request,
                                ('Please check that form is valid'))
-        else:
-            print("Client exists, add foreign key to appointment")
+        courseId = request.POST['course']
+        course = Course.objects.get(pk=courseId)
         if form.is_valid():
             app_date = request.POST['appointment_date']
             app_date = app_date.split("-")
             ap = app_date[2]+app_date[1]+app_date[0][2:4]
             client = Client.objects.get(pk=clientNum)
-            courseCode = request.POST['course']
+            courseCode = course.course_code
             courseCode = int(courseCode)
+            print(courseCode)
             if courseCode < 10:
                 courseCode = "0"+str(courseCode)
             else:
@@ -189,6 +201,7 @@ def edit_app(request, appointment_number):
             client = appointment.client
             courseCode = request.POST['course']
             courseCode = int(courseCode)
+            print(courseCode)
             if courseCode < 10:
                 courseCode = "0"+str(courseCode)
             else:
@@ -197,7 +210,6 @@ def edit_app(request, appointment_number):
             appointment.appointment_number = appNum
             appointment.save(update_fields=["appointment_number"])
             form.save()
-
             print("Edited appointment successfully")
             return redirect(reverse('view_app',
                                     args=[appointment.appointment_number]))
@@ -231,7 +243,7 @@ def delete_app(request, appointment_number):
                                     appointment_number=appointment_number)
     appointment.delete()
     messages.success(request, 'Appointment deleted!')
-    return redirect(reverse('all_clients'))
+    return redirect(reverse('all_appointments'))
 
 
 @login_required

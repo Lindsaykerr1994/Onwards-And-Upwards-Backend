@@ -53,7 +53,7 @@
                         <th></th>
                     </thead>
                     <tbody>
-                        {% for appointment in appointments %}
+                        {% for appointment in up_apps %}
                             <tr>
                                 <td><a href="{% url 'view_app' appointment.appointment_number %}"><i class="fas fa-search"></i></a></td>
                                 <td>{{ appointment.appointment_number }}</td>
@@ -81,7 +81,18 @@
                         <th>Activity</th>
                     </thead>
                     <tbody>
-                        
+                        {% for appointment in past_apps %}
+                            <tr>
+                                <td><a href="{% url 'view_app' appointment.appointment_number %}"><i class="fas fa-search"></i></a></td>
+                                <td>{{ appointment.appointment_number }}</td>
+                                <td>{{ appointment.appointment_date }}</td>
+                                <td>{{ appointment.client }}</td>
+                                <td>{{ appointment.activity }} - {{ appointment.course }}</td>
+                                <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

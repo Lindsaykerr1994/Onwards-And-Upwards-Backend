@@ -113,7 +113,7 @@
                 <div class="row">
                     <div class="col-12">
                         <p><b>Upcoming Appointments</b></p>
-                        {% if up_appointments %}
+                        {% if up_apps %}
                         <table class="table">
                             <thead>
                                 <th></th>
@@ -122,7 +122,7 @@
                                 <th>Activity</th>
                             </thead>
                             <tbody>
-                                {% for app in up_appointments %}
+                                {% for app in up_apps %}
                                     <tr>
                                         <td>
                                             <a href="{% url 'view_app' app.appointment_number %}">
@@ -143,9 +143,8 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        Past Appointments
-                        {% if past_appointments %}
-                            <p>Past Appointments Go Here</p>
+                        <p><b>Past Appointments</b></p>
+                        {% if past_apps %}
                             <table class="table">
                             <thead>
                                 <th></th>
@@ -154,7 +153,7 @@
                                 <th>Activity</th>
                             </thead>
                             <tbody>
-                                {% for app in past_appointments %}
+                                {% for app in past_apps %}
                                     <tr>
                                         <td>
                                             <a href="{% url 'view_app' app.appointment_number %}">

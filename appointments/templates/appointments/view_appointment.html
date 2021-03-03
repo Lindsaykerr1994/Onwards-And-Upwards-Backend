@@ -96,7 +96,9 @@
                                 <button><a href="">Send Payment Request</a></button>
                             </div>
                             <div class="col-6">
+                                {% if not appointment.isPaid %}
                                 <button><a href="{% url 'mark_as_paid' appointment.appointment_number %}">Mark as Paid</a></button>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

@@ -1,3 +1,4 @@
+from django import template
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -7,6 +8,8 @@ from .models import Client
 from .forms import ClientForm
 from activities.models import Activity, Course
 from appointments.models import Appointment
+
+register = template.Library()
 
 
 @login_required
@@ -41,12 +44,15 @@ def all_clients(request):
                 return redirect(reverse('all_clients'))
             queries = Q(last_name__icontains=query) | Q(first_name__icontains=query)
             clients = clients.filter(queries)
+    appointments = Appointment.objects.all()
+    appointments = appointments.order_by('-appointment_date')
 
     context = {
         'clients': clients,
         'current_sorting': sort,
         'current_direction': direction,
-        'search_term': query
+        'search_term': query,
+        'appointments': appointments,
     }
     return render(request, 'clients/all_clients.html', context)
 
@@ -68,12 +74,11 @@ def view_client(request, client_id):
     for app in apps:
         if app.appointment_date < today:
             past_apps.append(app)
-    print(up_apps, past_apps)
     context = {
         'client': client,
         'root_of_inquiry': client.get_root_of_inquiry_display(),
-        'up_appointments': up_apps,
-        'past_appointments': past_apps,
+        'up_apps': up_apps,
+        'past_apps': past_apps,
     }
     return render(request, 'clients/view_client.html', context)
 
