@@ -23,6 +23,7 @@ class Appointment(models.Model):
                                             blank=True)
     appointment_price = models.DecimalField(max_digits=6, decimal_places=2,
                                             null=False, default=0)
+    add_notes = models.TextField(null=True, blank=True)
     isPaid = models.BooleanField(default=False, null=False, blank=False)
 
     def __str__(self):

@@ -101,6 +101,14 @@
                                 {% endif %}
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Additional Notes:</p>
+                            </div>
+                            <div class="col-6">
+                                <p>{{ appointment.additional_notes }}</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-6">
                         <h4>Client Details:</h4>
@@ -131,34 +139,42 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
-                        <h4>Participants Details:</h4>
-                        <p>Participant Info Will Go Here</p>
-                        <div class="row">
-                            <div class="col-6">
-                                <p>Full Name:</p>
-                            </div>
-                            <div class="col-6">
-                                
-                            </div>
+                        <div class="col-6">
+                            <h4>Participants Details:</h4>
+                            {% if participants %}
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p>Full Name:</p>
+                                    </div>
+                                    <div class="col-6">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p>Date Of Birth:</p>
+                                    </div>
+                                    <div class="col-6">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <p>Risk Acknowledgement Form:</p>
+                                    </div>
+                                    <div class="col-6">
+                                        
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button>Convert to Client</button>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p>This appointment currently has no participants yet</p>
+                            {% endif %}
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <p>Date Of Birth:</p>
-                            </div>
-                            <div class="col-6">
-                                
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <p>Risk Acknowledgement Form:</p>
-                            </div>
-                            <div class="col-6">
-                                
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

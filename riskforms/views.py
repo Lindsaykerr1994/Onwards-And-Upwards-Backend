@@ -1,5 +1,5 @@
 import io
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from .models import Participant
@@ -15,17 +15,17 @@ def add_participant_form(request, appointment_number):
     forms = Participant.objects.all()
     formNum = len(forms)
     if formNum >= partNum:
-        print("already sufficient number")
+        return redirect(reverse('home'))
     else:
         print("We can add more forms")
-    if request.method == "POST":
-        print(request.POST)
-    partForm = ParticipantForm()
+        if request.method == "POST":
+            partForm = ParticipantForm(request.POST)
+        partForm = ParticipantForm()
     context = {
         'appointment': appointment,
         'form': partForm,
     }
-    return render(request, 'riskforms/add_form.html', context)
+    return render(request, 'riskforms/add_risk_form.html', context)
 
 
 def create_riskack_form(request, appointment_number):

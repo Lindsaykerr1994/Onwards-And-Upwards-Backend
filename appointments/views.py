@@ -149,11 +149,13 @@ def add_app_w_client(request, client_id):
     client = Client.objects.get(pk=client_id)
     if request.method == "POST":
         form = AppointmentForm(request.POST)
+        courseId = request.POST['course']
+        course = Course.objects.get(pk=courseId)
         if form.is_valid():
             app_date = request.POST['appointment_date']
             app_date = app_date.split("-")
             ap = app_date[2]+app_date[1]+app_date[0][2:4]
-            courseCode = request.POST['course']
+            courseCode = course.course_code
             courseCode = int(courseCode)
             if courseCode < 10:
                 courseCode = "0"+str(courseCode)
@@ -192,16 +194,17 @@ def edit_app(request, appointment_number):
     appointment = get_object_or_404(Appointment,
                                     appointment_number=appointment_number)
     if request.method == "POST":
+        
         form = AppointmentForm(request.POST, instance=appointment)
+        courseId = request.POST['course']
+        course = Course.objects.get(pk=courseId)
         if form.is_valid():
             app_date = request.POST['appointment_date']
             app_date = app_date.split("/")
             ap = app_date[0]+app_date[1]+app_date[2][2:4]
-            print(ap)
             client = appointment.client
-            courseCode = request.POST['course']
+            courseCode = course.course_code
             courseCode = int(courseCode)
-            print(courseCode)
             if courseCode < 10:
                 courseCode = "0"+str(courseCode)
             else:

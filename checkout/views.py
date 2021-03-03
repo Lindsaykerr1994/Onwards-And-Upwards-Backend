@@ -69,15 +69,15 @@ def checkout(request, appointment_number):
                 currency=settings.STRIPE_CURRENCY,
             )
             form = PaymentForm()
-
         if not stripe_public_key:
             messages.warning(request, 'Stripe Public Key is missing')
-        context = {
-            'form': form,
-            'appointment': appointment,
-            'stripe_public_key': stripe_public_key,
-            'client_secret': intent.client_secret
-        }
+    form = PaymentForm()
+    context = {
+        'form': form,
+        'appointment': appointment,
+        'stripe_public_key': stripe_public_key,
+        'client_secret': stripe_secret_key
+    }
     return render(request, 'checkout/checkout.html', context)
 
 

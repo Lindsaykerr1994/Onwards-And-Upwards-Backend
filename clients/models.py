@@ -5,6 +5,13 @@ from django.utils.translation import gettext_lazy as _
 class Client(models.Model):
     class Inquiry(models.TextChoices):
         REFERRAL = 'REF', _('Referral')
+        EMAIL = 'EML', _('Email')
+        WEBSITE = 'WEB', _('Website')
+        PHONE = 'PHO', _('Phone')
+        FACEBOOK = 'FAB', _('Facebook')
+        FACETOFACE = 'F2F', _('Face To Face')
+        INSTAGRAM = 'INS', _('Instagram')
+        TWITTER = 'TWT', _('Twitter')
         OTHER = 'OTH', _('Other')
 
     first_name = models.CharField(max_length=32, null=False, blank=False)
