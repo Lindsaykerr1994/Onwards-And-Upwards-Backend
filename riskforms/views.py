@@ -17,9 +17,10 @@ def add_participant_form(request, appointment_number):
     if formNum >= partNum:
         return redirect(reverse('home'))
     else:
-        print("We can add more forms")
         if request.method == "POST":
             partForm = ParticipantForm(request.POST)
+            if partForm.is_valid():
+                print("nice")
         partForm = ParticipantForm()
     context = {
         'appointment': appointment,
