@@ -18,6 +18,8 @@ def add_participant_form(request, appointment_number):
         return redirect(reverse('home'))
     else:
         if request.method == "POST":
+            form_data = request.POST
+            print(form_data)
             partForm = ParticipantForm(request.POST)
             if partForm.is_valid():
                 print("nice")

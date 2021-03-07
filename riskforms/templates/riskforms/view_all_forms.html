@@ -8,7 +8,18 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div class="row">
-            
+            <div class="col mx-auto">  
+                <h3>Thank you for making an appointment with Onwards & Upwards</h3>
+                <p>Before we meet on {{ appointment.appointment_date }}, we request that you complete the form via the link below.</p>
+                <p>If you have already completed a form for this appoinment and you do not see it listed below, please contact us at:</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col mx-auto">
+                {% for participant in participants %}
+                    {{ participant.last_name }}, {{ participant.first_name }}
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}
