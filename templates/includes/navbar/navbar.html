@@ -1,0 +1,30 @@
+<header class="container-fluid fixed-top">
+    <div class="row">
+        <div class="col-6 my-0 py-0 text-center text-lg-left">
+            <a href="{% url 'home' %}" class="nav-link main-logo-link">
+                <img src="../../media/onwards-logo.svg">
+                <p>Onwards-And-Upwards</p>
+            </a>
+        </div>
+        <div class="col-6 my-auto py-0 text-right">
+            <ul class="list-inline list-unstyled text-right my-0">
+                <li class="list-inline-item dropdown">
+                    <a class="text-black nav-link" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button><i class="fas fa-bars fa-lg"></i></button>
+                    </a>
+                    <div class="dropdown-menu border-0" aria-labelledby="user-options">
+                        {% if request.user.is_authenticated %}
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'all_appointments' %}" class="dropdown-item">Appointments</a>
+                                <a href="{% url 'all_clients' %}" class="dropdown-item">Clients</a>
+                            {% endif %}
+                            <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
+                        {% else %}
+                            <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>

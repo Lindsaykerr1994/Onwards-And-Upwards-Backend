@@ -115,13 +115,14 @@ def edit_client(request, client_id):
         form = ClientForm(request.POST, instance=client)
         if form.is_valid():
             form.save()
-            print("Editted client successfully")
+            messages.success(request, 'Successfully added client')
             return redirect(reverse('view_client', args=[client.pk]))
         else:
             print("Error, we'll sort it out", form.errors)
     else:
         form = ClientForm(instance=client)
-        print("you are editting client: {client.first_name}")
+        messages.success(request, f'You are editing {client.first_name} \
+                     {client.last_name}')
     template = 'clients/edit_client.html'
     context = {
         "form": form,

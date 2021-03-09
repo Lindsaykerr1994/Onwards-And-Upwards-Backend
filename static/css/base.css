@@ -1,7 +1,6 @@
 html {
     height: 100%;
 }
-
 .icon {
     align-items: center;
     display: inline-flex;
@@ -17,6 +16,7 @@ html {
 }
 .body-container {
     margin-top: 100px;
+    padding-bottom: 50px;
 }
 .appointment-container h4 {
     width: fit-content;
@@ -25,14 +25,22 @@ html {
     margin-right: 15px;
     font-size: 24px;
     color: #000;
+    transition: 0.5s;
+}
+.icon-btn:hover {
+    color: #b35f00;
+    transform: scale(1.05);
 }
 .link-specs {
     color: #000;
     margin-right: 15px;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 14px;
+    text-decoration: underline;
 }
 .link-specs:hover {
-    color: #000;
-    text-decoration: none;
+    color: #ff8c08;
 }
 .text-black {
     color: #000 !important;
@@ -53,6 +61,15 @@ html {
     justify-content: center;
     margin: 0;
     height: 100%;
+}
+.delete-btn {
+    text-align: center;
+}
+.delete-btn i{
+    transition: 0.5s;
+}
+.delete-btn:hover i{
+    transform: scale(1.05);
 }
 @media (min-width: 1200px) {
   .container {

@@ -5,6 +5,17 @@
     left: calc(50vw - 200px);
     height: auto;
     width: 400px;
-    background-color: red;
-    color: white;
+    border-radius: 5px;
+    padding: 0;
+}
+.modal-header{
+    background-color: #FF8C08;
+    border-color:black;
+}
+.modal-footer {
+    border-color:black;
+}
+.modal .btn-light {
+    box-sizing: border-box;
+    border-color: black;
 }

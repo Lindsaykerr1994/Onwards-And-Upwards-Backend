@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock %}
 
+{% block extra_title %}- All Appointments{% endblock %}
+
 {% block content %}
     <div class="body-container container-fluid">
         <div id="welcome-container" class="row">
@@ -61,8 +63,14 @@
                                 <td>{{ appointment.client }}</td>
                                 <td>{{ appointment.activity }} - {{ appointment.course }}</td>
                                 <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
-                                    <i class="fas fa-trash text-danger"></i>
+                                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteAppModal">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </button>
                                 </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">You have no upcoming appointments</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -89,8 +97,14 @@
                                 <td>{{ appointment.client }}</td>
                                 <td>{{ appointment.activity }} - {{ appointment.course }}</td>
                                 <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
-                                    <i class="fas fa-trash text-danger"></i>
+                                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteAppModal">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </button>
                                 </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4">You have no past appointments</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -98,31 +112,19 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="delete-modal">
-        <p>Are you sure you wish to delete this client?</p>
-        <p>Last Name, First Name</p>
-        <button>Cancel</button>
-        <button class="confirm-delete-btn">Confirm</button>
-    </div>
+    {% include 'includes/modals/delete_app.html' %}
 {% endblock %}
 {% block postloadjs %}
     {{ block.super }}
     <script>
         $(".delete-btn").click(function(){
             var appId = $(this).attr("data-appid");
-            console.log(clientId);
+            $("#appIdText").text(appId);
             currentURL = window.location.href;
             newUrl = `${currentURL}delete_appointment/${appId}`;
-            var modal = document.getElementById("delete-modal");
-            console.log(modal);
-            modal.style.display = "block";
-            $(".confirm-delete-btn").click(function(){
+            $("#confirm-delete").click(function(){
                 window.location = newUrl;
-            });
-            /* When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
-            modal.style.display = "none";
-            } */
+            })
         })
     </script>
 {% endblock %} 

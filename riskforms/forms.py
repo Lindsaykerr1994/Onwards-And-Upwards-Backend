@@ -1,5 +1,5 @@
 from django import forms
-from .models import Participant
+from .models import Participant, RAForm
 
 
 class ParticipantForm(forms.ModelForm):
@@ -37,7 +37,7 @@ class ParticipantForm(forms.ModelForm):
 class RiskAcknowledgementForm(forms.ModelForm):
 
     class Meta:
-        model = Participant
+        model = RAForm
         exclude = ('form_number', 'date_created',
                    'participant', 'risk_form')
 

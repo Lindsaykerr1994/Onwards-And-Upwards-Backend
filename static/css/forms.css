@@ -1,4 +1,4 @@
-.onwards-form {
+/* .onwards-form {
     width: 450px;
 }
 .onwards-form.small-form{
@@ -31,4 +31,103 @@
 }
 p.text-right {
     margin-right: 11px;
+} */
+.onwards-form{
+    width: 450px;
+}
+.onwards-form fieldset{
+    margin-bottom: 16px;
+}
+.onwards-form p{
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+.price-input p {
+    text-transform: capitalize;
+    display: inline;
+}
+.onwards-form hr{
+    border-color: rgba(42, 47, 54, 0.55);
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+.form-input:not(.solo-input, .price-input){
+    width: 430px;
+    height: 43px;
+    margin: 0 10px 8px 10px;
+    border: 0;
+    border-bottom: 1px solid rgba(42, 47, 54, 0.55);
+    position: relative;
+    right: 0;
+    top: 0;
+}
+.form-input.textarea-input {
+    height: 110px;
+}
+.solo-input{
+    width: 430px;
+    height: 43px;
+    margin: 8px 10px 0 10px;
+    border: 0;
+    position: relative;
+    right: 0;
+    top: 0;
+    padding-top: 8px;
+}
+.form-input.activeInput:not(.solo-input){
+    border-bottom: 1px solid rgba(255, 140, 8, 0.55)
+}
+.form-input input:not([type="checkbox"]), .form-input select{
+    border: 0;
+    height: 34px;
+    position: absolute;
+    bottom: 0;
+}
+.form-input textarea{
+    border: 0;
+    height: 102px;
+    position: absolute;
+    bottom: 0;
+}
+input:focus, input:active, select:focus, select:active, textarea:focus, textarea:active {
+    outline: none;
+}
+.form-input input, .form-input select, .form-input textarea{
+    width:100%;
+}
+.twoInput {
+    width: 430px;
+    margin: 0 10px 8px 10px;
+}
+.twoInput .form-input {
+    width: 210px;
+    display: inline-block;
+    margin: 0;
+}
+.form-input:not(.solo-input) label {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    z-index: 2;
+    margin-bottom: 0;
+}
+.form-input.activeInput label{
+    font-size: 10px;
+    color: #ff8c08;
+    top: -1px;    
+    transition: 0.4s;
+}
+.form-input.stickLabel label{
+    top: -1px;
+    font-size: 10px;
+    transition: 0.4s;
+}
+.form-input.textarea-input label {
+    top: 8px;
+}
+.form-input.activeInput.textarea-input label {
+    top: -4px;
+}
+.form-input.stickLabel.textarea-input label {
+    top: -4px;
 }

@@ -1,11 +1,14 @@
+.table-hover tbody tr {
+    transition: 0.4s;
+}
+.table-hover tbody tr:hover {
+    background-color: hsla(32, 100%, 35%, 0.075);
+}
 tbody {
     max-height: 185px;
 }
 tr {
     height: 37px !important;
-}
-td {
-    padding: 6px !important;
 }
 td a {
     color: #000 !important;

@@ -1,10 +1,11 @@
 import io
 from django.shortcuts import render, redirect, reverse
 from django.http import FileResponse
+from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from django.contrib import messages
 from .models import Participant
-from .forms import ParticipantForm, RiskAcknowledgementForm as RAForm
+from .forms import ParticipantForm, RiskAcknowledgementForm
 from appointments.models import Appointment
 
 
@@ -37,19 +38,20 @@ def add_participant_form(request, appointment_number):
             }
             full_name = form_data['first_name'] + " " + form_data['last_name']
             emer_name = form_data['emergency_contact_name']
-            print(full_name, emer_name)
             if full_name == emer_name:
+                print("emergency contact error")
                 messages.error(request,
                                ('You cannot make your emergency contact\
                                 yourself'))
             else:
                 partForm = ParticipantForm(form_data)
                 if partForm.is_valid():
-                    print("Form submitted")
+                    print("Part Form valid")
                     participant = partForm.save()
                     participant.appointment = appointment
                     participant.save(update_fields=['appointment'])
                     raform_data = {
+                        'participant': participant,
                         'first_name': request.POST['first_name'],
                         'last_name': request.POST['last_name'],
                         'date_of_birth': request.POST['date_of_birth'],
@@ -69,13 +71,23 @@ def add_participant_form(request, appointment_number):
                         'signed_by': request.POST['signed_by'],
                         'date_signed': request.POST['date_signed']
                     }
-                    raForm = RAForm(raform_data)
+                    raForm = RiskAcknowledgementForm(raform_data)
                     if raForm.is_valid():
-                        print("we can make a pdf now")
+                        raForm.save()
+                        print("raForm valid")
+                        raFile = create_riskack_form(
+                                                     appointment_number,
+                                                     form_data)
+                        raForm.risk_form = raFile
+                        print(raFile)
+                    else:
+                        print("not valid RAFORM")
+                        print(raForm.errors)
+                        participant.delete()
                 else:
                     print("Error with form", partForm.errors)
                     messages.error(request,
-                                ('Please check that form is valid'))
+                                   ('Please check that form is valid'))
         partForm = ParticipantForm()
     context = {
         'appointment': appointment,
@@ -84,18 +96,9 @@ def add_participant_form(request, appointment_number):
     return render(request, 'riskforms/add_risk_form.html', context)
 
 
-def create_riskack_form(request, appointment_number):
-    # Create a file-like buffer to receive PDF data.
-    buffer = io.BytesIO()
-    # Create the PDF object, using the buffer as its "file."
-    p = canvas.Canvas(buffer)
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 100, "Hello world.")
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-    # FileResponse sets the Content-Disposition header so that browsers
-    # present the option to save the file.
-    buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+def create_riskack_form(appointment_number, form_data):
+    pdf = canvas.Canvas("test.pdf")
+    pdf.setTitle("myTest")
+    pdf.showPage()
+    pdf.save()
+    return pdf

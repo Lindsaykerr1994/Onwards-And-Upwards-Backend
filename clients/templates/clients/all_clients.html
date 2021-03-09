@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock %}
 
+{% block extra_title %}- All Clients{% endblock %}
+
 {% block content %}
     <div class="body-container container-fluid">
         <div class="welcome-container row">
@@ -128,8 +130,10 @@
                                     N/A
                                 {% endfor %}
                             </td>
-                            <td data-clientid="{{ client.pk }}" class="delete-btn text-danger">
-                                <i class="fas fa-trash"></i>
+                            <td class="delete-btn" data-clientid="{{ client.pk }}" data-clientname="{{ client.first_name }} {{ client.last_name }}">
+                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteClientModal">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </button>
                             </td>
                             {% endif %}
                         </tr>
@@ -139,17 +143,12 @@
             </div>
         </div>
     </div>
-    <div class="modal" id="delete-modal">
-        <p>Are you sure you wish to delete this client?</p>
-        <p>Last Name, First Name</p>
-        <button>Cancel</button>
-        <button class="confirm-delete-btn">Confirm</button>
-    </div>
+    {% include 'includes/modals/delete_client.html' %}
 {% endblock %}
 
 {% block postloadjs %}
     {{ block.super }}
-    <script>
+    <!--<script>
         $(".delete-btn").click(function(){
             var clientId = $(this).attr("data-clientid");
             console.log(clientId);
@@ -165,6 +164,18 @@
             span.onclick = function() {
             modal.style.display = "none";
             } */
+        })
+    </script> -->
+    <script>
+        $(".delete-btn").click(function(){
+            var clientId = $(this).attr("data-clientid");
+            var clientName = $(this).attr("data-clientname");
+            $("#clientNameText").text(clientName);
+            currentURL = window.location.href;
+            newUrl = `${currentURL}delete_client/${clientId}`;
+            $("#confirm-delete").click(function(){
+                window.location = newUrl;
+            })
         })
     </script>
     <script type="text/javascript">

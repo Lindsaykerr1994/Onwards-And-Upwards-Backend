@@ -16,6 +16,8 @@
     {% block corecss %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/toasts.css' %}">
+        <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     {% endblock %}
 
     {% block extra_css %}
@@ -36,40 +38,24 @@
     <title>Onwards And Upwards {% block extra_title %}{% endblock %}</title>
   </head>
   <body>
-    <header class="container-fluid fixed-top">
-        <div class="row">
-            <div class="col-12 col-md-6 my-auto py-0 text-center text-lg-left">
-                <a href="{% url 'home' %}" class="nav-link main-logo-link">
-                    <p>Onwards-And-Upwards</p>
-                </a>
-            </div>
-            <div class="col-12 col-md-6 my-auto py-0 text-right">
-                <ul class="list-inline list-unstyled text-right my-0">
-                    <li class="list-inline-item dropdown">
-                        <a class="text-black nav-link" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <div class="text-center">
-                                <div><i class="fas fa-bars fa-lg"></i></div>
-                            </div>
-                        </a>
-                        <div class="dropdown-menu border-0" aria-labelledby="user-options">
-                            {% if request.user.is_authenticated %}
-                                {% if request.user.is_superuser %}
-                                    <a href="{% url 'all_appointments' %}" class="dropdown-item">Appointments</a>
-                                    <a href="{% url 'all_clients' %}" class="dropdown-item">Clients</a>
-                                {% endif %}
-                                <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
-                            {% else %}
-                                <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
-                            {% endif %}
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </header>
+    {% include 'includes/navbar/navbar.html' %}
 
     {% if messages %}
-        <div class="message-container"></div>
+        <div class="message-container">
+            {% for message in messages %}
+                {% with message.level as level %}
+                    {% if level == 40 %}
+                        {% include 'includes/toasts/toast_error.html' %}
+                    {% elif level == 30 %}
+                        {% include 'includes/toasts/toast_warning.html' %}
+                    {% elif level == 25 %}
+                        {% include 'includes/toasts/toast_success.html' %}
+                    {% else %}
+                        {% include 'includes/toasts/toast_info.html' %}
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
+        </div>
     {% endif %}
 
     {% block page_header %}
@@ -79,6 +65,12 @@
     {% endblock %}
 
     {% block postloadjs %}
+            <script type="text/javascript">
+                $('.toast').toast('show');
+                $(window).click(function(){
+                    $('.toast').toast('hide');
+                })
+            </script>
     {% endblock %}
   </body>
 </html>

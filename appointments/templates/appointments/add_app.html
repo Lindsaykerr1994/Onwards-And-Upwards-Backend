@@ -3,7 +3,10 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/switch.css' %}">
 {% endblock %}
+
+{% block extra_title %}- Add Appointment{% endblock %}
 
 {% block content %}
     <div class="body-container container-fluid">
@@ -20,46 +23,100 @@
                         <input id="id_client" type="text" value="{{ client }}" readonly>
                         <input type="hidden" name="client" value="{{ client.pk }}">
                     {% else %}
-                        <p>Client Details</p>
-                        <select id="client_select" name="client_select">
-                            <!-- How to specificy a new client -->
-                            <option selected disabled>Select A Client</option>
-                            {% for client in clients %}
-                            <option value="{{ client.pk }}" data-first-name="{{ client.first_name }}" data-last-name="{{ client.last_name }}" data-email="{{ client.email_address }}" data-phone="{{ client.phone_number }}">
-                                {{ client.first_name }} {{ client.last_name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                        <input type="text" id="id_client_first_name" name="first_name" placeholder="First Name">
-                        <input type="text" id="id_client_last_name" name="last_name" placeholder="Last Name">
-                        <input type="email" id="id_client_email" name="email" placeholder="Email Address">
-                        <input type="text" id="id_client_phone" name="phone" placeholder="Phone Number">
+                        <fieldset>
+                            <p>Client Details</p>
+                            <hr>
+                            <div class="form-input">
+                                <select id="client_select" name="client_select">
+                                    <!-- How to specificy a new client -->
+                                    <option selected disabled>Select A Client</option>
+                                    {% for client in clients %}
+                                    <option value="{{ client.pk }}" data-first-name="{{ client.first_name }}" data-last-name="{{ client.last_name }}" data-email="{{ client.email_address }}" data-phone="{{ client.phone_number }}">
+                                        {{ client.first_name }} {{ client.last_name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="twoInput d-flex justify-content-between">
+                            <div class="form-input">
+                                <label for="first_name">First Name</label>
+                                <input type="text" id="id_client_first_name" name="first_name">
+                            </div>
+                            <div class="form-input">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" id="id_client_last_name" name="last_name">
+                            </div>
+                            </div>
+                            <div class="form-input">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="id_client_email" name="email">
+                            </div>
+                            <div class="form-input">
+                                <label for="phone">Phone Number</label>
+                                <input type="text" id="id_client_phone" name="phone">
+                            </div>
+                        </fieldset>
                     {% endif %}
                     <p>Appointment Details</p>
-                    <select id="id_activity_select" name="activity">
-                        <option selected disabled>Select An Activity</option>
-                        {% for activity in activities %}
-                        <option  value="{{ activity.pk }}">{{ activity.friendly_name }}</option>
-                        {% endfor %}
-                    </select>
-                    <select id="id_course" name="course">
-                        <option selected disabled value="0">Select A Course</option>
-                        {% for course in courses %}
-                            <option class="d-none" data-activity="{{ course.activity.pk }}" data-solo="{{ course.solo }}" data-price="{{ course.price }}" value="{{ course.pk }}">{{ course.friendly_name }} {% if course.solo %} {% endif %}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="id_solo">Solo/ Group
-                        <input type="checkbox" id="id_solo" name="isSolo" checked="true">
-                    </label>
-                    <input type="number" id="id_number_participants" name="appointment_participants" placeholder="Number Of Participants">
-                    <input type="text" id="id_date" name="appointment_date" placeholder="Select A Date (YYYY-MM-DD)">
-                    <input type="text" id="id_time" name="appointment_time" placeholder="Select A Time">
-                    <input type="text" id="id_location" name="appointment_location" placeholder="Select A Location">
-                    <input type="text" id="id_price" name="appointment_price" readonly placeholder="Select A Price">
-                    <label for="override_price">Override Price?</label>
-                    <input type="checkbox" id="id_override_price" name="override_price">
-                    <textarea name="add_notes"></textarea>
-                    <input type="submit" class="d-block">
+                    <hr>
+                    <div class="form-input">
+                        <select id="id_activity_select" name="activity">
+                            <option selected disabled>Select An Activity</option>
+                            {% for activity in activities %}
+                            <option  value="{{ activity.pk }}">{{ activity.friendly_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-input">
+                        <select id="id_course" name="course">
+                            <option selected disabled value="0">Select A Course</option>
+                            {% for course in courses %}
+                                <option class="d-none" data-activity="{{ course.activity.pk }}" data-solo="{{ course.solo }}" data-price="{{ course.price }}" value="{{ course.pk }}">{{ course.friendly_name }} {% if course.solo %} {% endif %}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-input solo-input d-flex justify-content-around">
+                        <p id="soloText">Solo</p>
+                        <label class="switch">
+                            <input id="id_solo" name="isSolo" checked="true" type="checkbox"><span class="slider round"></span>
+                        </label>
+                        <p id="groupText">Group</p>
+                        <!--<label for="id_solo">Solo/ Group
+                            <input type="checkbox" id="id_solo" name="isSolo" checked="true">
+                        </label>-->
+                    </div>
+                    <div class="form-input">
+                        <input type="number" id="id_number_participants" name="appointment_participants" placeholder="Number Of Participants">
+                    </div>
+                    <div class="twoInput d-flex justify-content-between">
+                        <div class="form-input">
+                            <label for="appointment_date">Date</label>
+                            <input type="text" id="id_date" name="appointment_date">
+                        </div>
+                        <div class="form-input">
+                            <label for="appointment_time">Time</label>
+                            <input type="text" id="id_time" name="appointment_time">
+                        </div>
+                    </div>
+                    <div class="form-input">
+                        <label for="appointment_location">Location</label>
+                        <input type="text" id="id_location" name="appointment_location">
+                    </div>
+                    <div class="form-input price-input">
+                        <label for="appointment_price">Price</label>
+                        <input type="text" id="id_price" name="appointment_price" readonly>
+                    </div>
+                    <div class="form-input price-input">
+                        <p>Override Price?</p>
+                        <input type="checkbox" id="id_override_price" name="override_price">
+                    </div>
+                    <div class="form-input textarea-input">
+                        <label for="add_notes">Additional Notes</label>
+                        <textarea name="add_notes"></textarea>
+                    </div>
+                    <div class="form-input">
+                        <input type="submit" class="d-block">
+                    </div>
                 </form>
             </div>
         </div>
@@ -69,4 +126,22 @@
 {% block postloadjs %}
     {{ block.super }}
     <script src="{% static 'js/appointment.js' %}"></script>
+    <script type="text/javascript">
+        $(".form-input").focusin(function(){
+            $(this).addClass("activeInput");
+        })
+        $(".form-input").focusout(function(){
+            $(this).removeClass("activeInput");
+        })
+        $(".form-input input[type='text']").change(function(){
+            var inputVal = $(this).children("input").val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).addClass("stickLabel");
+                } else {
+                    $(this).removeClass("stickLabel");
+                }
+            }
+        })
+    </script>
 {% endblock %}

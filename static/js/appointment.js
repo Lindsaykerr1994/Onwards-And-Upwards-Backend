@@ -35,8 +35,6 @@ function handleCourseChange() {
     if(Number.isNaN(NOP)){
         if($("#id_solo").is(":checked")){
             $("#id_number_participants").val(1)
-        } else {
-            $("#id_number_participants").val(2)
         }
        
     }
@@ -52,15 +50,9 @@ function handleSoloChange() {
                 num = 1;
                 $("#id_number_participants").val(num);
             }
-        } else {
-            if(num<2){
-                num = 2;
-                $("#id_number_participants").val(num);
-            }
         }
     }
     if($("#id_course").val()!==null){
-        console.log("course selected");
         var i, altOption;
         var option = $(`#id_course option:selected`);
         var optionText = $(option).text().trim();
@@ -129,3 +121,11 @@ function calculatePrice(code) {
     }
     $("#id_price").val(cost);
 }
+
+$("#id_override_price").change(function(){
+    if($("#id_override_price").is(":checked")){
+        $("#id_price").attr("readonly", false);
+    } else {
+        $("#id_price").attr("readonly", true);
+    }
+})

@@ -1,0 +1,56 @@
+header {
+    height: 60px;
+    background-color: white;
+    border-bottom: 5px solid black;
+}
+header > .row {
+    height: 60px;
+}
+.nav-link {
+    padding-left: 0;
+    padding-right: 0;
+}
+.main-logo-link {
+    line-height: 40px;
+    color: black;
+    transition: 0.5s;
+}
+.main-logo-link:hover{
+    color: #ff8c08;
+}
+.main-logo-link p{
+    display: inline;
+    margin: 0;
+    font-family: 'Arial';
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1.1;
+}
+.main-logo-link img {
+    height: 40px;
+    width: 40px;
+    margin: 0 10px 1.6px 10px;
+}
+.nav-link button {
+    height: 40px;
+    width: 40px;
+    background-color: white;
+    border-radius: 5px;
+    border-color: transparent;
+    transition: 0.5s;
+}
+.nav-link button:hover {
+    border-color: black;
+}
+.show .nav-link button {
+    background-color: black;
+    border-color: #ff8c08;
+    color: #ff8c08;
+}
+.dropdown-menu {
+    padding: 0;
+}
+.dropdown-item:hover {
+    background-color: rgba(0,0,0,0.8);
+    color: #ff8c08;
+}

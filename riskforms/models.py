@@ -31,7 +31,7 @@ class Participant(models.Model):
 class RAForm(models.Model):
     form_number = models.CharField(max_length=32, null=False, editable=False)
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE,
-                                    null=False, blank=False)
+                                    null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     first_name = models.CharField(max_length=32, null=False, blank=False)
     last_name = models.CharField(max_length=32, null=False, blank=False)
@@ -55,21 +55,6 @@ class RAForm(models.Model):
     signed_by = models.CharField(max_length=64, null=False, blank=False)
     date_signed = models.DateField()
     risk_form = models.FileField(null=True, blank=True)
-
-    def _generate_form_number(self):
-        """
-        Generate a random, unique order number using UUID
-        """
-        return uuid.uuid4().hex.upper()
-
-    def save(self, *args, **kwargs):
-        """
-        Override the original save method to set the order number
-        if it hasn't been set already.
-        """
-        if not self.form_number:
-            self.form_number = self._generate_form_number()
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.form_number
