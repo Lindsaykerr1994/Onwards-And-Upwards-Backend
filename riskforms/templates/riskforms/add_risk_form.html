@@ -42,8 +42,8 @@
                     </fieldset>
                     <fieldset>
                         <legend>Emergency Contact</legend>
-                        <input type="text" name="emergency-contact-name" placeholder="Name">
-                        <input type="text" name="emergency-contact-number" placeholder="Number">
+                        <input type="text" name="emergency_name" placeholder="Name">
+                        <input type="text" name="emergency_number" placeholder="Number">
                     </fieldset>
                     <fieldset>
                         <legend>Declaration Of Fitness</legend>
@@ -54,14 +54,14 @@
                         <label for="dec_medication">
                             Please declare any medication recently or currently taken:
                         </label>
-                        <input type="text" name="dec_medication">
+                        <input type="text" name="dec_med">
                         <label for="dec_abs_cond">
                             I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.
                         </label>
                         <input type="checkbox" name="dec_abs_cond">
                     </fieldset>
                     <fieldset>
-                        <input type="hidden" name="acknowledgement_of_risk">
+                        <input type="hidden" name="ack_of_risk" id="ack_of_risk">
                         <input type="hidden" name="signed_by" id="signed_by">
                         <input type="hidden" name="date_signed" id="date_signed">
                     </fieldset>
@@ -98,9 +98,11 @@
             $("#confirm-btn").click(function(){
                 var signName = $("input[name='signing_input']").val();
                 var signDate = $("input[name='date_input']").val();
+                var ackCheck = $("#ack_checkbox").val()
                 if(signName.length > 0 && signDate.length > 0){
                     $("#signed_by").val(signName);
                     $("#date_signed").val(signDate);
+                    $("#ack_of_risk").val(ackCheck);
                     console.log("all g, submitting")
                     $("#ra-form").submit();
                 }
