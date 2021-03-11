@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="row">
+            <div class="col-12">
+                <p>Reference No: {{ appointment.appointment_number }}</p>
+                <p>
+                    Thank you for your interest with <strong>Onwards And Upwards</strong>.
+                    <br>
+                    Unfortunately our system indicates that we are unable to process any more participants for this appointment.
+                    <br>
+                    This may be caused by our system automatically retrieving your information from a previous appointment.
+                    <br>
+                    If you believe there is an error, then please contact us via <a href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>.
+                    <br>
+                    If you are part of a group session with us, and have yet to enter your information in order to participate with a scheduled session, then please contact the person who made the booking with us.
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

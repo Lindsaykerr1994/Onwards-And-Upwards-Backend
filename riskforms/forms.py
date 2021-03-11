@@ -38,8 +38,7 @@ class RiskAcknowledgementForm(forms.ModelForm):
 
     class Meta:
         model = RAForm
-        exclude = ('form_number', 'date_created',
-                   'participant', 'risk_form')
+        exclude = ('form_number', 'date_created')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

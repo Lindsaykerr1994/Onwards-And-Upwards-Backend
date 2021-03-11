@@ -113,9 +113,15 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-6">
+                        Risk Acknowledgement Forms
+                    </div>
+                    <!-- Risk Acknowledgement Forms Go Here -->
+                </div>
+                <div class="row">
                     <div class="col-12">
                         <p><b>Upcoming Appointments</b></p>
-                        {% if up_apps %}
+                        {% if up_apps or up_part_apps %}
                         <table class="table">
                             <thead>
                                 <th></th>
@@ -125,6 +131,18 @@
                             </thead>
                             <tbody>
                                 {% for app in up_apps %}
+                                    <tr>
+                                        <td>
+                                            <a href="{% url 'view_app' app.appointment_number %}">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </td>
+                                        <td>{{ app.appointment_number }}</td>
+                                        <td>{{ app.appointment_date }}</td>
+                                        <td>{{ app.activity }} - {{ app.course }}</td>
+                                    </tr>
+                                {% endfor %}
+                                {% for app in up_part_apps %}
                                     <tr>
                                         <td>
                                             <a href="{% url 'view_app' app.appointment_number %}">
@@ -174,12 +192,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-6">
-                        Risk Acknowledgement Forms
-                    </div>
-                    <!-- Risk Acknowledgement Forms Go Here -->
-                </div>
+                
                 
             </div>
         </div>
@@ -187,9 +200,5 @@
 {% endblock %}
 
 {% block postloadjs %}
-    <script>
-        $(document).ready(function(){
-            console.log("hey")
-        })
-    </script>
+    {{ block.super }}
 {% endblock %}

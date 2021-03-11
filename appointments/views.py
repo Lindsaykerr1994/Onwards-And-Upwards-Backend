@@ -8,6 +8,7 @@ import datetime
 from activities.models import Activity, Course
 from clients.models import Client
 from clients.forms import ClientForm
+from riskforms.models import Participant
 
 
 @login_required
@@ -71,8 +72,11 @@ def view_appoinment(request, appointment_number):
         return redirect(reverse('home'))
     appointment = get_object_or_404(Appointment,
                                     appointment_number=appointment_number)
+    all_parts = Participant.objects.all()
+    participants = all_parts.filter(appointment=appointment)
     context = {
-        'appointment': appointment
+        'appointment': appointment,
+        'participants': participants,
     }
     return render(request, 'appointments/view_appointment.html', context)
 

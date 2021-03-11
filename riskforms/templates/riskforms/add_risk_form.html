@@ -21,46 +21,86 @@
                 <form method="POST" class="onwards-form" id="ra-form" action="{% url 'add_part_form' appointment.appointment_number %}">
                     {% csrf_token %}
                     <fieldset>
-                        <legend>Participant Details</legend>
-                        <input type="text" name="first_name"
-                        placeholder="First Name *" required>
-                        <input type="text" name="last_name"
-                        placeholder="Last Name *" required>
-                        <input type="text" name="date_of_birth"
-                        placeholder="Date Of Birth *" required>
-                        <input type="email" name="email_address"
-                        placeholder="Email Address">
-                        <input type="text" name="phone_number"
-                        placeholder="Phone Number">
-                        <input type="text" name="address1"
-                        placeholder="Address *" required>
-                        <input type="text" name="address2"
-                        placeholder="Street Address 2" required>
-                        <input type="text" name="address3"
-                        placeholder="Street Address 3" required>
-                        <input type="text" name="town_or_city"
-                        placeholder="Town Or City" required>
-                        <input type="text" name="postcode" placeholder="Postcode *" required>
+                        <p>Participant Details</p>
+                        <hr>
+                        <div class="twoInput d-flex justify-content-between">
+                            <div class="form-input">
+                                <label for="first_name">First Name *</label>
+                                <input type="text" name="first_name" required>
+                            </div>
+                            <div class="form-input">
+                                <label for="first_name">Last Name *</label>
+                                <input type="text" name="last_name" required>
+                            </div>
+                        </div>
+                        <div class="form-input">
+                            <label for="date_of_birth">Date Of Birth</label>
+                            <input type="text" name="date_of_birth" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="email_address">Email Address</label>
+                            <input type="email" name="email_address">
+                        </div>
+                        <div class="form-input">
+                            <label for="phone_number">Phone Number *</label>
+                            <input type="text" name="phone_number" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="address1">Address Line 1 *</label>
+                            <input type="text" name="address1" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="address2">Address Line 2</label>
+                            <input type="text" name="address2">
+                        </div>
+                        <div class="form-input">
+                            <label for="address3">Address Line 3</label>
+                            <input type="text" name="address3">
+                        </div>
+                        <div class="twoInput d-flex justify-content-between">
+                            <div class="form-input">
+                                <label for="town_or_city">Town Or City *</label>
+                                <input type="text" name="town_or_city" required>
+                            </div>
+                            <div class="form-input">
+                                <label for="postcode">Post Code *</label>
+                                <input type="text" name="postcode" required>
+                            </div>
+                        </div>
                     </fieldset>
                     <fieldset>
-                        <legend>Emergency Contact</legend>
-                        <input type="text" name="emergency_name" placeholder="Name">
-                        <input type="text" name="emergency_number" placeholder="Number">
+                        <p>Emergency Contact</p>
+                        <hr>
+                        <div class="form-input">
+                            <label for="emergency_name">Emergency Contact Name</label>
+                            <input type="text" name="emergency_name">
+                        </div>
+                        <div class="form-input">
+                            <label for="emergency_number">Emergency Contact Number</label>
+                            <input type="text" name="emergency_number">
+                        </div>
                     </fieldset>
                     <fieldset>
-                        <legend>Declaration Of Fitness</legend>
-                        <label for="dec_illness">
-                            Please declare any recent or ongoing injury/condition/illness:
-                        </label>
-                        <input type="text" name="dec_illness">
-                        <label for="dec_medication">
-                            Please declare any medication recently or currently taken:
-                        </label>
-                        <input type="text" name="dec_med">
-                        <label for="dec_abs_cond">
-                            I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.
-                        </label>
-                        <input type="checkbox" name="dec_abs_cond">
+                        <p>Declaration Of Fitness</p>
+                        <hr>
+                        <div class="form-input">
+                            <label for="dec_illness">
+                                Please declare any recent or ongoing injury/condition/illness:
+                            </label>
+                            <input type="text" name="dec_illness">
+                        </div>
+                        <div class="form-input">
+                            <label for="dec_medication">
+                                Please declare any medication recently or currently taken:
+                            </label>
+                            <input type="text" name="dec_med">
+                        </div>
+                        <div class="form-input">
+                            <label for="dec_abs_cond">
+                                I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.
+                            </label>
+                            <input type="checkbox" name="dec_abs_cond">
+                        </div>
                     </fieldset>
                     <fieldset>
                         <input type="hidden" name="ack_of_risk" id="ack_of_risk">
@@ -68,51 +108,60 @@
                         <input type="hidden" name="date_signed" id="date_signed">
                     </fieldset>
                 </form>
-                    <button id="submit-btn">Cha cha</button>
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#confirmRAModal">
+                        Submit
+                    </button>
             </div>
         </div>
     </div>
-    <div class="modal" id="signature-modal">
-        <p class="small">I hereby acknowledge and agree that the activities supervised by Onwards And Upwards and its associates have inherent risks. I have full knowledge of the nature and extent of all risks associated with these activities. I understand that failure to exercise due care and to follow guidance and instructions whilst on session may result in my injury or death.</p>
-        <input type="checkbox" name="ack_checkbox">
-        <label for="signing_input">
-            PARTICIPANT’S SIGNATURE:
-            <span class="small">(or legal guardian if under 18)</span>
-        </label>
-        <input type="text" name="signing_input">
-        <label for="date_input">
-            DATE:
-        </label>
-        <input type="text" name="date_input">
-        <p id="error-message"> </p>
-        <button id="cancel-btn">Cancel <i class="far fa-window-close"></i></button>
-        <button id="confirm-btn">Confirm <i class="far fa-check-square"></i></button>
-
-    </div>
+    {% include 'includes/modals/confirm_raform.html' %}
 {% endblock %}
 
 {% block postloadjs %}
     {{ block.super }}
     <script type="text/javascript">
-        $("#submit-btn").click(function(event){
-            var modal = document.getElementById("signature-modal");
-            modal.style.display = "block";
-            $("#confirm-btn").click(function(){
-                var signName = $("input[name='signing_input']").val();
-                var signDate = $("input[name='date_input']").val();
-                var ackCheck = $("#ack_checkbox").val()
-                if(signName.length > 0 && signDate.length > 0){
-                    $("#signed_by").val(signName);
-                    $("#date_signed").val(signDate);
-                    $("#ack_of_risk").val(ackCheck);
-                    console.log("all g, submitting")
-                    $("#ra-form").submit();
+        $(".form-input").focusin(function(){
+            $(this).addClass("activeInput");
+        })
+        $(".form-input").focusout(function(){
+            $(this).removeClass("activeInput");
+        })
+        $(".form-input input[type='text']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
                 }
+            }
+        });
+        $(".form-input input[type='email']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        })
+    </script>
+    <script>
+        $("#confirm-btn").click(function(){
+            console.log("clicked submit")
+            var signName = $("input[name='signing-input']").val();
+            var signDate = $("input[name='date-input']").val();
+            var ackCheck = $("#ack_checkbox").val()
+            if(signName.length > 0 && signDate.length > 0){
+                console.log("submitting")
+                $("#signed_by").val(signName);
+                $("#date_signed").val(signDate);
+                $("#ack_of_risk").val(ackCheck);
+                $("#ra-form").submit();
+            } else {
                 $("#error-message").text("Please ensure the form is valid");
-            })
-            $("#cancel-btn").click(function(){
-                modal.style.display = "none";
-            })
+            }
         })
     </script>
 {% endblock %}

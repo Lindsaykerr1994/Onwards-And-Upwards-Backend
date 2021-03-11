@@ -29,7 +29,9 @@
                     </div>
                 </form>
                 {% if search_term %}
-                    <p>Searching for: "{{ search_term }}"</p>
+                <div>
+                    <span class="search-term">"{{ search_term }}" <i class="fas fa-times"></i></span>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -40,9 +42,12 @@
                         <h4>Upcoming Appointments</h4>
                     </div>
                     <div class="col-2">
-                        <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right icon-btn">
-                            <i class="fas fa-calendar-plus"></i>
-                        </a>
+                        <div class="tooltip-container">
+                            <span>New Appointment</span><span> </span>
+                            <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right icon-btn" >
+                                <i class="fas fa-calendar-plus"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <table class="table table-hover">
@@ -70,7 +75,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="4">You have no upcoming appointments</td>
+                                <td colspan="5">You have no upcoming appointments</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -104,7 +109,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="4">You have no past appointments</td>
+                                <td colspan="5">You have no past appointments</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -126,5 +131,20 @@
                 window.location = newUrl;
             })
         })
+        $(".search-term i").click(function(){
+            var currentUrl = new URL(window.location);
+            currentUrl.searchParams.delete("q");
+            window.location.replace(currentUrl);
+        })
+        $(".icon-btn").hover(function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeIn("fast");
+        }, function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeOut("fast");
+        })
+    </script>
+    <script>
+        
     </script>
 {% endblock %} 

@@ -8,6 +8,7 @@ from .models import Client
 from .forms import ClientForm
 from activities.models import Activity, Course
 from appointments.models import Appointment
+from riskforms.models import Participant
 
 register = template.Library()
 
@@ -71,14 +72,27 @@ def view_client(request, client_id):
     for app in apps:
         if app.appointment_date > today:
             up_apps.append(app)
-    for app in apps:
-        if app.appointment_date < today:
+        else:
             past_apps.append(app)
+    all_parts = Participant.objects.all()
+    up_part_apps = []
+    past_part_apps = []
+    participant = all_parts.filter(client=client)
+    if participant:
+        part_apps = participant.appointment.all()
+        for app in part_apps:
+            if app.appointment_date > today:
+                up_part_apps.append(app)
+            else:
+                past_part_apps.append(app)
+        print(up_part_apps, past_part_apps)
     context = {
         'client': client,
         'root_of_inquiry': client.get_root_of_inquiry_display(),
         'up_apps': up_apps,
         'past_apps': past_apps,
+        'up_part_apps': up_part_apps,
+        'past_part_apps': past_part_apps
     }
     return render(request, 'clients/view_client.html', context)
 
@@ -118,6 +132,8 @@ def edit_client(request, client_id):
             messages.success(request, 'Successfully added client')
             return redirect(reverse('view_client', args=[client.pk]))
         else:
+            messages.error(request, f'There was a error with the form. \
+                Please check that all inputs were valid')
             print("Error, we'll sort it out", form.errors)
     else:
         form = ClientForm(instance=client)
@@ -141,3 +157,43 @@ def delete_client(request, client_id):
     client.delete()
     messages.success(request, 'Client deleted!')
     return redirect(reverse('all_clients'))
+
+
+@login_required
+def convert_new_client(request, participant_id):
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+    participant = get_object_or_404(Participant, pk=participant_id)
+    part_data = {
+        'first_name': participant.first_name,
+        'last_name': participant.last_name,
+        'email_address': participant.email_address,
+        'phone_number': participant.phone_number,
+        'street_address1': participant.address_line1,
+        'street_address2': participant.address_line2,
+        'town_or_city': participant.town_or_city,
+        'postcode': participant.postcode,
+        'additional_info': 'Created from participant model',
+        'root_of_inquiry': 'REF'
+    }
+    form = ClientForm(part_data)
+    if form.is_valid():
+        client = form.save()
+        participant.client = client
+        participant.save(update_fields=['client'])
+        messages.success(request, f'Successfully created client from \
+            participant: {participant.first_name} {participant.last_name}')
+        return redirect(reverse('view_client', args=[client.id]))
+    else:
+        print(form.errors)
+        messages.error(request, "Missing information preventing creation of \
+            client. Please check the participant's information.")
+        return redirect(reverse('view_participant', args=[participant.id]))
+
+
+@login_required
+def convert_existing_client(request, client_id, participant_id):
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))

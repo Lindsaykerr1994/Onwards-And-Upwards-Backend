@@ -1,12 +1,28 @@
 import io
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import FileResponse
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from django.contrib import messages
-from .models import Participant
+from .models import Participant, RAForm
 from .forms import ParticipantForm, RiskAcknowledgementForm
 from appointments.models import Appointment
+from clients.models import Client
+
+
+@login_required
+def view_participant(request, part_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Sorry, I don't want you doing that.")
+        return redirect(reverse('home'))
+    participant = get_object_or_404(Participant, pk=part_id)
+    clients = Client.objects.all()
+    context = {
+        'participant': participant,
+        'clients': clients
+    }
+    return render(request, 'riskforms/view_participant.html', context)
 
 
 def add_participant_form(request, appointment_number):
@@ -18,8 +34,8 @@ def add_participant_form(request, appointment_number):
     participants = allParts.filter(appointment=appointment)
     formNum = len(participants)
     if formNum >= partNum:
-        print("Already filled in the number of forms required")
-        return redirect(reverse('home'))
+        return redirect(reverse('risk_form_denied',
+                        args=[appointment_number]))
     else:
         if request.method == "POST":
             form_data = {
@@ -39,17 +55,17 @@ def add_participant_form(request, appointment_number):
             full_name = form_data['first_name'] + " " + form_data['last_name']
             emer_name = form_data['emergency_contact_name']
             if full_name == emer_name:
-                print("emergency contact error")
                 messages.error(request,
                                ('You cannot make your emergency contact\
                                 yourself'))
+                return redirect(reverse('add_part_form',
+                               args=[appointment_number]))
             else:
                 partForm = ParticipantForm(form_data)
                 if partForm.is_valid():
                     print("Part Form valid")
                     participant = partForm.save()
-                    participant.appointment = appointment
-                    participant.save(update_fields=['appointment'])
+                    participant.appointment.add(appointment)
                     raform_data = {
                         'participant': participant,
                         'first_name': request.POST['first_name'],
@@ -79,7 +95,9 @@ def add_participant_form(request, appointment_number):
                                                      appointment_number,
                                                      form_data)
                         raForm.risk_form = raFile
-                        print(raFile)
+                        raForm.save()
+                        return redirect(reverse('risk_form_success',
+                                       args=[participant.pk]))
                     else:
                         print("not valid RAFORM")
                         print(raForm.errors)
@@ -99,6 +117,23 @@ def add_participant_form(request, appointment_number):
 def create_riskack_form(appointment_number, form_data):
     pdf = canvas.Canvas("test.pdf")
     pdf.setTitle("myTest")
-    pdf.showPage()
     pdf.save()
     return pdf
+
+
+def risk_form_success(request, part_id):
+    participant = get_object_or_404(Participant, pk=part_id)
+    ra_form = RAForm.objects.get(participant=participant)
+    context = {
+        'participant': participant,
+        'ra_form': ra_form
+    }
+    return render(request, 'riskforms/risk_form_success.html', context)
+
+
+def risk_form_denied(request, appointment_number):
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    context = {
+        'appointment': appointment
+    }
+    return render(request, 'riskforms/risk_form_denied.html', context)

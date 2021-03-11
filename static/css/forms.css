@@ -1,39 +1,8 @@
-/* .onwards-form {
-    width: 450px;
-}
-.onwards-form.small-form{
-    width: 100%;
-}
-.onwards-form *:not(div) {
-    margin: 5px 0px 5px 11px;
-}
-.onwards-form input:not([type='checkbox']):not([type='submit']), .onwards-form select, .onwards-form textarea {
-    width: 428px;
-    height: 30px;
-    display: block;
-    margin: 5px auto;
-    border: 1px solid #000;
-    padding: 4px 8px;
-}
-.small-form input:not([type='checkbox']):not([type='submit']), .small-form textarea{
-    width: 300px;
-    margin-left: 0px;
-}
-.onwards-form textarea {
-    height: 100px;
-}
-#name-form-container input {
-    width: 145px;
-    display: inline-block;
-}
-#name-form-container input:nth-of-type(1) {
-    margin-right: 6px;
-}
-p.text-right {
-    margin-right: 11px;
-} */
 .onwards-form{
     width: 450px;
+}
+.onwards-form.small-onwards-form {
+    width:350px;
 }
 .onwards-form fieldset{
     margin-bottom: 16px;
@@ -42,7 +11,7 @@ p.text-right {
     margin-bottom: 0;
     text-transform: uppercase;
 }
-.price-input p {
+.no-border p {
     text-transform: capitalize;
     display: inline;
 }
@@ -61,6 +30,9 @@ p.text-right {
     right: 0;
     top: 0;
 }
+.onwards-form.small-onwards-form .form-input {
+    width: 330px;
+}
 .form-input.textarea-input {
     height: 110px;
 }
@@ -73,6 +45,9 @@ p.text-right {
     right: 0;
     top: 0;
     padding-top: 8px;
+}
+.no-border {
+    border-bottom: 0px !important;
 }
 .form-input.activeInput:not(.solo-input){
     border-bottom: 1px solid rgba(255, 140, 8, 0.55)
@@ -92,8 +67,10 @@ p.text-right {
 input:focus, input:active, select:focus, select:active, textarea:focus, textarea:active {
     outline: none;
 }
-.form-input input, .form-input select, .form-input textarea{
+.form-input input:not([type="checkbox"]), .form-input select, .form-input textarea{
     width:100%;
+    z-index: 3;
+    background-color: transparent;
 }
 .twoInput {
     width: 430px;
@@ -119,15 +96,35 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
 }
 .form-input.stickLabel label{
     top: -1px;
+    z-index: 4;
     font-size: 10px;
-    transition: 0.4s;
+    transition: top 0.4s;
+    transition: font-size 0.4;
 }
 .form-input.textarea-input label {
-    top: 8px;
+    top: 78px;
 }
 .form-input.activeInput.textarea-input label {
-    top: -4px;
+    top: -5px;
 }
 .form-input.stickLabel.textarea-input label {
-    top: -4px;
+    top: -5px;
+}
+/* Stripe Loading Spinner */
+#loading-overlay {
+	display: none;
+	position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(23, 162, 184, .85);
+    z-index: 9999;
+}
+.loading-spinner {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    height: 100%;
 }

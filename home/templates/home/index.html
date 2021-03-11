@@ -49,12 +49,18 @@
             <h4 class="d-inline-block">Upcoming Appointments</h4>
         </div>
         <div class="col-2">
-            <a href="{% url 'add_client' %}" class="d-inline-block float-right icon-btn">
-                <i class="fas fa-user-plus"></i>
-            </a>
-            <a href="{% url 'add_app' %}" class="d-inline-block float-right icon-btn">
-                <i class="fas fa-calendar-plus"></i>
-            </a>
+            <div class="tooltip-container d-inline-block float-right">
+                <span>New Client</span><span> </span>
+                <a href="{% url 'add_client' %}" id="new-client-btn" class="d-inline-block float-right icon-btn" >
+                    <i class="fas fa-user-plus"></i>
+                </a>
+            </div>
+            <div class="tooltip-container d-inline-block float-right">
+                <span>New Appointment</span><span> </span>
+                <a href="{% url 'add_client' %}" id="new-appt-btn" class="d-inline-block float-right icon-btn" >
+                    <i class="fas fa-calendar-plus"></i>
+                </a>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -66,6 +72,7 @@
                     <th>Date</th>
                     <th>Client</th>
                     <th>Activity</th>
+                    <th></th>
                 </thead>
                 <tbody>
                     <!-- Limit To Next 5 or 10 Appointments -->
@@ -77,7 +84,9 @@
                         <td>{{ appointment.client }}</td>
                         <td>{{ appointment.activity }}</td>
                         <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
-                            <i class="fas fa-trash text-danger"></i>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteAppModal">
+                                <i class="fas fa-trash text-danger"></i>
+                            </button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -87,12 +96,7 @@
         </div>
     </div>
 </div>
-<div class="modal" id="delete-modal">
-    <p>Are you sure you wish to delete this client?</p>
-    <p>Last Name, First Name</p>
-    <button>Cancel</button>
-    <button class="confirm-delete-btn">Confirm</button>
-</div>
+{% include 'includes/modals/delete_app.html' %}
 {% endblock %}
 
 {% block postloadjs %}
@@ -109,18 +113,19 @@
     <script>
         $(".delete-btn").click(function(){
             var appId = $(this).attr("data-appid");
+            $("#appIdText").text(appId);
             currentURL = window.location.href;
             newUrl = `${currentURL}/appointments/delete_appointment/${appId}`;
-            var modal = document.getElementById("delete-modal");
-            console.log(modal);
-            modal.style.display = "block";
-            $(".confirm-delete-btn").click(function(){
+            $("#confirm-delete").click(function(){
                 window.location = newUrl;
-            });
-            /* When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
-            modal.style.display = "none";
-            } */
+            })
+        })
+        $(".icon-btn").hover(function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeIn("fast");
+        }, function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeOut("fast");
         })
     </script>
 {% endblock%}

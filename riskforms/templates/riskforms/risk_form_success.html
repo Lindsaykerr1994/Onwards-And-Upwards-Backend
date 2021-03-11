@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="row">
+            <div class="col-12">
+                <p>Reference No: {{ appointment.appointment_number }}</p>
+                <p>
+                    Thank you for registering with <strong>Onwards And Upwards</strong>.
+                    <br>
+                    We have successfully created an entry into our database for future appointments.
+                    <br>
+                    We promised to securely store your information.
+                </p>
+                <p>We look forwards to seeing you on {{ appointment.appointment_date }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

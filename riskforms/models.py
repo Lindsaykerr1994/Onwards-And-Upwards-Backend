@@ -5,8 +5,7 @@ from clients.models import Client
 
 
 class Participant(models.Model):
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE,
-                                    null=True, blank=True)
+    appointment = models.ManyToManyField(Appointment)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True,
                                blank=True)
     first_name = models.CharField(max_length=32, null=False, blank=False)

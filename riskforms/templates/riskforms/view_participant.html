@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block extra_title %}- View Participant{% endblock %}
+
+{% block content %}
+    <div class="body-container container-fluid">
+        <div class="header-container row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-11">
+                        <h3><a href="{% url 'view_app' participant.appointment %}">View Appointment</a><i class="fas fa-chevron-right"></i>View Participant</h3>
+                    </div>
+                    <div class="col-1 d-flex align-items-center text-center">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h4>{{ participant.last_name }}, {{ participant.first_name }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="view-client-container" class="row">
+            <div class="col-10 mx-auto">
+                <div class="row">
+                    <div class="col-6">
+                        <p>Full Name:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ participant.first_name }} {{ participant.last_name }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Email Address:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            {% if participant.email_address %}
+                            {{ participant.email_address }}
+                            {% else %}
+                            N/A
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Phone Number:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            {{ participant.phone_number }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Address:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            {{ participant.address_line1 }}
+                        </p>
+                        {% if participant.address_line2 %}
+                        <p>{{ participant.address_line2 }}</p>
+                        {% endif %}
+                        {% if participant.address_line3 %}
+                        <p>{{ participant.address_line3 }}</p>
+                        {% endif %}
+                        <p>{{ participant.town_or_city }}</p>
+                        <p>{{ participant.postcode }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                </div>
+                <div class="row">
+                </div>
+                <div class="row">
+                </div>
+                <div class="row">
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        Risk Acknowledgement Forms
+                    </div>
+                    <!-- Risk Acknowledgement Forms Go Here -->
+                </div>
+                <div class="row">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#convertClientModal">
+                        Convert To Client
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'includes/modals/convert_client.html' %}
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $("#existing-client").click(function(){
+            var clientId = $("#select-client").val()
+            if(typeof(clientId) !== 'undefined'){
+                var currentUrl = window.location.href;
+                currentUrl = currentUrl.split("/")
+                var partId =  currentUrl.pop();
+            }
+        })
+    </script>
+{% endblock %}

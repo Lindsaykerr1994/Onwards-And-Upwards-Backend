@@ -144,35 +144,37 @@
                         <div class="col-6">
                             <h4>Participants Details:</h4>
                             {% if participants %}
-                                <div class="row">
-                                    <div class="col-6">
-                                        <p>Full Name:</p>
+                                {% for part in participants %}
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p>Full Name:</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="{% url 'view_participant' part.pk %}">{{ part.first_name }} {{ part.last_name }}</a>
+                                        </div>
                                     </div>
-                                    <div class="col-6">
-                                        
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p>Date Of Birth:</p>
+                                        </div>
+                                        <div class="col-6">
+                                            {{ part.date_of_birth }}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <p>Date Of Birth:</p>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <p>Risk Acknowledgement Form:</p>
+                                        </div>
+                                        <div class="col-6">
+                                            Form will go here
+                                        </div>
                                     </div>
-                                    <div class="col-6">
-                                        
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button>Convert to Client</button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <p>Risk Acknowledgement Form:</p>
-                                    </div>
-                                    <div class="col-6">
-                                        
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <button>Convert to Client</button>
-                                    </div>
-                                </div>
+                                {% endfor %}
                             {% else %}
                                 <p>This appointment currently has no participants yet</p>
                             {% endif %}
