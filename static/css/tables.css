@@ -4,8 +4,12 @@
 .table-hover tbody tr:hover {
     background-color: hsla(32, 100%, 35%, 0.075);
 }
+thead {
+    font-family: 'Futura Medium';
+}
 tbody {
     max-height: 185px;
+    font-family: 'Futura Light';
 }
 tr {
     height: 37px !important;

@@ -77,7 +77,7 @@
                             </select>
                         </div>
                         <div class="form-input solo-input d-flex justify-content-around">
-                            <p id="soloText">Solo</p>
+                            <p id="soloText" class="text-orange">Solo</p>
                             <label class="switch">
                                 <input id="id_solo" name="isSolo" checked="true" type="checkbox"><span class="slider round"></span>
                             </label>
@@ -103,11 +103,14 @@
                         </div>
                         <div class="form-input">
                             <label for="appointment_price">Price</label>
-                            <input type="text" id="id_price" name="appointment_price" readonly>
+                            <input type="number" id="id_price" name="appointment_price" readonly>
                         </div>
-                        <div class="form-input no-border d-flex justify-content-end">
+                        <div class="form-input checkbox-input no-border d-flex justify-content-end">
                             <p>Override Price?</p>
-                            <input type="checkbox" id="id_override_price" name="override_price">
+                            <label class="ck-container">
+                                <input type="checkbox" id="id_override_price" name="override_price">
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
                         <div class="form-input textarea-input">
                             <label for="add_notes">Additional Notes</label>

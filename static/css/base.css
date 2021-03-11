@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;600;700&display=swap');
 html {
     height: 100%;
 }
@@ -8,18 +9,27 @@ html {
     height: 1.5rem;
     width: 1.5rem;
 }
-.logo-font {
-    text-transform: uppercase;
-}
-.main-logo-link {
-    width: fit-content;
-}
 .body-container {
-    margin-top: 100px;
-    padding-bottom: 50px;
+    min-height: 100vh;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    background-image: url("../../media/welcome-img.jpg");
+    background-repeat: no-repeat no-repeat;
+    background-size: cover;
+    background-position: center 100px;
 }
-.appointment-container h4 {
-    width: fit-content;
+.body-container::before {
+    position: fixed;
+    content: "";
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(white 70%, rgba(255,255,255,0.8), rgba(255,255,255,0.6) , rgba(255,255,255,0.3));
+}
+h1, h2, h3, h4, h5{
+    font-family: 'Oswald';
+    letter-spacing: 1.1px;
 }
 /* MISCELLANEOUS */
 /* Buttons */

@@ -6,6 +6,12 @@ header {
 header > .row {
     height: 60px;
 }
+.logo-font {
+    text-transform: uppercase;
+}
+.main-logo-link {
+    width: fit-content;
+}
 .nav-link {
     padding-left: 0;
     padding-right: 0;

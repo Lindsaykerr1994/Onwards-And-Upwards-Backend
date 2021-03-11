@@ -34,9 +34,9 @@ function handleCourseChange() {
     var NOP = parseInt($("#id_number_participants").val());
     if(Number.isNaN(NOP)){
         if($("#id_solo").is(":checked")){
-            $("#id_number_participants").val(1)
+            $("#id_number_participants").val(1);
+            $("#id_number_participants").change();
         }
-       
     }
     calculatePrice(code);
 }
@@ -50,6 +50,11 @@ function handleSoloChange() {
                 num = 1;
                 $("#id_number_participants").val(num);
             }
+            $("#groupText").removeClass("text-orange");
+            $("#soloText").addClass("text-orange");
+        } else {
+            $("#soloText").removeClass("text-orange");
+            $("#groupText").addClass("text-orange");
         }
     }
     if($("#id_course").val()!==null){
@@ -120,6 +125,7 @@ function calculatePrice(code) {
         return;
     }
     $("#id_price").val(cost);
+    $("#id_price").trigger('change');
 }
 
 $("#id_override_price").change(function(){

@@ -1,5 +1,8 @@
 .onwards-form{
-    width: 450px;
+    width: 480px;
+    padding-top: 10px;
+    background-color: rgba(255,255,255,0.2);
+    border: 1px solid #000;
 }
 .onwards-form.small-onwards-form {
     width:350px;
@@ -8,8 +11,9 @@
     margin-bottom: 16px;
 }
 .onwards-form p{
-    margin-bottom: 0;
     text-transform: uppercase;
+    font-family: 'Futura Medium';
+    margin: 0 10px;
 }
 .no-border p {
     text-transform: capitalize;
@@ -17,13 +21,12 @@
 }
 .onwards-form hr{
     border-color: rgba(42, 47, 54, 0.55);
-    margin-top: 4px;
-    margin-bottom: 12px;
+    margin: 4px 10px 12px 10px;
 }
-.form-input:not(.solo-input, .price-input){
+.form-input:not(.solo-input):not(.price-input){
     width: 430px;
     height: 43px;
-    margin: 0 10px 8px 10px;
+    margin: 0 25px 8px 25px;
     border: 0;
     border-bottom: 1px solid rgba(42, 47, 54, 0.55);
     position: relative;
@@ -34,7 +37,18 @@
     width: 330px;
 }
 .form-input.textarea-input {
-    height: 110px;
+    height: 110px!important;
+}
+input, textarea {
+    font-family: 'Futura Light';
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input [type="number"] {
+    -moz-appearance: textfield;
 }
 .solo-input{
     width: 430px;
@@ -81,20 +95,21 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
     display: inline-block;
     margin: 0;
 }
-.form-input:not(.solo-input) label {
+.form-input:not(.solo-input):not(.checkbox-input) label{
     position: absolute;
     top: 10px;
     left: 5px;
     z-index: 2;
     margin-bottom: 0;
+    font-family: 'Futura Light';
 }
-.form-input.activeInput label{
+.form-input.activeInput:not(.checkbox-input):not(.solo-input) label{
     font-size: 10px;
     color: #ff8c08;
     top: -1px;    
     transition: 0.4s;
 }
-.form-input.stickLabel label{
+.form-input.stickLabel:not(.checkbox-input):not(.solo-input) label{
     top: -1px;
     z-index: 4;
     font-size: 10px;
@@ -102,13 +117,13 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
     transition: font-size 0.4;
 }
 .form-input.textarea-input label {
-    top: 78px;
+    top: 78px!important;
 }
 .form-input.activeInput.textarea-input label {
-    top: -5px;
+    top: -5px!important;
 }
 .form-input.stickLabel.textarea-input label {
-    top: -5px;
+    top: -5px!important;
 }
 /* Stripe Loading Spinner */
 #loading-overlay {
@@ -127,4 +142,60 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
     justify-content: center;
     margin: 0;
     height: 100%;
+}
+/* Custom Checkbox */
+.ck-container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.ck-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 27px;
+  width: 27px;
+  border-radius: 50%;
+  background-color: #eee;
+  border: 2px solid rgba(42, 47, 54, 0.8);
+}
+.ck-container:hover .checkmark {
+  border: 2px solid rgba(42, 47, 54, 1);
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.ck-container input:checked ~ .checkmark:after {
+  display: block;
+}
+.ck-container .checkmark:after {
+  left: 2px;
+  top: 2px;
+  width: 19px;
+  height: 19px;
+  background-color: rgba(42, 47, 54, 0.8);
+  border-radius: 50%;
+}
+.ck-container:hover .checkmark:after {
+    display: block;
+    background-color: rgba(42, 47, 54, 0.4)
+}
+.ck-container:hover input:checked ~ .checkmark:after {
+    background-color: rgba(42, 47, 54, 1)
 }

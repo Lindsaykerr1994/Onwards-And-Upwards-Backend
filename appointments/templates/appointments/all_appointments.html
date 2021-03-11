@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="body-container container-fluid">
-        <div id="welcome-container" class="row">
+        <div id="welcome-container" class="row px-5">
             <div class="col-12 col-lg-6">
                 <h3 class="d-inline-block">All Appointments</h3>
             </div>
@@ -35,7 +35,7 @@
                 {% endif %}
             </div>
         </div>
-        <div id="upcoming-appointments" class="row my-3">
+        <div id="upcoming-appointments" class="row my-3 px-5">
             <div class="col">
                 <div class="row">
                     <div class="col-10">
@@ -75,7 +75,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="5">You have no upcoming appointments</td>
+                                <td colspan="6">You have no upcoming appointments</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -83,7 +83,7 @@
             </div>
         </div>
         <div id="past-appointments" class="row">
-            <div class="col">
+            <div class="col-11 mx-auto">
                 <h4>Past Appointments</h4>
                 <table class="table table-hover">
                     <thead>
@@ -92,6 +92,7 @@
                         <th>Date</th>
                         <th>Client</th>
                         <th>Activity</th>
+                        <th></th>
                     </thead>
                     <tbody>
                         {% for appointment in past_apps %}
@@ -109,7 +110,7 @@
                             </tr>
                         {% empty %}
                             <tr>
-                                <td colspan="5">You have no past appointments</td>
+                                <td colspan="6">You have no past appointments</td>
                             </tr>
                         {% endfor %}
                     </tbody>

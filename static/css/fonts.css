@@ -1,6 +1,27 @@
 /* Font Imports */
-
+@font-face {
+    font-family: 'Futura Medium';
+    src: url('../../media/fonts/Futura-Medium.woff') format('woff');
+}
+@font-face {
+    font-family: 'Futura Light';
+    src: url('../../media/fonts/Futura-Light.woff') format('woff');
+}
+/* Font Families */
+.font-futura-medium {
+    font-family: 'Futura Medium'!important;
+}
+.font-futura-light {
+    font-family: 'Futura Light'!important;
+}
+.font-oswald {
+    font-family: 'Oswald'!important;
+}
 /* Colours */
 .text-black {
     color: #000 !important;
+}
+.text-orange {
+    color: #FF8C08 !important;
+    transition: 0.8s;
 }
