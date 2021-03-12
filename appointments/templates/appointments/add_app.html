@@ -4,6 +4,7 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/switch.css' %}">
+    <link rel="stylesheet" href="{% static 'css/selects.css' %}">
 {% endblock %}
 
 {% block extra_title %}- Add Appointment{% endblock %}
@@ -20,22 +21,36 @@
                 <form method="POST" action="{% url 'add_app' %}" enctype="multipart/form-data" class="onwards-form mx-auto">
                     {% csrf_token %}
                     {% if client %}
-                        <input id="id_client" type="text" value="{{ client }}" readonly>
+                        <input type="text" value="{{ client }}" readonly>
                         <input type="hidden" name="client" value="{{ client.pk }}">
                     {% else %}
-                        <fieldset>
+                        <fieldset id="client-fieldset">
                             <p class="fieldset-header">Client Details</p>
                             <hr>
-                            <div class="form-input">
-                                <select id="client_select" name="client_select">
-                                    <!-- How to specificy a new client -->
+                            <div id="client-select" class="form-input onwards-select">
+                                <input type="hidden" id="id_client" name="client">
+                                <div class="onwards-select-display">
+                                    <p>Select A Client</p>
+                                    <span><i class="fas fa-chevron-down"></i></span>
+                                </div>
+                                <div class="onwards-select-items select-hide">
+                                    {% for client in clients %}
+                                    <div data-pkey="{{ client.pk }}" data-first-name="{{ client.first_name }}"
+                                    data-last-name="{{ client.last_name }}"
+                                    data-email="{{ client.email_address }}"
+                                    data-phone="{{ client.phone_number }}">
+                                    {{ client.first_name }} {{ client.last_name }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <!-- <select id="client_select" name="client_select">
                                     <option selected disabled>Select A Client</option>
                                     {% for client in clients %}
                                     <option value="{{ client.pk }}" data-first-name="{{ client.first_name }}" data-last-name="{{ client.last_name }}" data-email="{{ client.email_address }}" data-phone="{{ client.phone_number }}">
                                         {{ client.first_name }} {{ client.last_name }}
                                     </option>
                                     {% endfor %}
-                                </select>
+                                </select> -->
                             </div>
                             <div class="twoInput d-flex justify-content-between">
                                 <div class="form-input">
@@ -60,21 +75,29 @@
                     <fieldset>
                         <p class="fieldset-header">Appointment Details</p>
                         <hr>
-                        <div class="form-input">
-                            <select id="id_activity_select" name="activity">
-                                <option selected disabled>Select An Activity</option>
+                        <div class="form-input onwards-select">
+                            <input type="hidden" id="id_activity_select" name="activity">
+                            <div class="onwards-select-display">
+                                <p>Select An Activity</p>
+                                <span><i class="fas fa-chevron-down"></i></span>
+                            </div>
+                            <div class="onwards-select-items select-hide">
                                 {% for activity in activities %}
-                                <option  value="{{ activity.pk }}">{{ activity.friendly_name }}</option>
+                                <div data-pkey="{{ activity.pk }}">{{ activity.friendly_name }}</div>
                                 {% endfor %}
-                            </select>
+                            </div>
                         </div>
-                        <div class="form-input">
-                            <select id="id_course" name="course">
-                                <option selected disabled value="0">Select A Course</option>
+                        <div id="course-select" class="form-input onwards-select">
+                            <input type="hidden" id="id_course" name="course">
+                            <div class="onwards-select-display">
+                                <p>Select A Course</p>
+                                <span><i class="fas fa-chevron-down"></i></span>
+                            </div>
+                            <div class="onwards-select-items select-hide">
                                 {% for course in courses %}
-                                    <option class="d-none" data-activity="{{ course.activity.pk }}" data-solo="{{ course.solo }}" data-price="{{ course.price }}" value="{{ course.pk }}">{{ course.friendly_name }} {% if course.solo %} {% endif %}</option>
+                                <div class="d-none" data-pkey="{{ course.pk }}" data-activity="{{ course.activity.pk }}" data-solo="{{ course.solo }}" data-price="{{ course.price }}">{{ course.friendly_name }}</div>
                                 {% endfor %}
-                            </select>
+                            </div>
                         </div>
                         <div class="form-input solo-input d-flex justify-content-around">
                             <p id="soloText" class="text-orange">Solo</p>
@@ -101,9 +124,10 @@
                             <label for="appointment_location">Location</label>
                             <input type="text" id="id_location" name="appointment_location">
                         </div>
-                        <div class="form-input">
+                        <div class="form-input price-input">
                             <label for="appointment_price">Price</label>
                             <input type="number" id="id_price" name="appointment_price" readonly>
+                            <span id="currency-sym"></span>
                         </div>
                         <div class="form-input checkbox-input no-border d-flex justify-content-end">
                             <p>Override Price?</p>
@@ -116,22 +140,22 @@
                             <div class="d-flex justify-content-around">
                                 <p>0%</p>
                                 <label class="ck-container">
-                                    <input type="radio" checked="checked" name="discount-0">
+                                    <input type="radio" checked="checked" name="discount" value="0">
                                     <span class="checkmark"></span>
                                 </label>
                                 <p>-10%</p>
                                 <label class="ck-container">
-                                    <input type="radio" name="discount-10">
+                                    <input type="radio" name="discount" value="10">
                                     <span class="checkmark"></span>
                                 </label>
                                 <p>-25%</p>
                                 <label class="ck-container">
-                                    <input type="radio" name="discount-25">
+                                    <input type="radio" name="discount" value="25">
                                     <span class="checkmark"></span>
                                 </label>
                                 <p>-50%</p>
                                 <label class="ck-container">
-                                    <input type="radio" name="discount-50">
+                                    <input type="radio" name="discount" value="50">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -152,6 +176,7 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script src="{% static 'js/selects.js' %}"></script>
     <script src="{% static 'js/appointment.js' %}"></script>
     <script type="text/javascript">
         $(".form-input").focusin(function(){
@@ -171,7 +196,6 @@
             }
         });
         $(".form-input input[type='number']").change(function(){
-            console.log("number input changed");
             var inputVal = $(this).val();
             if(typeof(inputVal) !== 'undefined'){
                 if(inputVal.length > 0){

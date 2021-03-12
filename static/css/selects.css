@@ -1,0 +1,54 @@
+.onwards-select {
+  position: relative;
+}
+.onwards-select input {
+  display: none;
+}
+.onwards-select-display {
+  background-color: transparent;
+  height: 43px;
+  line-height: 43px;
+  font-family: 'Futura Medium';
+}
+.onwards-select-display p{
+    display: inline-block;
+    text-transform: capitalize;
+    margin: 0;
+}
+.onwards-select-items div,.onwards-select-display {
+  color: black!important;
+  padding: 1px 2px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
+.onwards-select-items {
+  position: absolute;
+  font-family: 'Futura Light';
+  border-bottom: 1px solid rgba(42, 47, 54, 0.55);
+  border-left: 1px solid rgba(42, 47, 54, 0.55);
+  border-right: 1px solid rgba(42, 47, 54, 0.55);
+  background-color: white;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+.select-hide {
+  display: none;
+}
+.same-as-selected {
+    background-color: rgba(255, 140, 8, 0.25);
+}
+.onwards-select-items div:not(.same-as-selected):hover{
+  background-color: rgba(255, 140, 8, 0.1);
+}
+.onwards-select-display span{
+    position: absolute;
+    right: 10px;
+    transition: 0.4s;
+}
+.onwards-select-display.active-arrow span {
+    transform: rotate(180deg);
+    color: #FF8C08;
+}
