@@ -88,12 +88,12 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
 }
 .twoInput {
     width: 430px;
-    margin: 0 10px 8px 10px;
+    margin: 0 25px 8px 25px;
 }
 .twoInput .form-input {
-    width: 210px;
+    width: 210px!important;
     display: inline-block;
-    margin: 0;
+    margin: 0!important;
 }
 .form-input:not(.solo-input):not(.checkbox-input) label{
     position: absolute;
@@ -206,4 +206,10 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
 }
 .ck-container:hover input:checked ~ .checkmark:after {
     background-color: rgba(42, 47, 54, 1)
+}
+.radio-input {
+    opacity: 0;
+}
+.radio-input p {
+    font-size: 14px;
 }

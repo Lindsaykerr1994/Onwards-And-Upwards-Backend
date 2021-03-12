@@ -131,7 +131,9 @@ function calculatePrice(code) {
 $("#id_override_price").change(function(){
     if($("#id_override_price").is(":checked")){
         $("#id_price").attr("readonly", false);
+        $("#radio-input").fadeTo();
     } else {
         $("#id_price").attr("readonly", true);
+        $("#radio-input").fadeTo();
     }
 })
