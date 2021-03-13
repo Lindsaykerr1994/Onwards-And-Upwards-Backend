@@ -77,15 +77,16 @@ def view_client(request, client_id):
     all_parts = Participant.objects.all()
     up_part_apps = []
     past_part_apps = []
-    participant = all_parts.filter(client=client)
-    if participant:
-        part_apps = participant.appointment.all()
-        for app in part_apps:
-            if app.appointment_date > today:
-                up_part_apps.append(app)
-            else:
-                past_part_apps.append(app)
-        print(up_part_apps, past_part_apps)
+    participants = all_parts.filter(client=client)
+    for part in participants:
+        if part:
+            part_apps = part.appointment.all()
+            for app in part_apps:
+                if app.appointment_date > today:
+                    up_part_apps.append(app)
+                else:
+                    past_part_apps.append(app)
+            print(up_part_apps, past_part_apps)
     context = {
         'client': client,
         'root_of_inquiry': client.get_root_of_inquiry_display(),
@@ -160,40 +161,52 @@ def delete_client(request, client_id):
 
 
 @login_required
-def convert_new_client(request, participant_id):
+def convert_client(request):
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
-    participant = get_object_or_404(Participant, pk=participant_id)
-    part_data = {
-        'first_name': participant.first_name,
-        'last_name': participant.last_name,
-        'email_address': participant.email_address,
-        'phone_number': participant.phone_number,
-        'street_address1': participant.address_line1,
-        'street_address2': participant.address_line2,
-        'town_or_city': participant.town_or_city,
-        'postcode': participant.postcode,
-        'additional_info': 'Created from participant model',
-        'root_of_inquiry': 'REF'
-    }
-    form = ClientForm(part_data)
-    if form.is_valid():
-        client = form.save()
-        participant.client = client
-        participant.save(update_fields=['client'])
-        messages.success(request, f'Successfully created client from \
-            participant: {participant.first_name} {participant.last_name}')
-        return redirect(reverse('view_client', args=[client.id]))
-    else:
-        print(form.errors)
-        messages.error(request, "Missing information preventing creation of \
-            client. Please check the participant's information.")
-        return redirect(reverse('view_participant', args=[participant.id]))
+    if request.method == "GET":
+        newClient = request.GET['newClient']
+        if newClient == "true":
+            partId = request.GET['partId']
+            participant = Participant.objects.get(pk=partId)
+            part_data = {
+                'first_name': participant.first_name,
+                'last_name': participant.last_name,
+                'email_address': participant.email_address,
+                'phone_number': participant.phone_number,
+                'street_address1': participant.address_line1,
+                'street_address2': participant.address_line2,
+                'town_or_city': participant.town_or_city,
+                'postcode': participant.postcode,
+                'additional_info': 'Created from participant model',
+                'root_of_inquiry': 'REF'
+            }
+            form = ClientForm(part_data)
+            if form.is_valid():
+                client = form.save()
+                participant.client = client
+                participant.save(update_fields=['client'])
+                messages.success(request, f'Successfully created client from \
+                    participant: {participant.first_name} {participant.last_name}')
+                return redirect(reverse('view_client', args=[client.id]))
+            else:
+                print(form.errors)
+                messages.error(request, "Missing information preventing creation of \
+                    client. Please check the participant's information.")
+                return redirect(reverse('view_participant', args=[participant.id]))
+        else:
+            partId = request.GET['partId']
+            participant = Participant.objects.get(pk=partId)
+            clientId = request.GET['clientId']
+            client = Client.objects.get(pk=clientId)
+            if client:
+                participant.client = client
+                participant.save(update_fields=['client'])
+                messages.success(request, f'Successfully merged participant with client to form super client: {client.first_name} {client.last_name}!')
+                return redirect(reverse('view_client', args=[client.id]))
+            else:
+                messages.error(request, f'Was not able to merge participant with client. Would you like to create a new client model?')
+                return redirect(reverse('view_participant', args=[participant.id]))
+    
 
-
-@login_required
-def convert_existing_client(request, client_id, participant_id):
-    if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can do that.')
-        return redirect(reverse('home'))

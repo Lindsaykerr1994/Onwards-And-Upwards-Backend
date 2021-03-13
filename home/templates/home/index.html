@@ -45,10 +45,10 @@
         
     </div>
     <div class="row my-3 px-5">
-        <div class="col-10">
+        <div class="col-8">
             <h4 class="d-inline-block">Upcoming Appointments</h4>
         </div>
-        <div class="col-2">
+        <div class="col-4">
             <div class="tooltip-container d-inline-block float-right">
                 <span>New Client</span><span> </span>
                 <a href="{% url 'add_client' %}" id="new-client-btn" class="d-inline-block float-right icon-btn" >
@@ -79,7 +79,7 @@
                         <!-- Limit To Next 5 or 10 Appointments -->
                         {% for appointment in appointments %}
                         <tr>
-                            <td><a href="{% url 'view_app' appointment.appointment_number %}"><i class="fas fa-search"></i></a></td>
+                            <td class="text-center"><a href="{% url 'view_app' appointment.appointment_number %}"><i class="fas fa-search"></i></a></td>
                             <td>{{ appointment.appointment_number }}</td>
                             <td>{{ appointment.appointment_date }}</td>
                             <td>{{ appointment.client }}</td>

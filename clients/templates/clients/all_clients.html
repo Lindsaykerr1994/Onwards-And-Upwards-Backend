@@ -99,6 +99,7 @@
                         <th>Delete?</th>
                     </thead>
                     <tbody>
+                        {% if clients %}
                         {% for client in clients %}
                         <tr>
                             <td>
@@ -138,6 +139,13 @@
                             {% endif %}
                         </tr>
                         {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="7">
+                                You have no registered clients at this moment
+                            </td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

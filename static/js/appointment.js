@@ -1,4 +1,4 @@
-$("#id_client").change(handleClientChange);
+;$("#id_client").change(handleClientChange);
 $("#id_activity_select").change(handleActivityChange);
 $("#id_solo").change(handleSoloChange);
 $("#id_course").change(handleCourseChange);

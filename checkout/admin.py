@@ -10,7 +10,7 @@ class PaymentAdmin(admin.ModelAdmin):
         'full_name',
     )
 
-    ordering = ('date', 'receipt_no', 'full_name')
+    ordering = ('-date', 'receipt_no', 'full_name')
 
 
 admin.site.register(Payment, PaymentAdmin)

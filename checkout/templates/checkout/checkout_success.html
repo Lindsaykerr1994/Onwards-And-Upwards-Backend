@@ -1,8 +1,130 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load my_filter %}
+
 {% block extra_title %}- Checkout Success!{% endblock %}
 
 {% block content %}
-    <div class="body-container container-fluid">Yayyyy you did it</div>
+    <div class="body-container container-fluid">
+        <div class="header-container row my-3 px-5">
+            <div class="col-12 mx-auto">
+                <h3>Thank you, {{ payment.full_name }}!</h3>
+                <h4>We appreciate your business with Onwards And Upwards</h4>
+            </div>
+        </div>
+        <div class="row my-3 px-5">
+            <div class="col-12 font-futura-light">
+                <p>Your card has been charged <span class="font-futura-medium">£{{ payment.checkout_total }}</span> for your booking: <span class="font-futura-medium">{{ appointment.appointment_number }}</span></p>
+                <p>We have sent a confirmation email to <span class="font-futura-medium">{{ payment.email }}</span> containing the following details</p>
+                <p>Your receipt number is: <span class="font-futura-medium">{{ payment.receipt_no }}</span></p>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-10 mx-auto">
+                <div class="row">
+                    <div class="col">
+                        <h5>Booking Details:</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Activity, Course:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ appointment.activity }}, {{ appointment.course }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Date:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ appointment.appointment_date }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Time:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ appointment.appointment_time }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Number Of Participants:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{% if appointment.isSolo %}
+                            Solo
+                            {% else %}
+                            Group
+                            {% endif %}
+                            ({{ appointment.appointment_participants }})</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p>Booking Name:</p>
+                    </div>
+                    <div class="col-6">
+                        <p>{{ appointment.client.first_name }} {{ appointment.client.last_name }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3 font-futura-light">
+            <div class="col-10 mx-auto">
+                <div class="row">
+                    <div class="col">
+                        <h5>Participant Details:</h5>
+                    </div>
+                </div>
+            {% if participants %}
+                {% if appointment.appointment_participants == particpants|length %}
+                <div class="row my-3">
+                    <div class="col-12">
+                        <p>Our system indicates that we currently have the <span class="font-futura-medium">Risk Acknowledgment Forms</span> for:</p>
+                        {% for part in participants %}
+                        <p class="small">{{ part.first_name }} {{ part.last_name }}</p>
+                        {% endfor %}
+                        <p>This fully satisfies our requirements, and we look forwards to seeing you there!</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row my-3">
+                    <div class="col-12">
+                        <p>Our system indicates that we currently have the <span class="font-futura-medium">Risk Acknowledgment Forms</span> for:</p>
+                        {% for part in participants %}
+                        <p class="small">{{ part.first_name }} {{ part.last_name }}</p>
+                        {% endfor %}
+                        <p>We still require {{ remaining_forms }} form(s).<br>
+                        All participants must complete and sign the form in order to participant in this session.</p>
+                        <button class="onwards-button"><a href="{% url 'add_part_form' appointment.appointment_number %}">Add Your Details</a></button>
+                    </div>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="row my-3">
+                    <div class="col-12">
+                        <p>We currently have no participants registered for this session</p>
+                        <button class="onwards-button"><a href="{% url 'add_part_form' appointment.appointment_number %}">Add Your Details</a></button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p>If you have participated with us before and have completed a Risk Acknowledgment Form, either using this system or on paper, please contact us at <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>, or send us an email at: <span class="font-futura-medium">XX</span>, and we will do our best to address this issue.</p>
+                    </div>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-11 mx-auto font-futura-light">
+                <p>If you believe there is any error with any of the details shown above, please do not to hesistate to contact us at <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>, or send us an email at: <span class="font-futura-medium">XX</span>.<br>
+                Plesae use the booking reference number allocated at the top of the page.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

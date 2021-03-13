@@ -8,6 +8,7 @@ import datetime
 from activities.models import Activity, Course
 from clients.models import Client
 from clients.forms import ClientForm
+from checkout.models import Payment
 from riskforms.models import Participant
 
 
@@ -72,11 +73,16 @@ def view_appoinment(request, appointment_number):
         return redirect(reverse('home'))
     appointment = get_object_or_404(Appointment,
                                     appointment_number=appointment_number)
+    payment = []
+    if appointment.isPaid:
+        payment = Payment.objects.get(appointment=appointment)
+
     all_parts = Participant.objects.all()
     participants = all_parts.filter(appointment=appointment)
     context = {
         'appointment': appointment,
         'participants': participants,
+        'payment': payment
     }
     return render(request, 'appointments/view_appointment.html', context)
 

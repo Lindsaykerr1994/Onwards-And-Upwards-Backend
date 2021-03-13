@@ -1,3 +1,8 @@
+.table {
+    background-color: rgba(255,255,255,0.2);
+    border: 1px solid #000;
+    padding: 5px;
+}
 .table-hover tbody tr {
     transition: 0.4s;
 }
@@ -6,6 +11,10 @@
 }
 thead {
     font-family: 'Futura Medium';
+}
+.table thead th {
+    border-bottom: 1px solid #000;
+    border-top-color: #000;
 }
 tbody {
     max-height: 185px;
@@ -16,4 +25,8 @@ tr {
 }
 td a {
     color: #000 !important;
+}
+.table td.delete-btn {
+    padding-top: 6px;
+    padding-bottom: 6px;
 }

@@ -25,3 +25,7 @@
     color: #FF8C08 !important;
     transition: 0.8s;
 }
+/* Decoration */
+.text-underline {
+    text-decoration: underline;
+}

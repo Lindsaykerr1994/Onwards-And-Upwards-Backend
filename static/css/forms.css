@@ -6,6 +6,10 @@
 }
 .onwards-form.small-onwards-form {
     width:350px;
+    border: 0px !important;
+}
+.onwards-form.small-onwards-form .form-input {
+    margin: 0 10px 8px 10px;
 }
 .onwards-form fieldset{
     margin-bottom: 16px;
@@ -14,6 +18,9 @@
     text-transform: uppercase;
     font-family: 'Futura Medium';
     margin: 0 10px;
+}
+.form-input p.small{
+    text-transform: none;
 }
 .no-border p {
     text-transform: capitalize;

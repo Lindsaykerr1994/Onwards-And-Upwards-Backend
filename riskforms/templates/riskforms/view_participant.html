@@ -9,17 +9,20 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div class="header-container row">
-            <div class="col">
-                <div class="row">
-                    <div class="col-11">
-                        <h3><a href="{% url 'view_app' participant.appointment %}">View Appointment</a><i class="fas fa-chevron-right"></i>View Participant</h3>
+            <div class="col-11 mx-auto">
+                <div class="row mb-3">
+                    <div class="col-9 onwards-header">
+                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'view_app' appointment.appointment_number %}">View Appointment</a></h3>
+                        <i class="fas fa-chevron-right"></i>
+                        <h4 class="link-sibling d-inline-block">View Participant</h4>
                     </div>
-                    <div class="col-1 d-flex align-items-center text-center">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <h4>{{ participant.last_name }}, {{ participant.first_name }}</h4>
+                    <div class="col-3 d-flex justify-content-end text-center">
+                        <div class="tooltip-container d-inline-block float-right">
+                            <span>Convert To Client</span><span> </span>
+                            <button type="button" class="btn btn-light icon-btn" data-toggle="modal" data-target="#convertClientModal">
+                                <i class="fas fa-share-square"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,11 +93,6 @@
                     </div>
                     <!-- Risk Acknowledgement Forms Go Here -->
                 </div>
-                <div class="row">
-                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#convertClientModal">
-                        Convert To Client
-                    </button>
-                </div>
             </div>
         </div>
     </div>
@@ -105,12 +103,25 @@
     {{ block.super }}
     <script type="text/javascript">
         $("#existing-client").click(function(){
+            var partId = $("#partId-input").val();
             var clientId = $("#select-client").val()
             if(typeof(clientId) !== 'undefined'){
                 var currentUrl = window.location.href;
+                console.log(currentUrl)
                 currentUrl = currentUrl.split("/")
-                var partId =  currentUrl.pop();
+                var newUrl = currentUrl.slice(0,-2);
+                console.log(newUrl)
+                var newStr = newUrl[0]+'/'+newUrl[1]+'/'+newUrl[2];
+                newStr = newStr + `/clients/convert_to_client?newClient=false&partId=${partId}&clientId=${clientId}`
+                window.location.href = newStr;
             }
+        })
+        $(".icon-btn").hover(function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeIn("fast");
+        }, function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeOut("fast");
         })
     </script>
 {% endblock %}

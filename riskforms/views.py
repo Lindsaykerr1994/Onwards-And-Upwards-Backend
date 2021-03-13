@@ -12,15 +12,27 @@ from clients.models import Client
 
 
 @login_required
-def view_participant(request, part_id):
+def view_participant(request):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
-    participant = get_object_or_404(Participant, pk=part_id)
+    if request.method == "GET":
+        partId = request.GET['partId']
+        appId = request.GET['appId']
+
+        participant = Participant.objects.get(pk=partId)
+        appointment = Appointment.objects.get(appointment_number=appId)
+        partApps = participant.appointment.all()
+    else:
+        participant = []
+        partApps = []
+        appointment = Appointment.objects.all()
     clients = Client.objects.all()
     context = {
         'participant': participant,
-        'clients': clients
+        'clients': clients,
+        'appointment': appointment,
+        'partApps': partApps
     }
     return render(request, 'riskforms/view_participant.html', context)
 
@@ -102,6 +114,11 @@ def add_participant_form(request, appointment_number):
                         print("not valid RAFORM")
                         print(raForm.errors)
                         participant.delete()
+                        messages.error(request,
+                                       ('There is an error with the form. Please check\
+                                you have entered a valid input.'))
+                        return redirect(reverse('add_part_form',
+                                        args=[appointment_number]))
                 else:
                     print("Error with form", partForm.errors)
                     messages.error(request,

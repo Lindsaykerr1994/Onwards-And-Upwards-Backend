@@ -6,19 +6,23 @@
     <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock %}
 
+{% block extra_js %}
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+{% endblock %}
+
 {% block extra_title %}- Risk Acknowledgment Form{% endblock %}
 
 {% block content %}
     <div class="body-container container-fluid">
         <div class="row">
-            <div class="col mx-auto">
+            <div class="col-10 mx-auto mb-3">
                 <h3>Add Participant Form</h3>
                 <h4>Appointment: {{ appointment.appointment_number }}</h4>
             </div>
         </div>
         <div class="row">
             <div class="col-11 mx-auto">
-                <form method="POST" class="onwards-form" id="ra-form" action="{% url 'add_part_form' appointment.appointment_number %}">
+                <form method="POST" class="onwards-form mx-auto" id="ra-form" action="{% url 'add_part_form' appointment.appointment_number %}">
                     {% csrf_token %}
                     <fieldset>
                         <p>Participant Details</p>
@@ -34,7 +38,7 @@
                             </div>
                         </div>
                         <div class="form-input">
-                            <label for="date_of_birth">Date Of Birth</label>
+                            <label for="date_of_birth">Date Of Birth *</label>
                             <input type="text" name="date_of_birth" required>
                         </div>
                         <div class="form-input">
@@ -72,12 +76,12 @@
                         <p>Emergency Contact</p>
                         <hr>
                         <div class="form-input">
-                            <label for="emergency_name">Emergency Contact Name</label>
-                            <input type="text" name="emergency_name">
+                            <label for="emergency_name">Emergency Contact Name *</label>
+                            <input type="text" name="emergency_name" required>
                         </div>
                         <div class="form-input">
-                            <label for="emergency_number">Emergency Contact Number</label>
-                            <input type="text" name="emergency_number">
+                            <label for="emergency_number">Emergency Contact Number *</label>
+                            <input type="text" name="emergency_number" required>
                         </div>
                     </fieldset>
                     <fieldset>
@@ -85,21 +89,22 @@
                         <hr>
                         <div class="form-input">
                             <label for="dec_illness">
-                                Please declare any recent or ongoing injury/condition/illness:
+                                Please declare any recent or ongoing injury/condition/illness*:
                             </label>
-                            <input type="text" name="dec_illness">
+                            <input type="text" name="dec_illness" id="dec_illness" required>
                         </div>
                         <div class="form-input">
                             <label for="dec_medication">
-                                Please declare any medication recently or currently taken:
+                                Please declare any medication recently or currently taken*:
                             </label>
-                            <input type="text" name="dec_med">
+                            <input type="text" name="dec_med" id="dec_med" required>
                         </div>
-                        <div class="form-input">
-                            <label for="dec_abs_cond">
-                                I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.
+                        <div class="form-input no-border checkbox-input d-flex justify-content-between">
+                            <p class="small font-futura-light">I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.</p>
+                            <label class="ck-container">
+                                <input type="checkbox" id="dec_abs_cond" name="dec_abs_cond">
+                                <span class="checkmark"></span>
                             </label>
-                            <input type="checkbox" name="dec_abs_cond">
                         </div>
                     </fieldset>
                     <fieldset>
@@ -107,10 +112,10 @@
                         <input type="hidden" name="signed_by" id="signed_by">
                         <input type="hidden" name="date_signed" id="date_signed">
                     </fieldset>
-                </form>
-                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#confirmRAModal">
+                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#confirmRAModal" id="openRAModal-btn">
                         Submit
                     </button>
+                </form>
             </div>
         </div>
     </div>
@@ -145,22 +150,51 @@
                     $(this).parent().removeClass("stickLabel");
                 }
             }
+        });
+        $("#dec_abs_cond").change(function(){
+            if($(this).is(":checked")){
+                $("#dec_illness").val("N/A");
+                $("#dec_illness").trigger('change');
+                $("#dec_illness").attr("readonly", true);
+                $("#dec_med").val("N/A");
+                $("#dec_med").trigger('change');
+                $("#dec_med").attr("readonly", true);
+            } else {
+                $("#dec_illness").val("");
+                $("#dec_illness").trigger('change');
+                $("#dec_illness").attr("readonly", false);
+                $("#dec_med").val("");
+                $("#dec_med").trigger('change');
+                $("#dec_med").attr("readonly", false);
+            }
+        });
+        $("#openRAModal-btn").click(function(e){
+            e.stopPropagation();
+            var form = $("#ra-form");
+            form.validate();
+            if(form.valid()){
+                $("#confirmRAModal").modal('show');
+            } else {
+                console.log("error in form")
+            }
         })
-    </script>
-    <script>
-        $("#confirm-btn").click(function(){
-            console.log("clicked submit")
+        $("#confirm-btn").click(function(e){
+            e.stopPropagation();
             var signName = $("input[name='signing-input']").val();
             var signDate = $("input[name='date-input']").val();
-            var ackCheck = $("#ack_checkbox").val()
-            if(signName.length > 0 && signDate.length > 0){
-                console.log("submitting")
-                $("#signed_by").val(signName);
-                $("#date_signed").val(signDate);
-                $("#ack_of_risk").val(ackCheck);
-                $("#ra-form").submit();
+            if($("#ack_checkbox").is(":checked")){
+                if(signName.length > 0 && signDate.length > 0){
+                    $("#error-message").text("");
+                    $("#signed_by").val(signName);
+                    $("#date_signed").val(signDate);
+                    console.log("#date_signed")
+                    $("#ack_of_risk").prop("checked", true);
+                    $("#ra-form").submit();
+                } else {
+                    $("#error-message").text("Please ensure the form is valid");
+                }
             } else {
-                $("#error-message").text("Please ensure the form is valid");
+                $("#error-message").text("You must acknowledge the risk to continue");
             }
         })
     </script>

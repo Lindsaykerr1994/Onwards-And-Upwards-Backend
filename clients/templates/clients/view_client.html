@@ -128,6 +128,7 @@
                                 <th>Ref No.</th>
                                 <th>Date</th>
                                 <th>Activity</th>
+                                <th>Participant?</th>
                             </thead>
                             <tbody>
                                 {% for app in up_apps %}
@@ -140,6 +141,7 @@
                                         <td>{{ app.appointment_number }}</td>
                                         <td>{{ app.appointment_date }}</td>
                                         <td>{{ app.activity }} - {{ app.course }}</td>
+                                        <td></td>
                                     </tr>
                                 {% endfor %}
                                 {% for app in up_part_apps %}
@@ -152,6 +154,7 @@
                                         <td>{{ app.appointment_number }}</td>
                                         <td>{{ app.appointment_date }}</td>
                                         <td>{{ app.activity }} - {{ app.course }}</td>
+                                        <td>Participant</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.contrib import messages
 from appointments.models import Appointment
+from riskforms.models import Participant
 from .models import Payment
 from .forms import PaymentForm
 import stripe
@@ -15,7 +16,6 @@ def cache_checkout_data(request):
         appointment_number = request.POST.get('appointment_no')
         stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe.PaymentIntent.modify(pid, metadata={
-            'save_info': False,
             'appointment_number': appointment_number
         })
         return HttpResponse(status=200)
@@ -76,14 +76,26 @@ def checkout(request, appointment_number):
         'form': form,
         'appointment': appointment,
         'stripe_public_key': stripe_public_key,
-        'client_secret': stripe_secret_key
+        'client_secret': intent.client_secret
     }
     return render(request, 'checkout/checkout.html', context)
 
 
 def checkout_success(request, receipt_no):
     payment = get_object_or_404(Payment, receipt_no=receipt_no)
+    appNumber = payment.appointment
+    appointment = Appointment.objects.get(appointment_number=appNumber)
+    participants = Participant.objects.all()
+    participants = participants.filter(appointment=appointment)
+    if participants:
+        partLen = len(participants)
+        remaining_forms = appointment.appointment_participants - partLen
+    else:
+        remaining_forms = 0
     context = {
-        'payment': payment
+        'payment': payment,
+        'appointment': appointment,
+        'participants': participants,
+        'remaining_forms': remaining_forms
     }
     return render(request, 'checkout/checkout_success.html', context)
