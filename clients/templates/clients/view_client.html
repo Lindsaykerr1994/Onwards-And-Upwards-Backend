@@ -10,12 +10,14 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div class="header-container row">
-            <div class="col">
-                <div class="row">
-                    <div class="col-11">
-                        <h3><a href="{% url 'all_clients' %}">All Clients</a><i class="fas fa-chevron-right"></i>View Client</h3>
+            <div class="col-11 mx-auto">
+                <div class="row mb-3">
+                    <div class="col-9 onwards-header">
+                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'all_clients' %}">All Clients</a></h3>
+                        <i class="fas fa-chevron-right"></i>
+                        <h4 class="link-sibling d-inline-block">View Client</h4>
                     </div>
-                    <div class="col-1 d-flex align-items-center text-center">
+                    <div class="col-3 d-flex align-items-center text-center">
                         <a href="{% url 'add_app_w_client' client.id %}" class="icon-btn">
                             <i class="fas fa-calendar-plus"></i>
                         </a>
@@ -24,100 +26,108 @@
                         </a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <h4>{{ client.last_name }}, {{ client.first_name }}</h4>
-                    </div>
-                </div>
             </div>
         </div>
         <div id="view-client-container" class="row">
             <div class="col-10 mx-auto">
                 <div class="row">
-                    <div class="col-6">
-                        <p>Full Name:</p>
-                    </div>
-                    <div class="col-6">
-                        <p>{{ client.first_name }} {{ client.last_name }}</p>
+                    <div class="col-12 mb-3">
+                        <h4 class="text-underline">Client Details:</h4>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Full Name:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ client.first_name }} {{ client.last_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Email Address:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>
+                                    {% if client.email_address %}
+                                    {{ client.email_address }}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Phone Number:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>
+                                    {% if client.phone_number %}
+                                    {{ client.phone_number }}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Address:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>
+                                    {% if client.street_address1 %}
+                                    {{ client.street_address1 }}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+                                </p>
+                                {% if client.street_address2 %}
+                                <p>{{ client.street_address2 }}</p>
+                                {% endif %}
+                                {% if client.town_or_city %}
+                                <p>{{ client.town_or_city }}</p>
+                                {% endif %}
+                                {% if client.postcode %}
+                                <p>{{ client.postcode }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Additional Information:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                {% if client.additional_info %}
+                                    <p>{{ client.additional_info }}</p>
+                                {% else %}
+                                    <p>N/A</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Root Of Inquiry</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ root_of_inquiry }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                Risk Acknowledgement Forms
+                            </div>
+                            <div class="col-6 font-futura-light"></div>
+                            <!-- Risk Acknowledgement Forms Go Here -->
+                        </div>
+                        <hr>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-6">
-                        <p>Email Address:</p>
-                    </div>
-                    <div class="col-6">
-                        <p>
-                            {% if client.email_address %}
-                            {{ client.email_address }}
-                            {% else %}
-                            N/A
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <p>Phone Number:</p>
-                    </div>
-                    <div class="col-6">
-                        <p>
-                            {% if client.phone_number %}
-                            {{ client.phone_number }}
-                            {% else %}
-                            N/A
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <p>Address:</p>
-                    </div>
-                    <div class="col-6">
-                        <p>
-                            {% if client.street_address1 %}
-                            {{ client.street_address1 }}
-                            {% else %}
-                            N/A
-                            {% endif %}
-                        </p>
-                        {% if client.street_address2 %}
-                        <p>{{ client.street_address2 }}</p>
-                        {% endif %}
-                        {% if client.town_or_city %}
-                        <p>{{ client.town_or_city }}</p>
-                        {% endif %}
-                        {% if client.postcode %}
-                        <p>{{ client.postcode }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <p>Additional Information:</p>
-                    </div>
-                    <div class="col-6">
-                        {% if client.additional_info %}
-                            <p>{{ client.additional_info }}</p>
-                        {% else %}
-                            <p>N/A</p>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <p>Root Of Inquiry</p>
-                    </div>
-                    <div class="col-6">
-                        <p>{{ root_of_inquiry }}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        Risk Acknowledgement Forms
-                    </div>
-                    <!-- Risk Acknowledgement Forms Go Here -->
-                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 mx-auto">
+                
                 <div class="row">
                     <div class="col-12">
                         <p><b>Upcoming Appointments</b></p>
@@ -195,8 +205,6 @@
                         {% endif %}
                     </div>
                 </div>
-                
-                
             </div>
         </div>
     </div>

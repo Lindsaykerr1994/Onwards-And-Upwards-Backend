@@ -109,7 +109,7 @@ def add_participant_form(request, appointment_number):
                         raForm.risk_form = raFile
                         raForm.save()
                         return redirect(reverse('risk_form_success',
-                                       args=[participant.pk]))
+                                        args=[participant.pk]))
                     else:
                         print("not valid RAFORM")
                         print(raForm.errors)
@@ -118,7 +118,7 @@ def add_participant_form(request, appointment_number):
                                        ('There is an error with the form. Please check\
                                 you have entered a valid input.'))
                         return redirect(reverse('add_part_form',
-                                        args=[appointment_number]))
+                                        args=[appointment_number, partId]))
                 else:
                     print("Error with form", partForm.errors)
                     messages.error(request,
@@ -159,12 +159,23 @@ def create_riskack_form(appointment_number, form_data):
     return pdf
 
 
-def risk_form_success(request, part_id):
+def risk_form_success(request, appointment_number, part_id):
     participant = get_object_or_404(Participant, pk=part_id)
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
     ra_form = RAForm.objects.get(participant=participant)
+    participants = Participant.objects.all()
+    participants = participants.filter(appointment=appointment)
+    if participants:
+        partLen = len(participants)
+        remaining_forms = appointment.appointment_participants - partLen
+    else:
+        remaining_forms = 0
     context = {
         'participant': participant,
-        'ra_form': ra_form
+        'appointment': appointment,
+        'ra_form': ra_form,
+        'parts': participants,
+        'remaining_forms': remaining_forms
     }
     return render(request, 'riskforms/risk_form_success.html', context)
 

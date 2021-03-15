@@ -11,6 +11,7 @@ header > .row {
 }
 .main-logo-link {
     width: fit-content;
+    position: relative;
 }
 .nav-link {
     padding-left: 0;
@@ -25,17 +26,21 @@ header > .row {
     color: #ff8c08;
 }
 .main-logo-link p{
-    display: inline;
+    display: inline-block;
+    width: 350px;
+    position: absolute;
     margin: 0;
     font-family: 'Arial';
     font-size: 20px;
     text-transform: uppercase;
-    letter-spacing: 1.1;
+    letter-spacing: 1.1px;
 }
-.main-logo-link img {
+.main-logo-link .logo {
+    display: inline-block;
     height: 40px;
     width: 40px;
     margin: 0 10px 1.6px 10px;
+    background-image: url("../../media/onwards-logo.svg");
 }
 .nav-link button {
     height: 40px;
@@ -59,4 +64,7 @@ header > .row {
 .dropdown-item:hover {
     background-color: rgba(0,0,0,0.8);
     color: #ff8c08;
+}
+.onwards-navbar .dropdown-menu{
+    top: 2px!important;
 }
