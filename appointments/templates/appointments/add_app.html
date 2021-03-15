@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/switch.css' %}">
     <link rel="stylesheet" href="{% static 'css/selects.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
 {% endblock %}
 
 {% block extra_title %}- Add Appointment{% endblock %}
@@ -44,14 +45,6 @@
                                     </div>
                                     {% endfor %}
                                 </div>
-                                <!-- <select id="client_select" name="client_select">
-                                    <option selected disabled>Select A Client</option>
-                                    {% for client in clients %}
-                                    <option value="{{ client.pk }}" data-first-name="{{ client.first_name }}" data-last-name="{{ client.last_name }}" data-email="{{ client.email_address }}" data-phone="{{ client.phone_number }}">
-                                        {{ client.first_name }} {{ client.last_name }}
-                                    </option>
-                                    {% endfor %}
-                                </select> -->
                             </div>
                             <div class="twoInput d-flex justify-content-between">
                                 <div class="form-input">
@@ -112,9 +105,10 @@
                             <input type="number" id="id_number_participants" name="appointment_participants">
                         </div>
                         <div class="twoInput d-flex justify-content-between">
-                            <div class="form-input">
+                            <div id="date-container" class="form-input">
                                 <label for="appointment_date">Date</label>
-                                <input type="text" id="id_date" name="appointment_date">
+                                <input type="text" id="id_date" name="appointment_date" readonly>
+                                {% include 'includes/modals/datepicker.html' %}
                             </div>
                             <div class="form-input">
                                 <label for="appointment_time">Time</label>
@@ -179,6 +173,7 @@
     {{ block.super }}
     <script src="{% static 'js/selects.js' %}"></script>
     <script src="{% static 'js/appointment.js' %}"></script>
+    <script src="{% static 'js/datepicker.js' %}"></script>
     <script type="text/javascript">
         $(".form-input").focusin(function(){
             $(this).addClass("activeInput");
