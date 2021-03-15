@@ -131,6 +131,27 @@ def add_participant_form(request, appointment_number):
     return render(request, 'riskforms/add_risk_form.html', context)
 
 
+@login_required
+def remove_participant(request):
+    if not request.user.is_superuser:
+        messages.error(request, "Sorry, you don't have permission to do that.")
+        return redirect(reverse('home'))
+    if request.method == 'GET':
+        partId = request.GET['partId']
+        participant = Participant.objects.get(pk=partId)
+        appId = request.GET['appId']
+        removeApp = Appointment.objects.get(appointment_number=appId)
+        participant.appointment.remove(removeApp)
+        appointments = participant.appointment.all()
+        if len(appointments) == 0:
+            print("no more appointments")
+            print("delete participant?")
+        messages.success(request, f'Successfully removed \
+            {participant.first_name} {participant.last_name} as a participant\
+             from appointment: {removeApp.appointment_number}')
+    return redirect(reverse('view_app', args=[appId]))
+
+
 def create_riskack_form(appointment_number, form_data):
     pdf = canvas.Canvas("test.pdf")
     pdf.setTitle("myTest")

@@ -6,6 +6,8 @@ urlpatterns = [
          name="add_part_form"),
     path('view_participant', views.view_participant,
          name="view_participant"),
+    path('remove_participant', views.remove_participant,
+         name="remove_participant"),
     path('success/<int:part_id>', views.risk_form_success,
          name="risk_form_success"),
     path('request_denied/<appointment_number>', views.risk_form_denied,

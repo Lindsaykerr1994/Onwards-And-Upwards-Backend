@@ -43,8 +43,8 @@
 .onwards-form.small-onwards-form .form-input {
     width: 330px;
 }
-.form-input.textarea-input {
-    height: 110px!important;
+.onwards-form .form-input.textarea-input {
+    height: 110px;
 }
 input, textarea {
     font-family: 'Futura Light';
@@ -111,7 +111,7 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
     display: inline-block;
     margin: 0!important;
 }
-.form-input input:read-only{
+.form-input input:read-only, .form-input textarea:read-only{
     background-color: rgba(0,0,0,0.1)!important;
 }
 .form-input:not(.solo-input):not(.checkbox-input) label{
@@ -231,4 +231,20 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
 }
 .radio-input p {
     font-size: 14px;
+}
+/* Submiy Button */
+.onwards-form .submit-button {
+    width: 230px;
+    height: 43px;
+    background-color: transparent;
+    text-align: center;
+    margin: 0 124px 8px 124px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid rgba(42, 47, 54, 0.55);
+    transition: 0.8s;
+    text-transform: uppercase;
+}
+.onwards-form .submit-button:hover {
+    background-color: rgba(255, 140, 8, 1);
+    border-color: rgba(42, 47, 54, 0.55);
 }

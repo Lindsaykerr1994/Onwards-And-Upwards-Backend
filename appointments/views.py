@@ -204,7 +204,6 @@ def edit_app(request, appointment_number):
     appointment = get_object_or_404(Appointment,
                                     appointment_number=appointment_number)
     if request.method == "POST":
-        
         form = AppointmentForm(request.POST, instance=appointment)
         courseId = request.POST['course']
         course = Course.objects.get(pk=courseId)
@@ -223,7 +222,8 @@ def edit_app(request, appointment_number):
             appointment.appointment_number = appNum
             appointment.save(update_fields=["appointment_number"])
             form.save()
-            print("Edited appointment successfully")
+            messages.success(request, f'Successfully edited appointment:\
+                {appointment.appointment_number}')
             return redirect(reverse('view_app',
                                     args=[appointment.appointment_number]))
             """ Use email functionality to inform client """

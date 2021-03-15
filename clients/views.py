@@ -163,7 +163,7 @@ def delete_client(request, client_id):
 @login_required
 def convert_client(request):
     if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can do that.')
+        messages.error(request, "Sorry, you don't have permission to do that.")
         return redirect(reverse('home'))
     if request.method == "GET":
         newClient = request.GET['newClient']
@@ -203,10 +203,12 @@ def convert_client(request):
             if client:
                 participant.client = client
                 participant.save(update_fields=['client'])
-                messages.success(request, f'Successfully merged participant with client to form super client: {client.first_name} {client.last_name}!')
+                messages.success(request, f'Successfully merged participant \
+                    with client to form super client: {client.first_name} \
+                        {client.last_name}!')
                 return redirect(reverse('view_client', args=[client.id]))
             else:
-                messages.error(request, f'Was not able to merge participant with client. Would you like to create a new client model?')
-                return redirect(reverse('view_participant', args=[participant.id]))
-    
-
+                messages.error(request, 'Was not able to merge participant \
+                    with client. Would you like to create a new client model?')
+                return redirect(reverse('view_participant',
+                                args=[participant.id]))

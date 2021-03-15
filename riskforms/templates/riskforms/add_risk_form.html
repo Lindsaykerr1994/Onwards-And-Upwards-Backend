@@ -87,17 +87,17 @@
                     <fieldset>
                         <p>Declaration Of Fitness</p>
                         <hr>
-                        <div class="form-input">
+                        <div class="form-input textarea-input">
                             <label for="dec_illness">
                                 Please declare any recent or ongoing injury/condition/illness*:
                             </label>
-                            <input type="text" name="dec_illness" id="dec_illness" required>
+                            <textarea name="dec_illness" id="dec_illness" required></textarea>
                         </div>
-                        <div class="form-input">
+                        <div class="form-input textarea-input">
                             <label for="dec_medication">
                                 Please declare any medication recently or currently taken*:
                             </label>
-                            <input type="text" name="dec_med" id="dec_med" required>
+                            <textarea name="dec_med" id="dec_med" required></textarea>
                         </div>
                         <div class="form-input no-border checkbox-input d-flex justify-content-between">
                             <p class="small font-futura-light">I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.</p>
@@ -112,7 +112,7 @@
                         <input type="hidden" name="signed_by" id="signed_by">
                         <input type="hidden" name="date_signed" id="date_signed">
                     </fieldset>
-                    <button type="button" class="btn btn-light" data-toggle="modal" data-target="#confirmRAModal" id="openRAModal-btn">
+                    <button type="button" class="submit-button" data-toggle="modal" data-target="#confirmRAModal" id="openRAModal-btn">
                         Submit
                     </button>
                 </form>
@@ -151,14 +151,37 @@
                 }
             }
         });
+        $(".form-input textarea").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
         $("#dec_abs_cond").change(function(){
             if($(this).is(":checked")){
-                $("#dec_illness").val("N/A");
-                $("#dec_illness").trigger('change');
-                $("#dec_illness").attr("readonly", true);
-                $("#dec_med").val("N/A");
-                $("#dec_med").trigger('change');
-                $("#dec_med").attr("readonly", true);
+                var decIllness = $("#dec_illness").val()
+                var decMed = $("#dec_med").val();
+                if(decIllness.length > 0 || decMed.length > 0){
+                    if(decIllness == "N/A" && decMed == "N/A"){
+                        $("#dec_illness").trigger('change');
+                        $("#dec_illness").attr("readonly", true)
+                        $("#dec_med").trigger('change');
+                        $("#dec_med").attr("readonly", true);
+                        return;
+                    }
+                    $("#dec_abs_cond").prop("checked", false);
+                } else {
+                    $("#dec_illness").val("N/A");
+                    $("#dec_illness").trigger('change');
+                    $("#dec_illness").attr("readonly", true);
+                    $("#dec_med").val("N/A");
+                    $("#dec_med").trigger('change');
+                    $("#dec_med").attr("readonly", true);
+                }
             } else {
                 $("#dec_illness").val("");
                 $("#dec_illness").trigger('change');
