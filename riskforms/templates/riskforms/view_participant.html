@@ -89,7 +89,7 @@
                     </div>
                     <div class="col-6 font-futura-light">
                         <p>
-                            {{ raform.emergency_contact_name }}
+                            {{ participant.emergency_contact_name }}
                         </p>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-6 font-futura-light">
                         <p>
-                            {{ raform.emergency_contact_number }}
+                            {{ participant.emergency_contact_number }}
                         </p>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                     </div>
                     <div class="col-6 font-futura-light">
                         <p>
-                            {{ raform.dec_illness }}
+                            {{ participant.dec_illness }}
                         </p>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-6 font-futura-light">
                         <p>
-                            {{ raform.dec_medication }}
+                            {{ participant.dec_medication }}
                         </p>
                     </div>
                 </div>
@@ -128,12 +128,15 @@
                         <p>Risk Acknowledgement Forms</p>
                     </div>
                     <div class="col-6 font-futura-light">
-                        <a href="{{ raform.risk_form.url }}">{{ raform.risk_form }}</a>
-                        <form action="{% url 'update_raform' participant.pk %}" method="POST" id="update_raform">
+                        {% for ra in raform %}
+                        <a href="{{ ra.risk_form.url }}" target="_blank">{{ ra.risk_form }}</a> <a class="text-danger" href="{% url 'delete_raform' ra.form_number participant.pk appointment.appointment_number %}"><i class="fas fa-minus-circle"></i></a>
+                        {% endfor %}
+                        <form action="{% url 'update_raform' participant.pk appointment.appointment_number %}" method="POST" id="update_raform" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <label class="onwards-button">Upload RA Form
-                                <input type="file" class="d-none" name="risk_form" id="id_risk_form">
+                            <label class="">Upload RA Form
+                                <input type="file" class="" name="document" id="id_risk_form">
                             </label>
+                            <input type="submit">
                         </form>
                     </div>
                 </div>
@@ -166,11 +169,6 @@
         }, function(){
             var testEl = $(this).parent().children("span");
             testEl.fadeOut("fast");
-        })
-    </script>
-    <script type="text/javascript">
-        $("#id_risk_form").change(function(){
-            $("#update_raform").submit();
         })
     </script>
 {% endblock %}

@@ -23,6 +23,12 @@ class ParticipantForm(forms.ModelForm):
             'postcode': 'Post Code',
             'emergency_contact_name': 'Name',
             'emergency_contact_number': 'Tel',
+            'dec_illness': 'Declaration Of Illness',
+            'dec_medication': 'Declaration Of Medication',
+            'dec_abs_cond': 'Declaration Of Absence of Condition',
+            'acknowledgement_of_risk': 'Acknowledgement',
+            'signed_by': 'Signed By',
+            'date_signed': 'Date Signed'
         }
         for field in self.fields:
             if self.fields[field].required:
@@ -38,7 +44,7 @@ class RiskAcknowledgementForm(forms.ModelForm):
 
     class Meta:
         model = RAForm
-        exclude = ('form_number', 'date_created')
+        exclude = ('form_number', 'date_created', 'participant')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

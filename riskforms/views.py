@@ -12,32 +12,25 @@ from clients.models import Client
 
 
 @login_required
-def view_participant(request):
+def view_participant(request, appId, partId):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     clients = Client.objects.all()
-    if request.method == "GET":
-        partId = request.GET['partId']
-        appId = request.GET['appId']
-
-        participant = Participant.objects.get(pk=partId)
-        appointment = Appointment.objects.get(appointment_number=appId)
-        raform = RAForm.objects.get(participant=participant)
-        partApps = participant.appointment.all()
-        context = {
-            'participant': participant,
-            'raform': raform,
-            'clients': clients,
-            'appointment': appointment,
-            'partApps': partApps
-        }
-    else:
-        appointment = Appointment.objects.all()
-        context = {
-            'appointment': appointment,
-            'clients': clients
-        }
+    participant = Participant.objects.get(pk=partId)
+    appointment = Appointment.objects.get(appointment_number=appId)
+    raform = RAForm.objects.all()
+    for form in raform:
+        print(form.participant)
+    print(raform)
+    partApps = participant.appointment.all()
+    context = {
+        'participant': participant,
+        'raform': raform,
+        'clients': clients,
+        'appointment': appointment,
+        'partApps': partApps
+    }
     return render(request, 'riskforms/view_participant.html', context)
 
 
@@ -66,7 +59,13 @@ def add_participant_form(request, appointment_number):
                 'town_or_city': request.POST['town_or_city'],
                 'postcode': request.POST['postcode'],
                 'emergency_contact_name': request.POST['emergency_name'],
-                'emergency_contact_number': request.POST['emergency_number']
+                'emergency_contact_number': request.POST['emergency_number'],
+                'dec_illness': request.POST['dec_illness'],
+                'dec_medication': request.POST['dec_medication'],
+                'dec_abs_cond': request.POST['dec_abs_cond'],
+                'acknowledgement_of_risk': request.POST['ack_of_risk'],
+                'signed_by': request.POST['signed_by'],
+                'date_signed': request.POST['date_signed']
             }
             full_name = form_data['first_name'] + " " + form_data['last_name']
             emer_name = form_data['emergency_contact_name']
@@ -83,25 +82,7 @@ def add_participant_form(request, appointment_number):
                     participant = partForm.save()
                     participant.appointment.add(appointment)
                     raform_data = {
-                        'participant': participant,
-                        'first_name': request.POST['first_name'],
-                        'last_name': request.POST['last_name'],
-                        'date_of_birth': request.POST['date_of_birth'],
-                        'email_address': request.POST['email_address'],
-                        'phone_number': request.POST['phone_number'],
-                        'address_line1': request.POST['address1'],
-                        'address_line2': request.POST['address2'],
-                        'address_line3': request.POST['address3'],
-                        'town_or_city': request.POST['town_or_city'],
-                        'postcode': request.POST['postcode'],
-                        'emergency_contact_name': request.POST['emergency_name'],
-                        'emergency_contact_number': request.POST['emergency_number'],
-                        'dec_illness': request.POST['dec_illness'],
-                        'dec_medication': request.POST['dec_med'],
-                        'dec_abs_cond': request.POST['dec_abs_cond'],
-                        'acknowledgement_of_risk': request.POST['ack_of_risk'],
-                        'signed_by': request.POST['signed_by'],
-                        'date_signed': request.POST['date_signed']
+                        'participant': participant
                     }
                     raForm = RiskAcknowledgementForm(raform_data)
                     if raForm.is_valid():
@@ -113,7 +94,8 @@ def add_participant_form(request, appointment_number):
                         raForm.risk_form = raFile
                         raForm.save()
                         return redirect(reverse('risk_form_success',
-                                        args=[participant.pk]))
+                                        args=[appointment_number,
+                                                participant.pk]))
                     else:
                         print("not valid RAFORM")
                         print(raForm.errors)
@@ -122,7 +104,7 @@ def add_participant_form(request, appointment_number):
                                        ('There is an error with the form. Please check\
                                 you have entered a valid input.'))
                         return redirect(reverse('add_part_form',
-                                        args=[appointment_number, partId]))
+                                        args=[appointment_number]))
                 else:
                     print("Error with form", partForm.errors)
                     messages.error(request,
@@ -136,7 +118,7 @@ def add_participant_form(request, appointment_number):
 
 
 @login_required
-def update_raform(request, part_id):
+def update_raform(request, part_id, appointment_number):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, you do not have permission to do \
             this.")
@@ -144,12 +126,19 @@ def update_raform(request, part_id):
     if request.method == "POST":
         participant = Participant.objects.get(pk=part_id)
         raForm = RAForm.objects.get(participant=participant)
-        newForm = request.POST['risk_form']
-        raForm.risk_form = newForm
+        form = request.FILES['document']
+        raForm.risk_form = form
         raForm.save(update_fields=['risk_form'])
-        messages.success(request, f'Updated RA Form for \
-            {participant.first_name} {participant.last_name}')
-        return redirect(reverse('home'))
+
+        return redirect(reverse('view_appointment', args=[appointment_number]))
+
+
+@login_required
+def delete_raform(request, form_number, part_id, appointment_number):
+    form = RAForm.objects.get(form_number=form_number)
+    form.delete()
+    return redirect(reverse('view_participant',
+                    args=[appointment_number, part_id]))
 
 
 @login_required
@@ -165,9 +154,10 @@ def remove_participant(request):
         participant.appointment.remove(removeApp)
         appointments = participant.appointment.all()
         if len(appointments) == 0:
-            print("no more appointments")
-            print("delete participant?")
-        messages.success(request, f'Successfully removed \
+            participant.delete()
+            messages.success(request, f'Deleted this participant')
+        else:
+            messages.success(request, f'Successfully removed \
             {participant.first_name} {participant.last_name} as a participant\
              from appointment: {removeApp.appointment_number}')
     return redirect(reverse('view_app', args=[appId]))

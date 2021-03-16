@@ -184,7 +184,7 @@
                                                 </div>
                                                 <div class="col-6 font-futura-light">
                                                     <p class="d-inline-block">{{ part.first_name }} {{ part.last_name }}</p>
-                                                    <a class="text-black mx-3" href="{% url 'view_participant' %}?partId={{ part.pk }}&appId={{ appointment.appointment_number }}"><i class="fas fa-search"></i></a>
+                                                    <a class="text-black mx-3" href="{% url 'view_participant' appointment.appointment_number part.pk  %}"><i class="fas fa-search"></i></a>
                                                     <a class="text-danger mx-3" href="{% url 'remove_participant' %}?partId={{ part.pk }}&appId={{ appointment.appointment_number }}"><i class="fas fa-user-minus"></i></a>
                                                 </div>
                                             </div>
