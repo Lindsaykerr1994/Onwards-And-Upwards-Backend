@@ -146,7 +146,8 @@ def add_app(request):
         'activities': activities,
         'courses': courses,
         'clients': clients,
-        'form': form
+        'form': form,
+        'add_app': True
     }
     return render(request, 'appointments/add_app.html', context)
 

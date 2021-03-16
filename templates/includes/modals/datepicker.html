@@ -1,10 +1,10 @@
 <div id="datepickerModal">
-    <div class="datepicker-header d-flex justify-content-around">
-        <span class="mx-3">
+    <div class="datepicker-header d-flex justify-content-between">
+        <span class="mx-3" id="prev-month-button">
             <i class="fas fa-chevron-left"></i>
         </span>
-        <p class="d-inline-block">Month Year</p>
-        <span class="mx-3">
+        <p id="viewMonthText" class="d-inline-block"><span id="monthText">Month</span> <span id="yearText">Year</span></p>
+        <span class="mx-3" id="next-month-button">
             <i class="fas fa-chevron-right"></i>
         </span>
     </div>
@@ -21,64 +21,72 @@
             </thead>
             <tbody class="font-futura-light">
                 <tr class="calendar-row">
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
                 </tr>
                 <tr class="calendar-row">
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
                 </tr>
                 <tr class="calendar-row">
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
                 </tr>
                 <tr class="calendar-row">
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
                 </tr>
                 <tr class="calendar-row">
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
                 </tr>
                 <tr class="calendar-row">
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
-                    <td><button class="datepicker-button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
+                    <td><button class="datepicker-button" type="button"></button></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="datepicker-footer d-flex justify-content-around">
-        <span>Cancel</span>
-        <span>Confirm</span>
+    <div class="datepicker-footer">
+        {% if add_app %}
+        <div class="d-flex justify-content-center">
+            <p class="d-inline-block">Multiple Dates?</p>
+            <input type="checkbox" name="multiple_dates" id="id_multiple_dates">
+        </div>
+        {% endif %}
+        <div class="d-flex justify-content-around">
+            <span>Cancel</span>
+            <span>Confirm</span>
+        </div>
     </div>
 </div>

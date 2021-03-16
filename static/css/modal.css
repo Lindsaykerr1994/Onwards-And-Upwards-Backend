@@ -37,11 +37,15 @@
 #datepickerModal .datepicker-header p {
     color: #687485;
 }
+.disabled-button svg{
+    color: rgba(42, 47, 54,0.25)
+}
 #datepickerModal .datepicker-content {
     width: 100%;
 }
 .datepicker-content table {
     width: 308px;
+    height: 275.2px;
     margin: 0px 5px;
 }
 .datepicker-content table th, .datepicker-content table td{
@@ -53,9 +57,24 @@
     background-color: #fff;
     height: 42px;
     width: 42px;
+    line-height: 42px;
     border-radius: 50%;
 }
+.datepicker-button.cell-disabled{
+    color: rgba(42,47,54,0.3);
+}
+.date-selected{
+    background-color: rgba(255, 140, 8, 0.8)!important;
+    color: #fff;
+}
+.todays-date{
+    background-color: rgba(42, 47, 54,0.3);
+    color: #fff;
+}
+.datepicker-button:focus{
+    outline: none;
+}
 #datepickerModal .datepicker-footer {
-    height: 30px;
+    height: 50px;
     width: 100%;
 }

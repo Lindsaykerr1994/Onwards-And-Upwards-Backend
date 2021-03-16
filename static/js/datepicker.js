@@ -1,5 +1,129 @@
 $("#id_date").click(function(){
 });
+$(".datepicker-button").click(function(){
+    if(!$(this).hasClass("cell-disabled")&&!$(this).hasClass("is-empty")){
+        if(!$(this).hasClass("date-selected")){
+            var date = parseInt($(this).attr('data-date'));
+            if(date<10){
+                date = `0${date}`;
+            }
+            var month = parseInt($(this).attr('data-month'));
+            if(month<10){
+                month = `0${month}`;
+            }
+            var year = $(this).attr('data-year');
+            var dateSelected = `${year}-${month}-${date}`;
+            if($("#id_multiple_dates").is(":checked")){
+                var dates = $("#id_date").val();
+                if(dates.length>0){
+                    dateSelected = dates+","+dateSelected;
+                } else {
+                    dateSelected = dateSelected;
+                }
+            } else {
+                $(".datepicker-button").removeClass("date-selected");
+            }
+            $(this).addClass("date-selected");
+            $("#id_date").val(dateSelected);
+            $("#id_date").trigger('change');
+        } else {
+            var dates = $("#id_date").val();
+            dates = dates.split(",");
+            var date = parseInt($(this).attr('data-date'));
+            if(date<10){
+                date = `0${date}`;
+            }
+            var month = parseInt($(this).attr('data-month'));
+            if(month<10){
+                month = `0${month}`;
+            }
+            var year = $(this).attr('data-year');
+            var dateSelected = `${year}-${month}-${date}`;
+            var indexDate = dates.indexOf(dateSelected);
+            dates.splice(indexDate,1);
+            $("#id_date").val(dates);
+            $("#id_date").trigger('change');
+            $(this).removeClass("date-selected");
+        }
+    }
+})
+$("#next-month-button").click(function(){
+    var currentMonth = parseInt($("#viewMonthText").attr("data-month"));
+    var year = parseInt($("#viewMonthText").attr("data-year"));
+    var nextMonth = currentMonth + 1;
+    if(nextMonth===13){
+        year = year + 1;
+        nextMonth = nextMonth - 12;
+    }
+    viewMonth = {
+        'year': year,
+        'month': nextMonth,
+        'totalDays': findTotalDays(nextMonth, year),
+        'monthName': getMonthName(nextMonth)
+    }
+    const fullDate = new Date();
+    var year = fullDate.getFullYear();
+    var month = fullDate.getMonth() + 1;
+    var date = fullDate.getDate();
+    var todaysDate = {
+        'year': year,
+        'month': month,
+        'day': date,
+        'totalDays': findTotalDays(month, year),
+        'monthName': getMonthName(month)
+    }
+    setDays(todaysDate, viewMonth);
+})
+$("#prev-month-button").click(function(){
+    var currentMonth = parseInt($("#viewMonthText").attr("data-month"));
+    var year = parseInt($("#viewMonthText").attr("data-year"));
+    var prevMonth = currentMonth - 1;
+    if($("#prev-month-button").hasClass("disabled-button")){
+        return;
+    } else {
+        if(prevMonth===0){
+            year = year - 1;
+            prevMonth = prevMonth + 12;
+        }
+        viewMonth = {
+        'year': year,
+        'month': prevMonth,
+        'totalDays': findTotalDays(prevMonth, year),
+        'monthName': getMonthName(prevMonth)
+        }
+        const fullDate = new Date();
+        var year = fullDate.getFullYear();
+        var month = fullDate.getMonth() + 1;
+        var date = fullDate.getDate();
+        var todaysDate = {
+            'year': year,
+            'month': month,
+            'day': date,
+            'totalDays': findTotalDays(month, year),
+            'monthName': getMonthName(month)
+        }
+        setDays(todaysDate, viewMonth);
+    };
+})
+$("#id_multiple_dates").change(function(){
+    if(!$(this).is(':checked')){
+        var dates = $("#id_date").val();
+        dates = dates.split(",");
+        console.log(dates);
+        if(dates.length>1){
+            var singleDate = dates[0];
+            $("#id_date").val(singleDate);
+            singleDate = singleDate.split("-");
+            cell = {
+                'year': singleDate[0],
+                'month': parseInt(singleDate[1]),
+                'date': parseInt(singleDate[2])
+            }
+            $(".datepicker-button").removeClass("date-selected");
+            $(`.datepicker-button[data-year=${cell['year']}][data-month=${cell['month']}][data-date=${cell['date']}]`).addClass("date-selected");
+        }
+    }
+})
 $(document).ready(function(){
     const fullDate = new Date();
     var year = fullDate.getFullYear();
@@ -40,15 +164,27 @@ function getMonthName(month){
     var monthName = names[month-1];
     return monthName;
 };
-function setDays(todaysDate, viewMonth, dateSelected){
+function setDays(todaysDate, viewMonth){
+    var dateSelected = $("#id_date").val();
+    if(dateSelected.length != 0){
+        console.log("we have dates selected");
+    }
     var i = 1, j, k, cell, cellObj, remainingCells, allCells;
     var d = new Date(viewMonth['year'],viewMonth['month']-1,1);
     var firstDay = d.getDay();
     var totalDays = viewMonth['totalDays']
+    setTitle(viewMonth);
     $(".calendar-row .cell-occupied").removeClass("cell-occupied cell-disabled");
     $(".calendar-row .todays-date").removeClass("todays-date");
     $(".calendar-row .date-selected").removeClass("date-selected");
     $(".calendar-row .is-empty").removeClass("is-empty");
+    if(viewMonth['year']===todaysDate['year']&&viewMonth['month']===todaysDate['month']){
+        console.log("adding disabled")
+        $("#prev-month-button").addClass(" disabled-button");
+    } else {
+        console.log("removing disabled")
+        $("#prev-month-button").removeClass("disabled-button");
+    }
     while(i<=totalDays){
         for(j=0;j<6;j++){
             if(j===0){
@@ -95,5 +231,11 @@ function setDays(todaysDate, viewMonth, dateSelected){
                 }
             }
         }
-    };
+    }
+};
+function setTitle(viewMonth){
+    $("#viewMonthText").attr("data-month",viewMonth['month']);
+    $("#viewMonthText").attr("data-year",viewMonth['year']);
+    $("#monthText").text(viewMonth['monthName']);
+    $("#yearText").text(viewMonth['year']);
 }
