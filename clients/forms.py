@@ -13,6 +13,7 @@ class ClientForm(forms.ModelForm):
         placeholders = {
             'first_name': 'First Name',
             'last_name': 'Last Name',
+            'abbreviation': 'Abbreviation',
             'email_address': 'Email Address',
             'phone_number': 'Phone Number',
             'street_address1': 'Street Address 1',

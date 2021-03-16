@@ -6,6 +6,8 @@ urlpatterns = [
          name="add_part_form"),
     path('view_participant', views.view_participant,
          name="view_participant"),
+    path('update_raform/<int:part_id>', views.update_raform,
+         name="update_raform"),
     path('remove_participant', views.remove_participant,
          name="remove_participant"),
     path('success/<appointment_number>/<int:part_id>',

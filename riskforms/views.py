@@ -16,24 +16,28 @@ def view_participant(request):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
+    clients = Client.objects.all()
     if request.method == "GET":
         partId = request.GET['partId']
         appId = request.GET['appId']
 
         participant = Participant.objects.get(pk=partId)
         appointment = Appointment.objects.get(appointment_number=appId)
+        raform = RAForm.objects.get(participant=participant)
         partApps = participant.appointment.all()
+        context = {
+            'participant': participant,
+            'raform': raform,
+            'clients': clients,
+            'appointment': appointment,
+            'partApps': partApps
+        }
     else:
-        participant = []
-        partApps = []
         appointment = Appointment.objects.all()
-    clients = Client.objects.all()
-    context = {
-        'participant': participant,
-        'clients': clients,
-        'appointment': appointment,
-        'partApps': partApps
-    }
+        context = {
+            'appointment': appointment,
+            'clients': clients
+        }
     return render(request, 'riskforms/view_participant.html', context)
 
 
@@ -129,6 +133,23 @@ def add_participant_form(request, appointment_number):
         'form': partForm,
     }
     return render(request, 'riskforms/add_risk_form.html', context)
+
+
+@login_required
+def update_raform(request, part_id):
+    if not request.user.is_superuser:
+        messages.error(request, "Sorry, you do not have permission to do \
+            this.")
+        return redirect(reverse('home'))
+    if request.method == "POST":
+        participant = Participant.objects.get(pk=part_id)
+        raForm = RAForm.objects.get(participant=participant)
+        newForm = request.POST['risk_form']
+        raForm.risk_form = newForm
+        raForm.save(update_fields=['risk_form'])
+        messages.success(request, f'Updated RA Form for \
+            {participant.first_name} {participant.last_name}')
+        return redirect(reverse('home'))
 
 
 @login_required

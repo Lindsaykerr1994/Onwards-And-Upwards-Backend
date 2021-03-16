@@ -1,5 +1,25 @@
 $("#id_date").click(function(){
+    const fullDate = new Date();
+    var year = fullDate.getFullYear();
+    var month = fullDate.getMonth() + 1;
+    var date = fullDate.getDate();
+    var todaysDate = {
+        'year': year,
+        'month': month,
+        'day': date,
+        'totalDays': findTotalDays(month, year),
+        'monthName': getMonthName(month)
+    }
+    setDays(todaysDate, todaysDate);
+    console.log("test");
+    $("#datepickerModal").modal({
+        backdrop: false,
+        show: true
+    });
 });
+$(document).click(function(event){
+    console.log(event.target)
+})
 $(".datepicker-button").click(function(){
     if(!$(this).hasClass("cell-disabled")&&!$(this).hasClass("is-empty")){
         if(!$(this).hasClass("date-selected")){
@@ -124,20 +144,6 @@ $("#id_multiple_dates").change(function(){
         }
     }
 })
-$(document).ready(function(){
-    const fullDate = new Date();
-    var year = fullDate.getFullYear();
-    var month = fullDate.getMonth() + 1;
-    var date = fullDate.getDate();
-    var todaysDate = {
-        'year': year,
-        'month': month,
-        'day': date,
-        'totalDays': findTotalDays(month, year),
-        'monthName': getMonthName(month)
-    }
-    setDays(todaysDate, todaysDate)
-})
 function findTotalDays(month, year){
     var totalDays;
         if (month===2){
@@ -167,9 +173,9 @@ function getMonthName(month){
 function setDays(todaysDate, viewMonth){
     var dateSelected = $("#id_date").val();
     if(dateSelected.length != 0){
-        console.log("we have dates selected");
+        dateSelected = dateSelected.split(",");
     }
-    var i = 1, j, k, cell, cellObj, remainingCells, allCells;
+    var i = 1, ii, j, k, cell, cellObj, remainingCells, allCells;
     var d = new Date(viewMonth['year'],viewMonth['month']-1,1);
     var firstDay = d.getDay();
     var totalDays = viewMonth['totalDays']
@@ -179,10 +185,8 @@ function setDays(todaysDate, viewMonth){
     $(".calendar-row .date-selected").removeClass("date-selected");
     $(".calendar-row .is-empty").removeClass("is-empty");
     if(viewMonth['year']===todaysDate['year']&&viewMonth['month']===todaysDate['month']){
-        console.log("adding disabled")
         $("#prev-month-button").addClass(" disabled-button");
     } else {
-        console.log("removing disabled")
         $("#prev-month-button").removeClass("disabled-button");
     }
     while(i<=totalDays){
@@ -218,9 +222,14 @@ function setDays(todaysDate, viewMonth){
                         }
                     }
                     if(dateSelected!=null){
-                        if(dateSelected.length>0){
-                            $(`.calendar-row td button[data-year='${dateSelected[0]}'][data-month='${dateSelected[1]}'][data-date='${dateSelected[2]}']`).addClass("date-selected");
-                            
+                        for(ii=0;ii<dateSelected.length;ii++){
+                            var sD = dateSelected[ii].split("-");
+                            var selectDate = {
+                                'year': sD[0],
+                                'month': parseInt(sD[1]),
+                                'date': parseInt(sD[2])
+                            }
+                            $(`.datepicker-button[data-year='${selectDate['year']}'][data-month='${selectDate['month']}'][data-date='${selectDate['date']}']`).addClass("date-selected");
                         }
                     }
                     var todaysCell = $(`.calendar-row td button[data-year='${todaysDate['year']}'][data-month='${todaysDate['month']}'][data-date='${todaysDate['day']}']`);
@@ -238,4 +247,11 @@ function setTitle(viewMonth){
     $("#viewMonthText").attr("data-year",viewMonth['year']);
     $("#monthText").text(viewMonth['monthName']);
     $("#yearText").text(viewMonth['year']);
+}
+function toggleDatepicker(){
+    if($("#datepickerModal").hasClass("datepickerOpen")){
+        $("#datepickerModal").removeClass("datepickerOpen");
+    } else {
+        $("#datepickerModal").addClass("datepickerOpen");
+    }
 }

@@ -17,31 +17,34 @@
                         <h4 class="link-sibling d-inline-block">View Participant</h4>
                     </div>
                     <div class="col-3 d-flex justify-content-end text-center">
+                        {% if not participant.client %}
                         <div class="tooltip-container d-inline-block float-right">
                             <span>Convert To Client</span><span> </span>
                             <button type="button" class="btn btn-light icon-btn" data-toggle="modal" data-target="#convertClientModal">
                                 <i class="fas fa-share-square"></i>
                             </button>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
         <div id="view-client-container" class="row">
             <div class="col-10 mx-auto">
+                <h4 class="text-underline">Personal Details:</h4>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Full Name:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>{{ participant.first_name }} {{ participant.last_name }}</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Email Address:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>
                             {% if participant.email_address %}
                             {{ participant.email_address }}
@@ -52,20 +55,20 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Phone Number:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>
                             {{ participant.phone_number }}
                         </p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Address:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>
                             {{ participant.address_line1 }}
                         </p>
@@ -79,19 +82,60 @@
                         <p>{{ participant.postcode }}</p>
                     </div>
                 </div>
+                <h4 class="text-underline">Emergency Contact Details:</h4>
                 <div class="row">
-                </div>
-                <div class="row">
-                </div>
-                <div class="row">
-                </div>
-                <div class="row">
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        Risk Acknowledgement Forms
+                    <div class="col-6 font-futura-medium">
+                        <p>Emergency Contact Name:</p>
                     </div>
-                    <!-- Risk Acknowledgement Forms Go Here -->
+                    <div class="col-6 font-futura-light">
+                        <p>
+                            {{ raform.emergency_contact_name }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Emergency Contact Number:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <p>
+                            {{ raform.emergency_contact_number }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Declaration Of Illness:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <p>
+                            {{ raform.dec_illness }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Declaration Of Medication:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <p>
+                            {{ raform.dec_medication }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Risk Acknowledgement Forms</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <a href="{{ raform.risk_form.url }}">{{ raform.risk_form }}</a>
+                        <form action="{% url 'update_raform' participant.pk %}" method="POST" id="update_raform">
+                            {% csrf_token %}
+                            <label class="onwards-button">Upload RA Form
+                                <input type="file" class="d-none" name="risk_form" id="id_risk_form">
+                            </label>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,6 +166,11 @@
         }, function(){
             var testEl = $(this).parent().children("span");
             testEl.fadeOut("fast");
+        })
+    </script>
+    <script type="text/javascript">
+        $("#id_risk_form").change(function(){
+            $("#update_raform").submit();
         })
     </script>
 {% endblock %}

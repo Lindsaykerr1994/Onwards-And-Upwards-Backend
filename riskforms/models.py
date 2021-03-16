@@ -45,8 +45,8 @@ class RAForm(models.Model):
                                               blank=False)
     emergency_contact_number = models.CharField(max_length=20, null=False,
                                                 blank=False)
-    dec_illness = models.CharField(max_length=254, null=True, blank=True)
-    dec_medication = models.CharField(max_length=254, null=True, blank=True)
+    dec_illness = models.TextField(null=True, blank=True)
+    dec_medication = models.TextField(null=True, blank=True)
     dec_abs_cond = models.BooleanField(default=False)
     acknowledgement_of_risk = models.BooleanField(default=False)
     # This needs to be default false so that the client

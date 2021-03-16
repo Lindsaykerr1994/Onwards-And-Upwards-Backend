@@ -17,7 +17,7 @@
                         <i class="fas fa-chevron-right"></i>
                         <h4 class="link-sibling d-inline-block">View Client</h4>
                     </div>
-                    <div class="col-3 d-flex align-items-center text-center">
+                    <div class="col-3 d-flex align-items-center justify-content-end text-center">
                         <a href="{% url 'add_app_w_client' client.id %}" class="icon-btn">
                             <i class="fas fa-calendar-plus"></i>
                         </a>
@@ -127,10 +127,9 @@
         </div>
         <div class="row">
             <div class="col-10 mx-auto">
-                
                 <div class="row">
                     <div class="col-12">
-                        <p><b>Upcoming Appointments</b></p>
+                        <p class="font-futura-medium">Upcoming Appointments</p>
                         {% if up_apps or up_part_apps %}
                         <table class="table">
                             <thead>
@@ -170,13 +169,13 @@
                             </tbody>
                         </table>
                         {% else %}
-                        <p>This client has no upcoming appointments</p>
+                        <p class="font-futura-light">This client has no upcoming appointments</p>
                         {% endif %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <p><b>Past Appointments</b></p>
+                        <p class="font-futura-medium">Past Appointments</p>
                         {% if past_apps %}
                             <table class="table">
                             <thead>
@@ -201,7 +200,7 @@
                             </tbody>
                         </table>
                         {% else %}
-                            <p>This client has no past appointments</p>
+                            <p class="font-futura-light">This client has no past appointments</p>
                         {% endif %}
                     </div>
                 </div>

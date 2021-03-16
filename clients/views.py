@@ -106,10 +106,23 @@ def add_client(request):
     if request.method == "POST":
         form = ClientForm(request.POST)
         if form.is_valid():
+            abbr = request.POST['abbreviation']
+            all_clients = Client.objects.all()
+            all_clients = all_clients.filter(abbreviation=abbr)
+            print(all_clients)
+            if len(all_clients) != 0:
+                newAbbr = request.POST['last_name']
+                newAbbr = newAbbr[0]+newAbbr[2]+newAbbr[3]
+                newAbbr = newAbbr.upper()
+                messages.success(request,
+                                 f'Updated client abbreviation to: {newAbbr}')
             client = form.save()
+            client.abbreviation = newAbbr
+            client.save(update_fields=['abbreviation'])
             messages.success(request, 'Successfully added client')
             return redirect(reverse('view_client', args=[client.id]))
         else:
+            print(form.errors)
             messages.error(request,
                            ('Please check that form is valid'))
     else:

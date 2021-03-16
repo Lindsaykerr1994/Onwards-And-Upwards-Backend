@@ -20,13 +20,17 @@
     border-color: black;
 }
 /* Date Picker */
-#datepickerModal {
+#datepickerModal .modal-dialog {
     width: 320px;
     background-color: #fff;
     position: absolute;
     top: 42px;
-    z-index: 4;
+    left: 0;
     border: 1px solid rgba(42, 47, 54, 0.55);
+    padding-right: 0px!important;
+}
+#datepickerModal .modal-dialog {
+    margin: 0 auto;
 }
 #datepickerModal .datepicker-header {
     height: 40px;
@@ -75,6 +79,6 @@
     outline: none;
 }
 #datepickerModal .datepicker-footer {
-    height: 50px;
+    height: 70px;
     width: 100%;
 }

@@ -125,7 +125,7 @@ def add_app(request):
                 courseCode = "0"+str(courseCode)
             else:
                 courseCode = str(courseCode)
-            appNum = ap+client.last_name[0:3].upper()+courseCode
+            appNum = ap+client.abbreviation+courseCode
             appointment = form.save()
             appointment.appointment_number = appNum
             appointment.client = client
@@ -136,7 +136,7 @@ def add_app(request):
         else:
             print(form.errors, "errors in form")
             messages.error(request,
-                        ('Please check that form is valid'))
+                           ('Please check that form is valid'))
     else:
         form = AppointmentForm()
     activities = Activity.objects.all()

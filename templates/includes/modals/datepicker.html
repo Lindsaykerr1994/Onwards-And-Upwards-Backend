@@ -1,4 +1,6 @@
-<div id="datepickerModal">
+<div class="modal fade" id="datepickerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
     <div class="datepicker-header d-flex justify-content-between">
         <span class="mx-3" id="prev-month-button">
             <i class="fas fa-chevron-left"></i>
@@ -85,8 +87,10 @@
         </div>
         {% endif %}
         <div class="d-flex justify-content-around">
-            <span>Cancel</span>
-            <span>Confirm</span>
+            <span class="onwards-button text-black" id="cancel-date">Cancel</span>
+            <span class="onwards-button text-black" id="confirm-date">Confirm</span>
         </div>
+    </div>
+    </div>
     </div>
 </div>
