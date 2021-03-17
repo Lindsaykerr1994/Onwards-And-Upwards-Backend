@@ -101,7 +101,7 @@
                         {% endfor %}
                         <p>We still require {{ remaining_forms }} form(s).<br>
                         All participants must complete and sign the form in order to participant in this session.</p>
-                        <button class="onwards-button"><a href="{% url 'add_part_form' appointment.appointment_number %}">Add Your Details</a></button>
+                        <button class="onwards-button"><a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Add Your Details</a></button>
                     </div>
                 </div>
                 {% endif %}

@@ -11,14 +11,4 @@ class ParticipantAdmin(admin.ModelAdmin):
     ordering = ('last_name', 'first_name')
 
 
-class RAFormAdmin(admin.ModelAdmin):
-    list_display = (
-        'form_number',
-        'date_created'
-    )
-
-    ordering = ('form_number', 'date_created')
-
-
 admin.site.register(Participant, ParticipantAdmin)
-admin.site.register(RAForm, RAFormAdmin)

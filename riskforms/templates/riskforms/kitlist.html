@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="row mb-3">
+            <div class="col-11 mx-auto">
+                <h3>Just A Mo'</h3>
+                <h5>Before we progress, we ask that you read the information below</h5>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-11 mx-auto">
+                <p class="font-futura-medium">Terms And Conditions</p>
+                <p class="font-futura-light">All terms and conditions will go here.</p>
+            </div>
+        </div>
+        <div class="row mb-3 font-futura-light">
+            <div class="col-11 mx-auto">
+                <p class="font-futura-medium">Kit List</p>
+                <p >The acitivity/course specific kit list will go here</p>
+                <ul class>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mb-3 font-futura-light">
+            <div class="col-11 mx-auto">
+                <p>By proceeding, I acknowledge the risks described above.</p>
+                <button class="onwards-button"><a href="{% url 'add_part_form' appointment.appointment_number %}">Register</a></button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

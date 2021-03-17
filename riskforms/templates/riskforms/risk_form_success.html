@@ -6,6 +6,8 @@
         <div class="row mb-3">
             <div class="col-11 mx-auto">
                 <h3>Success!</h3>
+                <p class="font-futura-light">Reference No: {{ appointment.appointment_number }}</p>
+                <p class="font-futura-light">We look forwards to seeing you on {{ appointment.appointment_date|date:"jS M, Y" }}</p>
                 <p class="font-futura-light">
                     Thank you {{ participant.first_name }}, for registering with <strong>Onwards And Upwards</strong>.
                     <br>
@@ -13,8 +15,12 @@
                     <br>
                     You will receive a copy of your Risk Acknowledgement form at the email address: {{ participant.email_address }}
                 </p>
-                <p class="font-futura-light">Reference No: {{ appointment.appointment_number }}</p>
-                <p class="font-futura-light">We look forwards to seeing you on {{ appointment.appointment_date|date:"jS M, Y" }}</p>
+                <div class="row">
+                    <div class="col-12 font-futura-light">
+                        <p>You can view your completed Risk Acknowledgement Form <a href="{% url 'view_raform' participant.pk %}" target="_blank">here</a></p>
+                        <p class="small">To download, right click on the link and select 'Save Link As'.</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row mb-3">
@@ -56,7 +62,7 @@
                         </div>
                         <div class="row my-3">
                             <div class="col-12 text-center font-futura-medium">
-                                <a href="" class="onwards-button text-black">View Our Kit List</a>
+                                <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}" class="onwards-button text-black">View Our Kit List</a>
                             </div>
                         </div>
                     </div>
@@ -76,7 +82,7 @@
                 <p>If you wish, you can share the following link to other members of your session to register. However we will be only allowing maximum number of <strong>{{ appointment.appointment_participants }}</strong> people to register for this session.</p>
                 <a href="">Link</a>
                 <p class="font-futura-medium">For the safety of Onwards And Upwards staff, and for other members of this session, you will not be allowed to participate if you have not completed a Risk Acknowledgement Form.</p>
-                <a href="" class="onwards-button text-decoration-none text-black mx-3">Register Participant</a>
+                <a href="{% url 'add_part_form' appointment.appointment_number  %}" class="onwards-button text-decoration-none text-black mx-3">Register Participant</a>
                 {% else %}
                 <p>Our system indicates that we have reached our quota for the number of registered participants for this booking.</p>
                 {% endif %}

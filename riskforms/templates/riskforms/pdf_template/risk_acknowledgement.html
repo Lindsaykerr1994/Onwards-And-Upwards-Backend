@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Risk Acknowledgment Form {{first_name}} {{last_name}}</title>
+    </head>
+<body>
+    <div>
+        <p>Personal Information:</p>
+        <table>
+            <tr>
+                <td colspan="2">Name: {{ first_name }} {{ last_name }}</td>
+                <td colspan="2">Date Of Birth: {{ date_of_birth }}</td>
+            </tr>
+            <tr>
+                <td colspan="3">Address: {{ address_line1 }} {{ address_line2 }}</td>
+                <td colspan="1">Postcode: {{ postcode }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">Tel: {{ phone_number }}</td>
+                <td colspan="2">Email: {{ email_address }}</td>
+            </tr>
+        </table>
+        <p>Emergency Contact:</p>
+        <table>
+            <tr>
+                <td colspan="2">Name: {{ emergency_contact_name }}</td>
+                <td colspan="2">Tel: {{ emergency_contact_number }}</td>
+            </tr>
+        </table>
+        <p>Declaration Of Fitness:</p>
+        <table>
+            <tr>
+                <td colspan="4">Please declare any recent or ongoing injury/condition/illness: {{ dec_illness }}</td>
+            </tr>
+            <tr>
+                <td colspan="4">Please declare any medication recently or currently taken: {{ dec_medication }}</td>
+            </tr>
+            <tr>
+                <td colspan="3">I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.</td>
+            </tr>
+        </table>
+        <p>Acknowledgement Of Risk</p>
+        <table>
+            <tr>
+                <td colspan="4">
+                    I hereby acknowledge and agree that the activities supervised by Onwards And Upwards and its associates have inherent risks. I have full knowledge of the nature and extent of all risks associated with these activities. I understand that failure to exercise due care and to follow guidance and instructions whilst on session may result in my injury or death.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">PARTICIPANT’S SIGNATURE: (or legal guardian if under 18) {{ signed_by }}</td>
+                <td colspan="2">DATE: {{ date_signed }}</td>
+            </tr>
+        </table>
+    </div>
+    <footer>
+        <p>TONY KERR ・ ONWARDS AND UPWARDS OUTDOOR ADVENTURES</p>
+        <p>16 LONG GREY ・ FLECKNEY ・ LEICESTERSHIRE ・ LE8 8TB</p>
+        <p>07774 804669 ・ TONY@ONWARDS-AND-UPWARDS.COM</p>
+    </footer>
+</body>
+</html>

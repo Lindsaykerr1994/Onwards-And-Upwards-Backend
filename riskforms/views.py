@@ -1,9 +1,9 @@
-import io
+import uuid
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import FileResponse
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 from django.contrib import messages
 from .models import Participant, RAForm
 from .forms import ParticipantForm, RiskAcknowledgementForm
@@ -67,6 +67,10 @@ def add_participant_form(request, appointment_number):
                 'signed_by': request.POST['signed_by'],
                 'date_signed': request.POST['date_signed']
             }
+            if form_data['address_line2'] is None:
+                form_data['address_line2'] = " "
+            if form_data['address_line3'] is None:
+                form_data['address_line3'] = " "
             full_name = form_data['first_name'] + " " + form_data['last_name']
             emer_name = form_data['emergency_contact_name']
             if full_name == emer_name:
@@ -74,39 +78,14 @@ def add_participant_form(request, appointment_number):
                                ('You cannot make your emergency contact\
                                 yourself'))
                 return redirect(reverse('add_part_form',
-                               args=[appointment_number]))
+                                args=[appointment_number]))
             else:
                 partForm = ParticipantForm(form_data)
                 if partForm.is_valid():
                     print("Part Form valid")
                     participant = partForm.save()
                     participant.appointment.add(appointment)
-                    raform_data = {
-                        'participant': participant
-                    }
-                    raForm = RiskAcknowledgementForm(raform_data)
-                    if raForm.is_valid():
-                        raForm.save()
-                        print("raForm valid")
-                        raFile = create_riskack_form(
-                                                     appointment_number,
-                                                     form_data)
-                        raForm.risk_form = raFile
-                        raForm.save()
-                        return redirect(reverse('risk_form_success',
-                                        args=[appointment_number,
-                                                participant.pk]))
-                    else:
-                        print("not valid RAFORM")
-                        print(raForm.errors)
-                        participant.delete()
-                        messages.error(request,
-                                       ('There is an error with the form. Please check\
-                                you have entered a valid input.'))
-                        return redirect(reverse('add_part_form',
-                                        args=[appointment_number]))
                 else:
-                    print("Error with form", partForm.errors)
                     messages.error(request,
                                    ('Please check that form is valid'))
         partForm = ParticipantForm()
@@ -163,17 +142,95 @@ def remove_participant(request):
     return redirect(reverse('view_app', args=[appId]))
 
 
-def create_riskack_form(appointment_number, form_data):
-    pdf = canvas.Canvas("test.pdf")
-    pdf.setTitle("myTest")
-    pdf.save()
-    return pdf
+def download_pdf(request, part_id):
+    template_path = 'riskforms/pdf_template/risk_acknowledgement.html'
+    part = get_object_or_404(Participant, pk=part_id)
+    context = {
+        'first_name': part.first_name,
+        'last_name': part.last_name,
+        'date_of_birth': part.date_of_birth,
+        'email_address': part.email_address,
+        'phone_number': part.phone_number,
+        'address_line1': part.address_line1,
+        'address_line2': part.address_line2,
+        'address_line3': part.address_line3,
+        'town_or_city': part.town_or_city,
+        'postcode': part.postcode,
+        'emergency_contact_name': part.emergency_contact_name,
+        'emergency_contact_number': part.emergency_contact_number,
+        'dec_illness': part.dec_illness,
+        'dec_medication': part.dec_medication,
+        'dec_abs_cond': part.dec_abs_cond,
+        'acknowledgement_of_risk': part.acknowledgement_of_risk,
+        'signed_by': part.signed_by,
+        'date_signed': part.date_signed
+    }
+
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    form_number = _generate_form_number()
+    response['Content-Disposition'] = f'attachment; filename="\
+        oau_ra_form_{part.first_name}_{part.last_name}_{form_number}.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def view_pdf(request, part_id):
+    template_path = 'riskforms/pdf_template/risk_acknowledgement.html'
+    part = get_object_or_404(Participant, pk=part_id)
+    context = {
+        'first_name': part.first_name,
+        'last_name': part.last_name,
+        'date_of_birth': part.date_of_birth,
+        'email_address': part.email_address,
+        'phone_number': part.phone_number,
+        'address_line1': part.address_line1,
+        'address_line2': part.address_line2,
+        'address_line3': part.address_line3,
+        'town_or_city': part.town_or_city,
+        'postcode': part.postcode,
+        'emergency_contact_name': part.emergency_contact_name,
+        'emergency_contact_number': part.emergency_contact_number,
+        'dec_illness': part.dec_illness,
+        'dec_medication': part.dec_medication,
+        'dec_abs_cond': part.dec_abs_cond,
+        'acknowledgement_of_risk': part.acknowledgement_of_risk,
+        'signed_by': part.signed_by,
+        'date_signed': part.date_signed
+    }
+
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    form_number = _generate_form_number()
+    response['Content-Disposition'] = f'filename="oau_ra_form_\
+        {part.first_name}_{part.last_name}_{form_number}.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+    # create a pdf
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def _generate_form_number():
+    return uuid.uuid4().hex.upper()
 
 
 def risk_form_success(request, appointment_number, part_id):
     participant = get_object_or_404(Participant, pk=part_id)
     appointment = Appointment.objects.get(appointment_number=appointment_number)
-    ra_form = RAForm.objects.get(participant=participant)
+    ra_form = RAForm.objects.all()
     participants = Participant.objects.all()
     participants = participants.filter(appointment=appointment)
     if participants:
@@ -197,3 +254,12 @@ def risk_form_denied(request, appointment_number):
         'appointment': appointment
     }
     return render(request, 'riskforms/risk_form_denied.html', context)
+
+
+def kitlist_and_terms(request, appointment_number):
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+
+    context = {
+        'appointment': appointment
+    }
+    return render(request, 'riskforms/kitlist.html', context)
