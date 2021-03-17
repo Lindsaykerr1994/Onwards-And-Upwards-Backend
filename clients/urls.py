@@ -9,6 +9,6 @@ urlpatterns = [
     path('edit_client/<int:client_id>', views.edit_client, name="edit_client"),
     path('delete_client/<int:client_id>', views.delete_client,
          name="delete_client"),
-    path('convert_to_client',
+    path('convert_to_client/<int:part_id>',
          views.convert_client, name="convert_client"),
 ]

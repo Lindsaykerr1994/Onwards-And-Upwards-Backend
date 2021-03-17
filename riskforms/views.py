@@ -15,21 +15,20 @@ from clients.models import Client
 
 
 @login_required
-def view_participant(request, appId, partId):
+def view_participant(request, partId):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     clients = Client.objects.all()
+    if request.GET:
+        appId = request.GET['appId']
+        appointment = Appointment.objects.get(appointment_number=appId)
+    else:
+        appointment = []
     participant = Participant.objects.get(pk=partId)
-    appointment = Appointment.objects.get(appointment_number=appId)
-    raform = RAForm.objects.all()
-    for form in raform:
-        print(form.participant)
-    print(raform)
     partApps = participant.appointment.all()
     context = {
         'participant': participant,
-        'raform': raform,
         'clients': clients,
         'appointment': appointment,
         'partApps': partApps
@@ -124,27 +123,27 @@ def _send_confirmation_email(appointment, participant):
 
 
 @login_required
-def update_raform(request, part_id, appointment_number):
+def update_raform(request, part_id):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, you do not have permission to do \
             this.")
         return redirect(reverse('home'))
     if request.method == "POST":
         participant = Participant.objects.get(pk=part_id)
-        raForm = RAForm.objects.get(participant=participant)
         form = request.FILES['document']
-        raForm.risk_form = form
-        raForm.save(update_fields=['risk_form'])
+        participant.manual_form = form
+        participant.save(update_fields=['manual_form'])
 
-        return redirect(reverse('view_appointment', args=[appointment_number]))
+        return redirect(reverse('view_participant',
+                        args=[participant.pk]))
 
 
 @login_required
-def delete_raform(request, form_number, part_id, appointment_number):
-    form = RAForm.objects.get(form_number=form_number)
-    form.delete()
+def delete_raform(request, part_id):
+    participant = Participant.objects.get(pk=part_id)
+    participant.manual_form.delete()
     return redirect(reverse('view_participant',
-                    args=[appointment_number, part_id]))
+                    args=[participant.pk]))
 
 
 @login_required
@@ -167,47 +166,6 @@ def remove_participant(request):
             {participant.first_name} {participant.last_name} as a participant\
              from appointment: {removeApp.appointment_number}')
     return redirect(reverse('view_app', args=[appId]))
-
-
-def download_pdf(request, part_id):
-    template_path = 'riskforms/pdf_template/risk_acknowledgement.html'
-    part = get_object_or_404(Participant, pk=part_id)
-    context = {
-        'first_name': part.first_name,
-        'last_name': part.last_name,
-        'date_of_birth': part.date_of_birth,
-        'email_address': part.email_address,
-        'phone_number': part.phone_number,
-        'address_line1': part.address_line1,
-        'address_line2': part.address_line2,
-        'address_line3': part.address_line3,
-        'town_or_city': part.town_or_city,
-        'postcode': part.postcode,
-        'emergency_contact_name': part.emergency_contact_name,
-        'emergency_contact_number': part.emergency_contact_number,
-        'dec_illness': part.dec_illness,
-        'dec_medication': part.dec_medication,
-        'dec_abs_cond': part.dec_abs_cond,
-        'acknowledgement_of_risk': part.acknowledgement_of_risk,
-        'signed_by': part.signed_by,
-        'date_signed': part.date_signed
-    }
-
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    form_number = _generate_form_number()
-    response['Content-Disposition'] = f'attachment; filename="\
-        oau_ra_form_{part.first_name}_{part.last_name}_{form_number}.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
-
-    # create a pdf
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    # if error then show some funy view
-    if pisa_status.err:
-        return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
 
 
 def view_pdf(request, part_id):
@@ -237,8 +195,7 @@ def view_pdf(request, part_id):
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     form_number = _generate_form_number()
-    response['Content-Disposition'] = f'filename="oau_ra_form_\
-        {part.first_name}_{part.last_name}_{form_number}.pdf"'
+    response['Content-Disposition'] = f'filename="oau_ra_form_{part.first_name}_{part.last_name}_{form_number}.pdf"'
     # find the template and render it.
     template = get_template(template_path)
     html = template.render(context)

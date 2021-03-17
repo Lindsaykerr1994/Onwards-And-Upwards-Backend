@@ -12,17 +12,23 @@
             <div class="col-11 mx-auto">
                 <div class="row mb-3">
                     <div class="col-9 onwards-header">
-                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'home' %}">All Appointments</a></h3>
+                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'home' %}">All Sessions</a></h3>
                         <i class="fas fa-chevron-right"></i>
-                        <h4 class="link-sibling d-inline-block">View Appointments</h4>
+                        <h4 class="link-sibling d-inline-block">View Sessions</h4>
                     </div>
                     <div class="col-3 d-flex justify-content-end text-center">
-                        <a href="{% url 'edit_app' appointment.appointment_number %}" class="icon-btn">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="{% url 'delete_app' appointment.appointment_number %}" class="icon-btn">
-                            <i class="fas fa-trash text-danger"></i>
-                        </a>
+                        <div class="tooltip-container d-inline-block float-right">
+                            <span>Edit Session</span><span> </span>
+                            <a href="{% url 'edit_app' appointment.appointment_number %}" class="icon-btn">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                        <div class="tooltip-container d-inline-block float-right">
+                            <span>Delete Session</span><span> </span>
+                            <a href="{% url 'delete_app' appointment.appointment_number %}" class="icon-btn">
+                                <i class="fas fa-trash text-danger"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,14 +149,17 @@
                         <hr>
                     </div>
                     <div class="col-12 col-lg-6 mb-3">
-                        <h4 class="text-underline">Client Details:</h4>
+                        <h4 class="text-underline d-inline-block">Client Details:</h4>
+                        <div class="tooltip-container d-inline-block">
+                            <span>View Client</span><span> </span>
+                            <a class="text-black mx-3 icon-btn" href="{% url 'view_client' appointment.client.id %}"><i class="fas fa-search"></i></a>
+                        </div>
                         <div class="row">
                             <div class="col-6 font-futura-medium">
                                 <p>Full Name:</p>
                             </div>
                             <div class="col-6 font-futura-light">
                                 <p class="d-inline-block">{{ appointment.client }}</p>
-                                <a class="text-black mx-3" href="{% url 'view_client' appointment.client.id %}"><i class="fas fa-search"></i></a>
                             </div>
                         </div>
                         <div class="row">
@@ -177,15 +186,23 @@
                             {% if participants %}
                                 {% for part in participants %}
                                     <div class="row my-3">
-                                        <div class="col-12">
+                                        <div class="col-2">
+                                            <div class="tooltip-container d-inline-block float-right">
+                                                <span>View Participant</span><span> </span>
+                                                <a class="text-black mx-3 icon-btn" href="{% url 'view_participant' part.pk  %}?appId={{appointment.appointment_number}}"><i class="fas fa-search"></i></a>
+                                            </div>
+                                            <div class="tooltip-container d-inline-block">
+                                                <span>Remove From Session</span><span> </span>
+                                                <a class="text-danger mx-3 icon-btn" href="{% url 'remove_participant' %}?partId={{ part.pk }}&appId={{ appointment.appointment_number }}"><i class="fas fa-user-minus"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-10">
                                             <div class="row">
                                                 <div class="col-6 font-futura-medium">
                                                     <p>Full Name:</p>
                                                 </div>
                                                 <div class="col-6 font-futura-light">
                                                     <p class="d-inline-block">{{ part.first_name }} {{ part.last_name }}</p>
-                                                    <a class="text-black mx-3" href="{% url 'view_participant' appointment.appointment_number part.pk  %}"><i class="fas fa-search"></i></a>
-                                                    <a class="text-danger mx-3" href="{% url 'remove_participant' %}?partId={{ part.pk }}&appId={{ appointment.appointment_number }}"><i class="fas fa-user-minus"></i></a>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -216,4 +233,17 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(".icon-btn").hover(function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeIn("fast");
+        }, function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeOut("fast");
+        });
+    </script>
 {% endblock %}

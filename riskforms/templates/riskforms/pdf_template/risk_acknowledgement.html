@@ -1,11 +1,22 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Risk Acknowledgment Form {{first_name}} {{last_name}}</title>
-    </head>
+<head>
+    <style>
+        @page {
+            size: a4 portrait;
+            @frame personal_frame{
+                -pdf-frame-content: personal_frame;
+                left: 50pt; width: 512pt; top: 0pt; height: 480pt;
+            }
+            @frame footer_frame{
+                -pdf-frame-content: footer_content;
+                left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+            }
+        }
+    </style>
+    <meta charset="utf-8">
+    <title>Risk Acknowledgment Form {{first_name}} {{last_name}}</title>
+</head>
 <body>
-    <div>
+    <div id="personal_frame">
         <p>Personal Information:</p>
         <table>
             <tr>
@@ -21,6 +32,8 @@
                 <td colspan="2">Email: {{ email_address }}</td>
             </tr>
         </table>
+    </div>
+    <div id="emergency_frame">
         <p>Emergency Contact:</p>
         <table>
             <tr>
@@ -40,6 +53,8 @@
                 <td colspan="3">I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.</td>
             </tr>
         </table>
+    </div>
+    <div class="risk_frame">
         <p>Acknowledgement Of Risk</p>
         <table>
             <tr>
@@ -53,10 +68,12 @@
             </tr>
         </table>
     </div>
+    <div id="footer_frame">
     <footer>
         <p>TONY KERR ・ ONWARDS AND UPWARDS OUTDOOR ADVENTURES</p>
         <p>16 LONG GREY ・ FLECKNEY ・ LEICESTERSHIRE ・ LE8 8TB</p>
         <p>07774 804669 ・ TONY@ONWARDS-AND-UPWARDS.COM</p>
     </footer>
+    </div>
 </body>
 </html>

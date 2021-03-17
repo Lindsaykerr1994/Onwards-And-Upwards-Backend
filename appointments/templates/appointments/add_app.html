@@ -22,7 +22,10 @@
                 <form method="POST" action="{% url 'add_app' %}" enctype="multipart/form-data" class="onwards-form mx-auto">
                     {% csrf_token %}
                     {% if client %}
-                        <input type="text" value="{{ client }}" readonly>
+                        <div class="form-input">
+                            <label for="client">Last Name</label>
+                            <input type="text" id="" name="client" value="{{ client }}" readonly>
+                        </div>
                         <input type="hidden" name="client" value="{{ client.pk }}">
                     {% else %}
                         <fieldset id="client-fieldset">

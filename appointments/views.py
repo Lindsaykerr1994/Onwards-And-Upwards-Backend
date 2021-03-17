@@ -92,6 +92,11 @@ def add_app(request):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
+    if request.method == "GET":
+        clientId = request.GET['clientId']
+        client = Client.objects.get(pk=clientId)
+    else:
+        client = []
     if request.method == "POST":
         form = AppointmentForm(request.POST)
         clientNum = request.POST.get('client_select')
@@ -145,54 +150,10 @@ def add_app(request):
     context = {
         'activities': activities,
         'courses': courses,
+        'client': client,
         'clients': clients,
         'form': form,
         'add_app': True
-    }
-    return render(request, 'appointments/add_app.html', context)
-
-
-@login_required
-def add_app_w_client(request, client_id):
-    if not request.user.is_superuser:
-        messages.error(request, "Sorry, I don't want you doing that.")
-        return redirect(reverse('home'))
-    client = Client.objects.get(pk=client_id)
-    if request.method == "POST":
-        form = AppointmentForm(request.POST)
-        courseId = request.POST['course']
-        course = Course.objects.get(pk=courseId)
-        if form.is_valid():
-            app_date = request.POST['appointment_date']
-            app_date = app_date.split("-")
-            ap = app_date[2]+app_date[1]+app_date[0][2:4]
-            courseCode = course.course_code
-            courseCode = int(courseCode)
-            if courseCode < 10:
-                courseCode = "0"+str(courseCode)
-            else:
-                courseCode = str(courseCode)
-            appNum = ap+client.last_name[0:3].upper()+courseCode
-            appointment = form.save()
-            appointment.appointment_number = appNum
-            appointment.client = client
-            appointment.save(update_fields=["appointment_number", "client"])
-            messages.success(request, 'Successfully added appointment')
-            return redirect(reverse('view_app',
-                                    args=[appointment.appointment_number]))
-        else:
-            print(form.errors, "errors in form")
-            messages.error(request,
-                           ('Please check that form is valid'))
-    else:
-        form = AppointmentForm()
-    activities = Activity.objects.all()
-    courses = Course.objects.all()
-    context = {
-        'activities': activities,
-        'courses': courses,
-        'client': client,
-        'form': form
     }
     return render(request, 'appointments/add_app.html', context)
 

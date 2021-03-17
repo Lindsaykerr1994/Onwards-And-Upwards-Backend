@@ -12,7 +12,11 @@
             <div class="col-11 mx-auto">
                 <div class="row mb-3">
                     <div class="col-9 onwards-header">
+                        {% if appointment %}
                         <h3 class="d-inline-block"><a class="link-specs" href="{% url 'view_app' appointment.appointment_number %}">View Appointment</a></h3>
+                        {% else %}
+                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'all_appointments' %}">All Appointments</a></h3>
+                        {% endif %}
                         <i class="fas fa-chevron-right"></i>
                         <h4 class="link-sibling d-inline-block">View Participant</h4>
                     </div>
@@ -23,6 +27,11 @@
                             <button type="button" class="btn btn-light icon-btn" data-toggle="modal" data-target="#convertClientModal">
                                 <i class="fas fa-share-square"></i>
                             </button>
+                        </div>
+                        {% else %}
+                        <div class="tooltip-container d-inline-block float-right">
+                            <span>View Client</span><span> </span>
+                            <a href="{% url 'view_client' participant.client.pk %}" class="icon-btn"><i class="fas fa-user-tag"></i></a>
                         </div>
                         {% endif %}
                     </div>
@@ -123,21 +132,40 @@
                         </p>
                     </div>
                 </div>
-                <div class="row">
+                <div id="ra-form-container" class="row">
                     <div class="col-6 font-futura-medium">
                         <p>Risk Acknowledgement Forms</p>
                     </div>
                     <div class="col-6 font-futura-light">
-                        {% for ra in raform %}
-                        <a href="{{ ra.risk_form.url }}" target="_blank">{{ ra.risk_form }}</a> <a class="text-danger" href="{% url 'delete_raform' ra.form_number participant.pk appointment.appointment_number %}"><i class="fas fa-minus-circle"></i></a>
-                        {% endfor %}
-                        <form action="{% url 'update_raform' participant.pk appointment.appointment_number %}" method="POST" id="update_raform" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <label class="">Upload RA Form
-                                <input type="file" class="" name="document" id="id_risk_form">
-                            </label>
-                            <input type="submit">
-                        </form>
+                        {% if participant.manual_form %}
+                        <div class="row">
+                            <div class="col-12">
+                            {% if appointment %}
+                                <a href="{{ participant.manual_form.url }}" target="_blank" class="text-break">{{ participant.manual_form }}</a> <a class="text-danger mx-3" href="{% url 'delete_raform'  participant.pk %}?appId={{appointment.appointment_number}}"><i class="fas fa-minus-circle"></i></a>
+                            {% else %}
+                                <a href="{{ participant.manual_form.url }}" target="_blank" class="text-break">{{ participant.manual_form }}</a> <a class="text-danger mx-3" href="{% url 'delete_raform'  participant.pk %}"><i class="fas fa-minus-circle"></i></a>
+                            {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-6">
+                                <form action="{% url 'update_raform' participant.pk %}" method="POST" id="update_raform" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <label class="onwards-button">Upload RA Form
+                                        <input type="file" class="d-none" name="document" id="id_risk_form">
+                                    </label>
+                                    <span id="submit_raform" class="mx-3 d-none"><i class="fas fa-plus-circle text-success"></i></span>
+                                    <p id="fileName" class="small"></p>
+                                </form>
+                            </div>
+                            <div class="col-6">
+                                <a href="{% url 'view_raform' participant.pk %}" class="onwards-button text-black d-inline-block align-middle" target="_blank">Generate PDF</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 font-futura-light">
+                        
                     </div>
                 </div>
             </div>
@@ -151,7 +179,8 @@
     <script type="text/javascript">
         $("#existing-client").click(function(){
             var partId = $("#partId-input").val();
-            var clientId = $("#select-client").val()
+            var clientId = $("#select-client").val();
+            var appId = $("#appId-input").val();
             if(typeof(clientId) !== 'undefined'){
                 var currentUrl = window.location.href;
                 console.log(currentUrl)
@@ -159,7 +188,7 @@
                 var newUrl = currentUrl.slice(0,-2);
                 console.log(newUrl)
                 var newStr = newUrl[0]+'/'+newUrl[1]+'/'+newUrl[2];
-                newStr = newStr + `/clients/convert_to_client?newClient=false&partId=${partId}&clientId=${clientId}`
+                newStr = newStr + `/clients/convert_to_client/${partId}?newClient=false&clientId=${clientId}&appId=${appId}`
                 window.location.href = newStr;
             }
         })
@@ -169,6 +198,17 @@
         }, function(){
             var testEl = $(this).parent().children("span");
             testEl.fadeOut("fast");
+        });
+        $("#id_risk_form").change(function(){
+            var file = $("#id_risk_form")[0].files[0].name;
+            $("#fileName").text(file);
+            $("#submit_raform").removeClass("d-none");
+        })
+        $("#submit_raform").click(function(e){
+            var file = $("#id_risk_form")[0].files[0];
+            if(typeof(file) !== 'undefined'){
+                $("#update_raform").submit();
+            }
         })
     </script>
 {% endblock %}

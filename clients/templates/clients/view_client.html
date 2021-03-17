@@ -18,12 +18,26 @@
                         <h4 class="link-sibling d-inline-block">View Client</h4>
                     </div>
                     <div class="col-3 d-flex align-items-center justify-content-end text-center">
-                        <a href="{% url 'add_app_w_client' client.id %}" class="icon-btn">
-                            <i class="fas fa-calendar-plus"></i>
-                        </a>
-                        <a href="{% url 'edit_client' client.id %}" class="icon-btn">
-                            <i class="fas fa-user-edit"></i>
-                        </a>
+                        <div class="tooltip-container d-inline-block float-right">
+                            <span>Add Appointment With Client</span><span> </span>
+                            <a href="{% url 'add_app' %}?clientId={{client.id}}" class="icon-btn">
+                                <i class="fas fa-calendar-plus"></i>
+                            </a>
+                        </div>
+                        <div class="tooltip-container d-inline-block float-right">
+                            <span>Edit Client</span><span> </span>
+                            <a href="{% url 'edit_client' client.id %}" class="icon-btn">
+                                <i class="fas fa-user-edit"></i>
+                            </a>
+                        </div>
+                        {% if participant %}
+                        <div class="tooltip-container d-inline-block float-right">
+                            <span>View Participant</span><span> </span>
+                            <a href="{% url 'view_participant' participant.pk %}" class="icon-btn">
+                                <i class="fas fa-user-tag"></i>
+                            </a>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -38,7 +52,7 @@
                                 <p>Full Name:</p>
                             </div>
                             <div class="col-6 font-futura-light">
-                                <p>{{ client.first_name }} {{ client.last_name }}</p>
+                                <p>{{ client.first_name }} {{ client.last_name }} ({{ client.abbreviation }})</p>
                             </div>
                         </div>
                         <div class="row">
@@ -115,10 +129,15 @@
                         </div>
                         <div class="row">
                             <div class="col-6 font-futura-medium">
-                                Risk Acknowledgement Forms
+                                <p>Risk Acknowledgement Forms</p>
                             </div>
-                            <div class="col-6 font-futura-light"></div>
-                            <!-- Risk Acknowledgement Forms Go Here -->
+                            <div class="col-6 font-futura-light">
+                                {% if participant %}
+                                <button class="onwards-button">
+                                    <a target="_blank" href="{% url 'view_raform' participant.pk %}">Generate PDF</a>
+                                </button>
+                                {% endif %}
+                            </div>
                         </div>
                         <hr>
                     </div>
@@ -156,7 +175,7 @@
                                 {% for app in up_part_apps %}
                                     <tr>
                                         <td>
-                                            <a href="{% url 'view_app' app.appointment_number %}">
+                                            <a href="{% url 'view_app' app.appointment_number %}" class="text-black">
                                                 <i class="fas fa-search"></i>
                                             </a>
                                         </td>
@@ -211,4 +230,13 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script type="text/javascript">
+        $(".icon-btn").hover(function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeIn("fast");
+        }, function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeOut("fast");
+        });
+    </script>
 {% endblock %}

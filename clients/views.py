@@ -74,24 +74,28 @@ def view_client(request, client_id):
             up_apps.append(app)
         else:
             past_apps.append(app)
-    all_parts = Participant.objects.all()
+    parts = Participant.objects.all()
+    parts = parts.filter(client=client)
     up_part_apps = []
     past_part_apps = []
-    participants = all_parts.filter(client=client)
-    for part in participants:
-        if part:
-            part_apps = part.appointment.all()
-            for app in part_apps:
-                if app.appointment_date > today:
-                    up_part_apps.append(app)
-                else:
-                    past_part_apps.append(app)
-            print(up_part_apps, past_part_apps)
+    if len(parts) > 0:
+        p_iter = iter(parts)
+        participant = next(p_iter)
+        part_apps = participant.appointment.all()
+        for app in part_apps:
+            if app.appointment_date > today:
+                up_part_apps.append(app)
+            else:
+                past_part_apps.append(app)
+        print(up_part_apps, past_part_apps)
+    else:
+        participant = []
     context = {
         'client': client,
         'root_of_inquiry': client.get_root_of_inquiry_display(),
         'up_apps': up_apps,
         'past_apps': past_apps,
+        'participant': participant,
         'up_part_apps': up_part_apps,
         'past_part_apps': past_part_apps
     }
@@ -174,43 +178,52 @@ def delete_client(request, client_id):
 
 
 @login_required
-def convert_client(request):
+def convert_client(request, part_id):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, you don't have permission to do that.")
         return redirect(reverse('home'))
     if request.method == "GET":
         newClient = request.GET['newClient']
         if newClient == "true":
-            partId = request.GET['partId']
-            participant = Participant.objects.get(pk=partId)
+            appId = request.GET['appId']
+            part = Participant.objects.get(pk=part_id)
+            abbr = part.last_name[0:3]
+            all_clients = Client.objects.all()
+            all_clients = all_clients.filter(abbreviation=abbr)
+            if len(all_clients) != 0:
+                newAbbr = part.last_name
+                newAbbr = newAbbr[0]+newAbbr[2]+newAbbr[3]
+                newAbbr = newAbbr.upper()
+                abbr = newAbbr
             part_data = {
-                'first_name': participant.first_name,
-                'last_name': participant.last_name,
-                'email_address': participant.email_address,
-                'phone_number': participant.phone_number,
-                'street_address1': participant.address_line1,
-                'street_address2': participant.address_line2,
-                'town_or_city': participant.town_or_city,
-                'postcode': participant.postcode,
+                'first_name': part.first_name,
+                'last_name': part.last_name,
+                'abbreviation': abbr,
+                'email_address': part.email_address,
+                'phone_number': part.phone_number,
+                'street_address1': part.address_line1,
+                'street_address2': part.address_line2,
+                'town_or_city': part.town_or_city,
+                'postcode': part.postcode,
                 'additional_info': 'Created from participant model',
                 'root_of_inquiry': 'REF'
             }
             form = ClientForm(part_data)
             if form.is_valid():
                 client = form.save()
-                participant.client = client
-                participant.save(update_fields=['client'])
+                part.client = client
+                part.save(update_fields=['client'])
                 messages.success(request, f'Successfully created client from \
-                    participant: {participant.first_name} {participant.last_name}')
+                    participant: {part.first_name} {part.last_name}')
                 return redirect(reverse('view_client', args=[client.id]))
             else:
                 print(form.errors)
                 messages.error(request, "Missing information preventing creation of \
                     client. Please check the participant's information.")
-                return redirect(reverse('view_participant', args=[participant.id]))
+                return redirect(reverse('view_participant',
+                                args=[appId, part.pk]))
         else:
-            partId = request.GET['partId']
-            participant = Participant.objects.get(pk=partId)
+            participant = Participant.objects.get(pk=part_id)
             clientId = request.GET['clientId']
             client = Client.objects.get(pk=clientId)
             if client:
@@ -224,4 +237,4 @@ def convert_client(request):
                 messages.error(request, 'Was not able to merge participant \
                     with client. Would you like to create a new client model?')
                 return redirect(reverse('view_participant',
-                                args=[participant.id]))
+                                args=[appId, participant.id]))
