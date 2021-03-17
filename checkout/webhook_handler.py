@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.http import HttpResponse
 from appointments.models import Appointment
 from .models import Payment
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 import time
 
@@ -9,6 +12,23 @@ class StripeWH_Handler:
 
     def __init__(self, request):
         self.request = request
+
+    def _send_confirmation_email(self, payment):
+        """Send the user a confirmation email"""
+        cust_email = payment.email
+        subject = render_to_string(
+            'checkout/email_template/payment_success_subject.txt',
+            {'payment': payment})
+        body = render_to_string(
+            'checkout/email_templatepayment_success_body.txt',
+            {'payment': payment, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+
+        send_mail(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [cust_email]
+        )
 
     def handle_event(self, event):
         return HttpResponse(
@@ -49,7 +69,7 @@ class StripeWH_Handler:
                 attempt += 1
                 time.sleep(1)
         if payment_exists:
-            print("payment_exists")
+            self._send_confirmation_email(payment)
             return HttpResponse(
                     content=f'Webhook received: {event["type"]} | SUCCESS: Verified in database',
                     status=200)

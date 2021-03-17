@@ -1,5 +1,5 @@
 from django import forms
-from .models import Participant, RAForm
+from .models import Participant
 
 
 class ParticipantForm(forms.ModelForm):
@@ -38,13 +38,3 @@ class ParticipantForm(forms.ModelForm):
             self.fields[field].widget.attrs['placeholder'] = placeholder
             self.fields[field].widget.attrs['class'] = 'onwards-form-input'
             self.fields[field].label = True
-
-
-class RiskAcknowledgementForm(forms.ModelForm):
-
-    class Meta:
-        model = RAForm
-        exclude = ('form_number', 'date_created', 'participant')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)

@@ -34,25 +34,3 @@ class Participant(models.Model):
     def __str__(self):
         return f'{self.last_name}, {self.first_name}'
 
-
-class RAForm(models.Model):
-    form_number = models.CharField(max_length=32, null=False, editable=False)
-    participant = models.ForeignKey(Participant, on_delete=models.CASCADE,
-                                    null=True, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    risk_form = models.FileField(null=True, blank=True, upload_to='raforms/')
-
-    def _generate_form_number(self):
-        return uuid.uuid4().hex.upper()
-
-    def save(self, *args, **kwargs):
-        """
-        Override the original save method to set the order number
-        if it hasn't been set already.
-        """
-        if not self.form_number:
-            self.form_number = self._generate_form_number()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.form_number

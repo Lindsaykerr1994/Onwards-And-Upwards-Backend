@@ -1,12 +1,15 @@
 import uuid
+from django.conf import settings
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.contrib import messages
-from .models import Participant, RAForm
-from .forms import ParticipantForm, RiskAcknowledgementForm
+from .models import Participant
+from .forms import ParticipantForm
 from appointments.models import Appointment
 from clients.models import Client
 
@@ -82,9 +85,14 @@ def add_participant_form(request, appointment_number):
             else:
                 partForm = ParticipantForm(form_data)
                 if partForm.is_valid():
-                    print("Part Form valid")
                     participant = partForm.save()
                     participant.appointment.add(appointment)
+                    _send_confirmation_email(appointment, participant)
+                    messages.success(request, 'Registration completed. \
+                        Thank you!')
+                    return redirect(reverse('risk_form_success',
+                                    args=[appointment.appointment_number,
+                                            participant.pk]))
                 else:
                     messages.error(request,
                                    ('Please check that form is valid'))
@@ -94,6 +102,25 @@ def add_participant_form(request, appointment_number):
         'form': partForm,
     }
     return render(request, 'riskforms/add_risk_form.html', context)
+
+
+def _send_confirmation_email(appointment, participant):
+    """Send the user a confirmation email"""
+    part_email = participant.email
+    subject = render_to_string(
+        'riskforms/email_template/pdf_success_subject.txt',
+        {'appointment': appointment})
+    body = render_to_string(
+        'riskforms/email_template/pdf_success_body.txt',
+        {'appointment': appointment, 'participant': participant,
+            'contact_email': settings.DEFAULT_FROM_EMAIL})
+
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [part_email]
+    )
 
 
 @login_required

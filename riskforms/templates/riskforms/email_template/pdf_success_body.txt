@@ -1,0 +1,39 @@
+Hello {{ participant.first_name }} {{ participant.last_name }}!
+
+This is a confirmation of your registration with Onwards And Upwards:
+
+Session Number: {{ appointment.appointment_number }}
+Session Date: {{ appointment.appointment_date }}
+
+Below is the information that you submitted:
+First Name: {{ participant.first_name }}
+Last Name: {{ participant.last_name }}
+Date Of Birth: {{ participant.date_of_birth }}
+Phone Number: {{ participant.phone_number }}
+Email Address: {{ participant.email_address }}
+Street Address: {{ participant.address_line1 }}
+{% if participant.address_line2 %}
+Street Address2: {{ participant.address_line2 }}
+{% endif %}
+{% if participant.address_line3 %}
+Street Address3: {{ participant.address_line3 }}
+{% endif %}
+Town Or City: {{ participant.town_or_city }}
+Postcode: {{ participant.postcode }}
+
+Emergency Contact Name: {{ participant.emergency_contact_name }}
+Emergency Contact Number: {{ participant.emergency_contact_number }}
+
+Declaration Of Illness: {{ participant.dec_illness }}
+Declaration Of Medication: {{ participant.dec_medication }}
+
+Signed By: {{ participant.signed_up }}
+Date Signed: {{ participant.date_signed }}
+
+If you have any questions, feel free to contact us at {{ contact_email }}.
+
+Thank you, and we look forward to seeing you {{ appointment.appointment_date|date:"jS M, Y" }}!
+
+Sincerely,
+
+Onwards And Upwards
