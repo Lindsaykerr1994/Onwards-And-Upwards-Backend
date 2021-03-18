@@ -30,7 +30,6 @@ class Participant(models.Model):
     # has to manually change it.
     signed_by = models.CharField(max_length=64, null=False, blank=False)
     date_signed = models.DateField()
-    manual_form = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.last_name}, {self.first_name}'
