@@ -1,7 +1,11 @@
-from django.shortcuts import render, reverse, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, reverse, redirect, get_object_or_404
+from django.shortcuts import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from appointments.models import Appointment
 from riskforms.models import Participant
 from .models import Payment
@@ -99,3 +103,27 @@ def checkout_success(request, receipt_no):
         'remaining_forms': remaining_forms
     }
     return render(request, 'checkout/checkout_success.html', context)
+
+
+@login_required
+def send_payment_request(request, appointment_number):
+    if not request.user.is_superuser:
+        messages.error(request, "Sorry, you don't have permission to do this.")
+        return redirect(reverse('home'))
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    """Send the user a confirmation email"""
+    cust_email = appointment.client.email_address
+    subject = render_to_string(
+        'checkout/email_template/payment_success_subject.txt',
+        {'appointment': appointment})
+    body = render_to_string(
+        'checkout/email_templatepayment_success_body.txt',
+        {'appointment': appointment,
+         'contact_email': settings.DEFAULT_FROM_EMAIL})
+
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [cust_email]
+    )

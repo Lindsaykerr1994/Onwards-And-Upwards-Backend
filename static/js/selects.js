@@ -17,6 +17,7 @@ $(".onwards-select-items div").click(function(event){
     // Assign to input
     var input = $(this).parent().siblings("input");
     input.val(pKey);
+    console.log(input);
     input.trigger('change');
     // Update select display
     var display = $(this).parent().siblings().children("p");

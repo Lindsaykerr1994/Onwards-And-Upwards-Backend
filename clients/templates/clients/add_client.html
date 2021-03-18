@@ -25,21 +25,24 @@
                         <div class="twoInput d-flex justify-content-between">
                             <div class="form-input">
                                 <label for="first_name">First Name*</label>
-                                <input type="text" id="id_first_name" name="first_name">
+                                <input type="text" id="id_first_name" name="first_name" required>
                             </div>
                             <div class="form-input">
                                 <label for="last_name">Last Name*</label>
-                                <input type="text" id="id_last_name" name="last_name">
-                                <input type="hidden" id="id_abbr" name="abbreviation">
+                                <input type="text" id="id_last_name" name="last_name" required>
                             </div>
                         </div>
                         <div class="form-input">
+                            <label for="abbreviation">Abbreviation</label>
+                            <input type="text" name="abbreviation" id="id_abbr" value="{{client.abbreviation}}">
+                        </div>
+                        <div class="form-input">
                             <label for="email">Email Address</label>
-                            <input type="email" id="id_email" name="email">
+                            <input type="email" id="id_email" name="email_address">
                         </div>
                         <div class="form-input">
                             <label for="email">Phone Number*</label>
-                            <input type="text" id="id_phone" name="phone" required>
+                            <input type="text" id="id_phone" name="phone_number" required>
                         </div>
                     </fieldset>
                     <fieldset>
@@ -135,6 +138,49 @@
         })
     </script>
     <script type="text/javascript">
+        $(document).ready(function(){
+            var input;
+            var allTextInputs = $("input[type='text']");
+            for(let i=0;i<allTextInputs.length;i++){
+                input = allTextInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allEmailInputs = $("input[type='email']");
+            for(let i=0;i<allEmailInputs.length;i++){
+                input = allEmailInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allNumInputs = $("input[type='number']");
+            for(let i=0;i<allNumInputs.length;i++){
+                input = allNumInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allTextareas = $("textarea");
+            for(let i=0;i<allTextareas.length;i++){
+                input = allTextareas[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+        })
         $("#id_root_of_inquiry").change(function(){
             console.log($(this).val());
         })

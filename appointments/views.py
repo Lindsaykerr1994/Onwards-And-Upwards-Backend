@@ -99,12 +99,29 @@ def add_app(request):
     else:
         client = []
     if request.method == "POST":
-        form = AppointmentForm(request.POST)
-        clientNum = request.POST.get('client_select')
-        if clientNum is None:
+        clientNum = request.POST['client']
+        if clientNum is None or clientNum == "0":
+            clientLast = request.POST['last_name']
+            abbr = clientLast[0:3]
+            abbr = abbr.upper()
+            all_clients = Client.objects.all()
+            all_clients = all_clients.filter(abbreviation=abbr)
+            if len(all_clients) != 0:
+                newAbbr = request.POST['last_name']
+                newAbbr = newAbbr[0]+newAbbr[2]+newAbbr[3]
+                abbr = newAbbr.upper()
+                all_clients = Client.objects.all()
+                all_clients = all_clients.filter(abbreviation=abbr)
+                if len(all_clients) != 0:
+                    messages.info(request,
+                                 f'Updated client abbreviation to: {newAbbr}. There is another client with this abbreviation. You will need to declare a new abbreviation.')
+                else:
+                    messages.success(request,
+                                 f'Updated client abbreviation to: {newAbbr}')
             client_data = {
                 'first_name': request.POST['first_name'],
                 'last_name': request.POST['last_name'],
+                'abbreviation': abbr,
                 'email_address': request.POST['email'],
                 'phone_number': request.POST['phone'],
                 'root_of_inquiry': "OTH"
@@ -113,36 +130,76 @@ def add_app(request):
             if clientForm.is_valid():
                 client = clientForm.save()
                 clientNum = client.id
+                courseId = request.POST['course']
+                course = Course.objects.get(pk=courseId)
+                form_data = {
+                    'activity': request.POST['activity'],
+                    'course': request.POST['course'],
+                    'client': client,
+                    'appointment_date': request.POST['appointment_date'],
+                    'appointment_time': request.POST['appointment_time'],
+                    'isSolo': request.POST.get('isSolo'),
+                    'appointment_participants': request.POST['appointment_participants'],
+                    'appointment_location': request.POST['appointment_location'],
+                    'appointment_price': request.POST['appointment_price'],
+                    'add_notes': request.POST['add_notes']
+                }
+                form = AppointmentForm(form_data)
+                if form.is_valid():
+                    app_date = request.POST['appointment_date']
+                    app_date = app_date.split("-")
+                    ap = app_date[2]+app_date[1]+app_date[0][2:4]
+                    courseCode = course.course_code
+                    courseCode = int(courseCode)
+                    if courseCode < 10:
+                        courseCode = "0"+str(courseCode)
+                    else:
+                        courseCode = str(courseCode)
+                    abbr = client.abbreviation
+                    appNum = ap+abbr+courseCode
+                    appointment = form.save()
+                    appointment.client = client
+                    appointment.appointment_number = appNum
+                    appointment.save(update_fields=["appointment_number", "client"])
+                    messages.success(request, 'Successfully added appointment')
+                    return redirect(reverse('view_app',
+                                            args=[appointment.appointment_number]))
+                else:
+                    messages.error(request,
+                                ('Please check that form is valid'))
             else:
-                print(clientForm.errors)
                 messages.error(request,
-                               ('Please check that form is valid'))
-        courseId = request.POST['course']
-        course = Course.objects.get(pk=courseId)
-        if form.is_valid():
-            app_date = request.POST['appointment_date']
-            app_date = app_date.split("-")
-            ap = app_date[2]+app_date[1]+app_date[0][2:4]
-            client = Client.objects.get(pk=clientNum)
-            courseCode = course.course_code
-            courseCode = int(courseCode)
-            print(courseCode)
-            if courseCode < 10:
-                courseCode = "0"+str(courseCode)
-            else:
-                courseCode = str(courseCode)
-            appNum = ap+client.abbreviation+courseCode
-            appointment = form.save()
-            appointment.appointment_number = appNum
-            appointment.client = client
-            appointment.save(update_fields=["appointment_number", "client"])
-            messages.success(request, 'Successfully added appointment')
-            return redirect(reverse('view_app',
-                                    args=[appointment.appointment_number]))
+                               ('Could not create a new client,\
+therefore could not create appointment.'))
+                return redirect(reverse('add_app'))
         else:
-            print(form.errors, "errors in form")
-            messages.error(request,
-                           ('Please check that form is valid'))
+            courseId = request.POST['course']
+            course = Course.objects.get(pk=courseId)
+            form = AppointmentForm(request.POST)
+            if form.is_valid():
+                app_date = request.POST['appointment_date']
+                app_date = app_date.split("-")
+                ap = app_date[2]+app_date[1]+app_date[0][2:4]
+                courseCode = course.course_code
+                courseCode = int(courseCode)
+                if courseCode < 10:
+                    courseCode = "0"+str(courseCode)
+                else:
+                    courseCode = str(courseCode)
+                clientNum = request.POST['client']
+                client = Client.objects.get(pk=clientNum)
+                abbr = client.abbreviation
+                appNum = ap+client.abbreviation+courseCode
+                appointment = form.save()
+                appointment.client = client
+                appointment.appointment_number = appNum
+                appointment.save(update_fields=["appointment_number", "client"])
+                messages.success(request, 'Successfully added appointment')
+                return redirect(reverse('view_app',
+                                        args=[appointment.appointment_number]))
+            else:
+                messages.error(request,
+                            ('Please check that form is valid'))
     else:
         form = AppointmentForm()
     activities = Activity.objects.all()
@@ -171,8 +228,8 @@ def edit_app(request, appointment_number):
         course = Course.objects.get(pk=courseId)
         if form.is_valid():
             app_date = request.POST['appointment_date']
-            app_date = app_date.split("/")
-            ap = app_date[0]+app_date[1]+app_date[2][2:4]
+            app_date = app_date.split("-")
+            ap = app_date[2]+app_date[1]+app_date[0][2:4]
             client = appointment.client
             courseCode = course.course_code
             courseCode = int(courseCode)
@@ -180,7 +237,7 @@ def edit_app(request, appointment_number):
                 courseCode = "0"+str(courseCode)
             else:
                 courseCode = str(courseCode)
-            appNum = ap+client.last_name[0:3].upper()+courseCode
+            appNum = ap+client.abbreviation+courseCode
             appointment.appointment_number = appNum
             appointment.save(update_fields=["appointment_number"])
             form.save()
@@ -190,10 +247,12 @@ def edit_app(request, appointment_number):
                                     args=[appointment.appointment_number]))
             """ Use email functionality to inform client """
         else:
-            print("Error, we'll sort it out", form.errors)
+            print(form.errors)
+            messages.error(request, f'Was not able to update appointment: {appointment.appointment_number} due to errors in the form.')
+            return redirect(reverse('edit_app',
+                                    args=[appointment.appointment_number]))
     else:
         form = AppointmentForm(instance=appointment)
-        print("you are editting appointment: {appointment.appointment_number}")
     clients = Client.objects.all()
     activities = Activity.objects.all()
     courses = Course.objects.all()

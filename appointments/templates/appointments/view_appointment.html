@@ -101,11 +101,14 @@
                                 <p>Number Of Participants:</p>
                             </div>
                             <div class="col-6 font-futura-light">
+                                <p>
                                 {% if appointment.isSolo %}
                                     Solo
                                 {% else %}
-                                    {{ appointment.appointment_participants }}
+                                    Group
                                 {% endif %}
+                                 ({{ appointment.appointment_participants }})
+                                </p>
                             </div>
                         </div>
                         <div class="row">
@@ -117,6 +120,14 @@
                             </div>
                         </div>
                         <hr>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Price:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                £{{appointment.appointment_price}}
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-6 font-futura-medium">
                                 <p>Paid?</p>

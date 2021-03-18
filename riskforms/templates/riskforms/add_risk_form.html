@@ -39,7 +39,8 @@
                         </div>
                         <div class="form-input">
                             <label for="date_of_birth">Date Of Birth *</label>
-                            <input type="text" name="date_of_birth" required>
+                            <input type="text" id="id_date" name="date_of_birth" readonly required>
+                            {% include 'includes/modals/datepicker.html' %}
                         </div>
                         <div class="form-input">
                             <label for="email_address">Email Address *</label>
@@ -125,6 +126,7 @@
 {% block postloadjs %}
     {{ block.super }}
     <script type="text/javascript">
+    <script src="{% static 'js/datepicker.js' %}"></script>
         $(".form-input").focusin(function(){
             $(this).addClass("activeInput");
         })

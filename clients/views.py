@@ -117,11 +117,15 @@ def add_client(request):
             if len(all_clients) != 0:
                 newAbbr = request.POST['last_name']
                 newAbbr = newAbbr[0]+newAbbr[2]+newAbbr[3]
-                newAbbr = newAbbr.upper()
-                messages.success(request,
-                                 f'Updated client abbreviation to: {newAbbr}')
+                abbr = newAbbr.upper()
+                if len(all_clients) != 0:
+                    messages.info(request,
+                                 f'Updated client abbreviation to: {newAbbr}. There is another client with this abbreviation. You will need to declare a new abbreviation.')
+                else:
+                    messages.success(request,
+                                     f'Updated client abbreviation to: {newAbbr}')
             client = form.save()
-            client.abbreviation = newAbbr
+            client.abbreviation = abbr
             client.save(update_fields=['abbreviation'])
             messages.success(request, 'Successfully added client')
             return redirect(reverse('view_client', args=[client.id]))
@@ -144,6 +148,8 @@ def edit_client(request, client_id):
         return redirect(reverse('home'))
     client = get_object_or_404(Client, pk=client_id)
     if request.method == "POST":
+        if request.POST['last_name'] != client.last_name:
+            print("not matching")
         form = ClientForm(request.POST, instance=client)
         if form.is_valid():
             form.save()
@@ -239,3 +245,6 @@ def convert_client(request, part_id):
                 return redirect(reverse('view_participant',
                                 args=[appId, participant.id]))
 
+
+def update_appointments(client):
+    abbr = client.abbreviation

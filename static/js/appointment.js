@@ -6,8 +6,10 @@ $("#id_number_participants").change(handleNumberChange);
 $("input[name='discount']").change(calculatePrice);
 
 function handleClientChange() {
+    console.log("changed client");
     var clientNo = $("#id_client").val();
-    if(clientNo == "new"){
+    if(clientNo == "0"){
+        console.log("changed to 0")
         $("#id_client_first_name").val("");
         $("#id_client_last_name").val("");
         $("#id_client_email").val("");
@@ -149,8 +151,10 @@ function calculatePrice() {
             NOP = 2;
         }
     }
-    var code = $("#id_course").val();
+    var code = parseInt($("#id_course").val());
+    console.log(code);
     var option = $(`#course-select .onwards-select-items div[data-pkey="${code}"]`);
+    console.log(option);
     var price = parseInt($(option).attr("data-price"));
     console.log(price);
     if($("#id_override_price").is(":checked")){

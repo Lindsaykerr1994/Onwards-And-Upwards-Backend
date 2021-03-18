@@ -38,7 +38,7 @@
                                     <span><i class="fas fa-chevron-down"></i></span>
                                 </div>
                                 <div class="onwards-select-items select-hide">
-                                    <div data-pkey="new" id="new-client-option">New Client</div>
+                                    <div data-pkey="0" id="new-client-option">New Client</div>
                                     {% for client in clients %}
                                     <div data-pkey="{{ client.pk }}" data-first-name="{{ client.first_name }}"
                                     data-last-name="{{ client.last_name }}"
@@ -114,7 +114,7 @@
                                 {% include 'includes/modals/datepicker.html' %}
                             </div>
                             <div class="form-input">
-                                <label for="appointment_time">Time</label>
+                                <label for="appointment_time">Time (HH:MM)</label>
                                 <input type="text" id="id_time" name="appointment_time">
                             </div>
                         </div>
@@ -124,7 +124,7 @@
                         </div>
                         <div class="form-input price-input">
                             <label for="appointment_price">Price</label>
-                            <input type="number" id="id_price" name="appointment_price" readonly>
+                            <input type="number" id="id_price" name="appointment_price" step="0.01" readonly>
                             <span id="currency-sym"></span>
                         </div>
                         <div class="form-input checkbox-input no-border d-flex justify-content-end">

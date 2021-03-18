@@ -13,9 +13,6 @@ $("#id_date").click(function(){
     setDays(todaysDate, todaysDate);
     toggleDatepicker();
 });
-$("#id_date").focusout(function(){
-    console.log("close modal");
-})
 $("#cancel-date").click(function(){
     $("#id_date").val("");
     toggleDatepicker()

@@ -3,6 +3,7 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/selects.css' %}">
 {% endblock %}
 
 {% block extra_title %}- Edit Clients{% endblock %}
@@ -10,19 +11,88 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div class="header-container row">
-            <div class="col">
+            <div class="col-10 mx-auto mb-3">
                 <h3>Editing Client</h3>
                 <h4>{{ client.last_name }}, {{ client.first_name }}</h4>
             </div>
         </div>
-        <div id="edit-client-container" class="row">
-            <div class="col-10 mx-auto">
-                <form method="POST" class="onwards-form small-form" action="{% url 'edit_client' client.pk %}" enctype="multipart/form-data">
+        <div class="row">
+            <div id="edit-client-container" class="col-11 mx-auto">
+                <form method="POST" class="onwards-form mx-auto" action="{% url 'edit_client' client.pk %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {% for field in form %}
-                    {{ field }}
-                    {% endfor %}
-                    <input type="submit">
+                    <fieldset>
+                        <p>Personal Details</p>
+                        <hr>
+                        <div class="twoInput d-flex justify-content-between">
+                            <div class="form-input">
+                                <label for="first_name">First Name*</label>
+                                <input type="text" id="id_first_name" name="first_name" value="{{client.first_name}}" required>
+                            </div>
+                            <div class="form-input">
+                                <label for="last_name">Last Name*</label>
+                                <input type="text" id="id_last_name" name="last_name" value="{{client.last_name}}" required>
+                            </div>
+                        </div>
+                        <div class="form-input">
+                            <label for="abbreviation">Abbreviation</label>
+                            <input type="text" name="abbreviation" id="id_abbr" value="{{client.abbreviation}}">
+                        </div>
+                         <div class="form-input">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="id_email" name="email_address" {% if client.email_address %}value="{{client.email_address}}"{% endif %}>
+                        </div>
+                        <div class="form-input">
+                            <label for="email">Phone Number*</label>
+                            <input type="text" id="id_phone" name="phone_number" value="{{client.phone_number}}" required>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <p>Address Details:</p>
+                        <hr>
+                        <div class="form-input">
+                            <label for="street_address1">Street Address 1</label>
+                            <input type="text" name="street_address1" id="street_address1" {% if client.street_address1 %}value="{{client.street_address1}}" {% endif %}>
+                        </div>
+                        <div class="form-input">
+                            <label for="street_address2">Street Address 2</label>
+                            <input type="text" name="street_address2" id="street_address2" {% if client.street_address2 %}value="{{client.street_address2}}"{%endif%}>
+                        </div>
+                        <div class="twoInput d-flex justify-content-between">
+                            <div class="form-input">
+                                <label for="town_or_city">
+                                    Town Or City
+                                </label>
+                                <input type="text" name="town_or_city" id="id_town_or_city" {% if client.town_or_city %}value="{{client.town_or_city}}"{% endif %}>
+                            </div>
+                            <div class="form-input">
+                                <label for="postcode">
+                                    Postcode
+                                </label>
+                                <input type="text" name="postcode" id="id_postcode" {% if client.postcode %}value="{{client.postcode}}" {% endif %}>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <p>Additional Information:</p>
+                        <hr>
+                        <div class="form-input onwards-select">
+                            <input type="hidden" id="id_root_of_inquiry" name="root_of_inquiry" value={{client.root_of_inquiry}}>
+                            <div class="onwards-select-display">
+                                <p>{{ client.root_of_inquiry }}</p>
+                                <span><i class="fas fa-chevron-down"></i></span>
+                            </div>
+                            <div class="onwards-select-items select-hide">
+                                {% for option in form.root_of_inquiry %}
+                                    <div>{{ option }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-input textarea-input">
+                            <label for="additional_info">Additional Notes</label>
+                            <textarea name="additional_info" {% if client.additional_info %}value="{{client.additional_info}}"{% endif %}></textarea>
+                        </div>
+                    </fieldset>
+                    <input type="submit" class="d-block submit-button">
                 </form>
             </div>
         </div>
@@ -31,4 +101,141 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script type="text/javascript">
+        $(".onwards-select-display").click(function(event){
+            event.stopPropagation();
+            var display, itemsList;
+            display = $(this);
+            itemsList = display.siblings(".onwards-select-items");
+            display.toggleClass("active-arrow");
+            itemsList.toggleClass("select-open");
+            itemsList.fadeToggle("fast");
+        });
+        // Selecting An Option
+        $(".onwards-select-items div").click(function(event){
+            event.stopPropagation();
+            // Get activity id
+            var pKey = $(this).children().attr("value");
+            var optText = $(this).text();
+            // Assign to input
+            var input = $(this).parent().siblings("input");
+            input.val(pKey);
+            input.trigger('change');
+            // Update select display
+            var display = $(this).parent().siblings().children("p");
+            display.text(optText)
+            // Remove all instances of class "same-as-selected";
+            $(this).parent().children(".same-as-selected").removeClass("same-as-selected");
+            // Add class of "same-as-selected"
+            $(this).addClass("same-as-selected");
+            $(this).parent().fadeToggle("fast");
+            $(this).parent().toggleClass("select-open");
+            $(this).parent().siblings(".onwards-select-display").toggleClass("active-arrow");
+        });
+        $(window).click(function(){
+            $(".onwards-select-display").removeClass("active-arrow");
+            $(".select-open").fadeToggle("fast");
+            $(".select-open").removeClass("select-open");
+        })
+    </script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+            var input;
+            var allTextInputs = $("input[type='text']");
+            for(let i=0;i<allTextInputs.length;i++){
+                input = allTextInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allEmailInputs = $("input[type='email']");
+            for(let i=0;i<allEmailInputs.length;i++){
+                input = allEmailInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allNumInputs = $("input[type='number']");
+            for(let i=0;i<allNumInputs.length;i++){
+                input = allNumInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allTextareas = $("textarea");
+            for(let i=0;i<allTextareas.length;i++){
+                input = allTextareas[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+        })
+        $("#id_root_of_inquiry").change(function(){
+            console.log($(this).val());
+        })
+        $(".form-input").focusin(function(){
+            $(this).addClass("activeInput");
+        })
+        $(".form-input").focusout(function(){
+            $(this).removeClass("activeInput");
+        })
+        $(".form-input input[type='text']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+        $(".form-input input[type='number']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+        $(".form-input textarea").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+        $(".form-input input[type='email']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+        $("#id_last_name").change(function(){
+            var abbr = $("#id_last_name").val();
+            abbr = abbr.slice(0,3);
+            abbr = abbr.toUpperCase();
+            $("#id_abbr").val(abbr);
+        })
+    </script>
 {% endblock %}
