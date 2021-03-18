@@ -13,7 +13,7 @@ html {
     min-height: 100vh;
     padding-top: 80px;
     padding-bottom: 80px;
-    background-image: url("../../media/welcome-img.jpg");
+    background-image: url("/media/welcome-img.jpg");
     background-repeat: no-repeat no-repeat;
     background-size: cover;
     background-position: center 100px;
