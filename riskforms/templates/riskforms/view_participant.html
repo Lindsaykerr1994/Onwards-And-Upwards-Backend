@@ -150,14 +150,14 @@
                         {% endif %}
                         <div class="row">
                             <div class="col-6">
-                                <form action="{% url 'update_raform' participant.pk %}" method="POST" id="update_raform" enctype="multipart/form-data">
+                                <!--<form action="{% url 'update_raform' participant.pk %}" method="POST" id="update_raform" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <label class="onwards-button">Upload RA Form
                                         <input type="file" class="d-none" name="document" id="id_risk_form">
                                     </label>
                                     <span id="submit_raform" class="mx-3 d-none"><i class="fas fa-plus-circle text-success"></i></span>
                                     <p id="fileName" class="small"></p>
-                                </form>
+                                </form>-->
                             </div>
                             <div class="col-6">
                                 <a href="{% url 'view_raform' participant.pk %}" class="onwards-button text-black d-inline-block align-middle" target="_blank">Generate PDF</a>
