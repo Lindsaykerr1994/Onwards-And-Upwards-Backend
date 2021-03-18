@@ -6,7 +6,7 @@ class ParticipantForm(forms.ModelForm):
 
     class Meta:
         model = Participant
-        exclude = ('appointment', 'client', 'manual_form')
+        exclude = ('appointment', 'client',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
