@@ -14,6 +14,9 @@ from riskforms.models import Participant
 
 @login_required
 def all_appointments(request):
+    if not request.user.is_staff:
+        messages.error(request, "Sorry, You don't have permission to do that.")
+        return redirect(reverse('home'))
     appointments = Appointment.objects.all()
     query = None
     activities = None
@@ -68,7 +71,7 @@ def all_appointments(request):
 
 @login_required
 def view_appoinment(request, appointment_number):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     appointment = get_object_or_404(Appointment,
@@ -89,7 +92,7 @@ def view_appoinment(request, appointment_number):
 
 @login_required
 def add_app(request):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     clientId = None
@@ -217,7 +220,7 @@ therefore could not create appointment.'))
 
 @login_required
 def edit_app(request, appointment_number):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     appointment = get_object_or_404(Appointment,
@@ -269,7 +272,7 @@ def edit_app(request, appointment_number):
 
 @login_required
 def delete_app(request, appointment_number):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
 
@@ -282,7 +285,7 @@ def delete_app(request, appointment_number):
 
 @login_required
 def mark_as_paid(request, appointment_number):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     appointment = Appointment.objects.get(appointment_number=appointment_number)

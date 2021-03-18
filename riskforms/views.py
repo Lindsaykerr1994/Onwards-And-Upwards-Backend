@@ -16,7 +16,7 @@ from clients.models import Client
 
 @login_required
 def view_participant(request, partId):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     clients = Client.objects.all()
@@ -124,7 +124,7 @@ def _send_confirmation_email(appointment, participant):
 
 @login_required
 def update_raform(request, part_id):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, you do not have permission to do \
             this.")
         return redirect(reverse('home'))
@@ -140,6 +140,9 @@ def update_raform(request, part_id):
 
 @login_required
 def delete_raform(request, part_id):
+    if request.user.is_staff:
+        messages.error(request, "Sorry, I don't want you doing that.")
+        return redirect(reverse('home'))
     participant = Participant.objects.get(pk=part_id)
     participant.manual_form.delete()
     return redirect(reverse('view_participant',
@@ -148,7 +151,7 @@ def delete_raform(request, part_id):
 
 @login_required
 def remove_participant(request):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, you don't have permission to do that.")
         return redirect(reverse('home'))
     if request.method == 'GET':

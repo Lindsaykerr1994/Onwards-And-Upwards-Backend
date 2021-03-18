@@ -15,7 +15,7 @@ register = template.Library()
 
 @login_required
 def all_clients(request):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     clients = Client.objects.all()
@@ -60,7 +60,7 @@ def all_clients(request):
 
 @login_required
 def view_client(request, client_id):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     client = get_object_or_404(Client, pk=client_id)
@@ -104,7 +104,7 @@ def view_client(request, client_id):
 
 @login_required
 def add_client(request):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     if request.method == "POST":
@@ -143,7 +143,7 @@ def add_client(request):
 
 @login_required
 def edit_client(request, client_id):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     client = get_object_or_404(Client, pk=client_id)
@@ -173,7 +173,7 @@ def edit_client(request, client_id):
 
 @login_required
 def delete_client(request, client_id):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
 
@@ -185,7 +185,7 @@ def delete_client(request, client_id):
 
 @login_required
 def convert_client(request, part_id):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, you don't have permission to do that.")
         return redirect(reverse('home'))
     if request.method == "GET":
@@ -244,7 +244,3 @@ def convert_client(request, part_id):
                     with client. Would you like to create a new client model?')
                 return redirect(reverse('view_participant',
                                 args=[appId, participant.id]))
-
-
-def update_appointments(client):
-    abbr = client.abbreviation

@@ -107,7 +107,7 @@ def checkout_success(request, receipt_no):
 
 @login_required
 def send_payment_request(request, appointment_number):
-    if not request.user.is_superuser:
+    if not request.user.is_staff:
         messages.error(request, "Sorry, you don't have permission to do this.")
         return redirect(reverse('home'))
     appointment = Appointment.objects.get(appointment_number=appointment_number)
