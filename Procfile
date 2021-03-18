@@ -1,0 +1,1 @@
+web: gunicorn onwards_backend.wsgi:application
