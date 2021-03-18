@@ -1,6 +1,6 @@
 Hello {{ payment.full_name }}!
 
-This is a confirmation of your registration with Onwards And Upwards:
+This is a confirmation of your payment with Onwards And Upwards:
 
 Session Number: {{ payment.appointment.appointment_number }}
 Session Date: {{ payment.appointment.appointment_date }}

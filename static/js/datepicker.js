@@ -11,14 +11,17 @@ $("#id_date").click(function(){
         'monthName': getMonthName(month)
     }
     setDays(todaysDate, todaysDate);
-    console.log("test");
-    $("#datepickerModal").modal({
-        backdrop: false,
-        show: true
-    });
+    toggleDatepicker();
 });
-$(document).click(function(event){
-    console.log(event.target)
+$("#id_date").focusout(function(){
+    console.log("close modal");
+})
+$("#cancel-date").click(function(){
+    $("#id_date").val("");
+    toggleDatepicker()
+});
+$("#confirm-date").click(function(){
+    toggleDatepicker();
 })
 $(".datepicker-button").click(function(){
     if(!$(this).hasClass("cell-disabled")&&!$(this).hasClass("is-empty")){
@@ -68,8 +71,8 @@ $(".datepicker-button").click(function(){
     }
 })
 $("#next-month-button").click(function(){
-    var currentMonth = parseInt($("#viewMonthText").attr("data-month"));
-    var year = parseInt($("#viewMonthText").attr("data-year"));
+    var currentMonth = parseInt($("#monthSelection").attr("data-month"));
+    var year = parseInt($("#yearSelection").attr("data-year"));
     var nextMonth = currentMonth + 1;
     if(nextMonth===13){
         year = year + 1;
@@ -95,8 +98,8 @@ $("#next-month-button").click(function(){
     setDays(todaysDate, viewMonth);
 })
 $("#prev-month-button").click(function(){
-    var currentMonth = parseInt($("#viewMonthText").attr("data-month"));
-    var year = parseInt($("#viewMonthText").attr("data-year"));
+    var currentMonth = parseInt($("#monthSelection").attr("data-month"));
+    var year = parseInt($("#yearSelection").attr("data-year"));
     var prevMonth = currentMonth - 1;
     if($("#prev-month-button").hasClass("disabled-button")){
         return;
@@ -144,6 +147,88 @@ $("#id_multiple_dates").change(function(){
         }
     }
 })
+$("#monthText").click(function(){
+    var textDiv = document.getElementById("monthText").children;
+    $("#monthSelection").removeClass("d-none");
+    $("#monthSelection").parent().addClass("openDropdown");
+    $("#monthSelection div").click(function(){
+        var newMonth = parseInt($(this).attr("data-month"));
+        $("#monthSelection").attr("data-month", newMonth);
+        var thisYear = parseInt($("#yearSelection").attr("data-year"));
+        const fullDate = new Date();
+        var year = fullDate.getFullYear();
+        var month = fullDate.getMonth() + 1;
+        var date = fullDate.getDate();
+        var todaysDate = {
+            'year': year,
+            'month': month,
+            'day': date,
+            'totalDays': findTotalDays(month, year),
+            'monthName': getMonthName(month)
+        }
+        var viewMonth = {
+            'year': thisYear,
+            'month': newMonth,
+            'totalDays': findTotalDays(newMonth, thisYear),
+            'monthName': getMonthName(newMonth)
+        }
+        setDays(todaysDate, viewMonth);
+    });
+    $(document).click(function(e){
+        if(e.target != textDiv[0]){
+            $("#monthSelection").addClass("d-none");
+            $("#monthSelection").parent().removeClass("openDropdown");
+        } 
+    })
+})
+$("#yearText").click(function(){
+    var textDiv = document.getElementById("yearText").children;
+    $("#yearSelection").removeClass("d-none");
+    $("#yearSelection").parent().addClass("openDropdown");
+    $("#yearSelection div").click(function(){
+        var newYear = parseInt($(this).attr("data-year"));
+        $("#yearSelection").attr("data-year", newYear);
+        var thisMonth = parseInt($("#monthSelection").attr("data-month"));
+        const fullDate = new Date();
+        var year = fullDate.getFullYear();
+        var month = fullDate.getMonth() + 1;
+        var date = fullDate.getDate();
+        var todaysDate = {
+            'year': year,
+            'month': month,
+            'day': date,
+            'totalDays': findTotalDays(month, year),
+            'monthName': getMonthName(month)
+        }
+        var viewMonth = {
+            'year': newYear,
+            'month': thisMonth,
+            'totalDays': findTotalDays(thisMonth, newYear),
+            'monthName': getMonthName(thisMonth)
+        }
+        setDays(todaysDate, viewMonth);
+    });
+    $(document).click(function(e){
+        if(e.target != textDiv[0]){
+            $("#yearSelection").addClass("d-none");
+            $("#yearSelection").parent().removeClass("openDropdown");
+        }
+    })
+})
+$("#today-date").click(function(){
+    const fullDate = new Date();
+    var year = fullDate.getFullYear();
+    var month = fullDate.getMonth() + 1;
+    var date = fullDate.getDate();
+    var todaysDate = {
+        'year': year,
+        'month': month,
+        'day': date,
+        'totalDays': findTotalDays(month, year),
+        'monthName': getMonthName(month)
+    }
+    setDays(todaysDate, todaysDate);
+})
 function findTotalDays(month, year){
     var totalDays;
         if (month===2){
@@ -184,11 +269,13 @@ function setDays(todaysDate, viewMonth){
     $(".calendar-row .todays-date").removeClass("todays-date");
     $(".calendar-row .date-selected").removeClass("date-selected");
     $(".calendar-row .is-empty").removeClass("is-empty");
-    if(viewMonth['year']===todaysDate['year']&&viewMonth['month']===todaysDate['month']){
-        $("#prev-month-button").addClass(" disabled-button");
-    } else {
-        $("#prev-month-button").removeClass("disabled-button");
-    }
+    // if($("#prev-month-button").attr("data-past-dates") != "true") {
+    //     if(viewMonth['year']===todaysDate['year']&&viewMonth['month']===todaysDate['month']){
+    //         $("#prev-month-button").addClass(" disabled-button");
+    //     } else {
+    //         $("#prev-month-button").removeClass("disabled-button");
+    //     }
+    // }
     while(i<=totalDays){
         for(j=0;j<6;j++){
             if(j===0){
@@ -243,10 +330,17 @@ function setDays(todaysDate, viewMonth){
     }
 };
 function setTitle(viewMonth){
-    $("#viewMonthText").attr("data-month",viewMonth['month']);
-    $("#viewMonthText").attr("data-year",viewMonth['year']);
-    $("#monthText").text(viewMonth['monthName']);
-    $("#yearText").text(viewMonth['year']);
+    var month = viewMonth['month'];
+    var year = viewMonth['year'];
+    $("#monthSelection").attr("data-month",viewMonth['month']);
+    $("#yearSelection").attr("data-year",viewMonth['year']);
+    $("#monthText span").text(viewMonth['monthName']);
+    $("#monthSelection div").removeClass("selectedMonth");
+    $(`#monthSelection div[data-month=${month}]`).addClass("selectedMonth");
+    $("#yearText span").text(viewMonth['year']);
+    $("#yearSelection div").removeClass("selectedYear");
+    $(`#yearSelection div[data-year=${year}]`).addClass("selectedYear");
+
 }
 function toggleDatepicker(){
     if($("#datepickerModal").hasClass("datepickerOpen")){
@@ -255,3 +349,10 @@ function toggleDatepicker(){
         $("#datepickerModal").addClass("datepickerOpen");
     }
 }
+$(document).ready(function(){
+    var thisYear = new Date().getFullYear();
+    for(let i=0;i<100;i++){
+        var newYear = (thisYear-97)+i;
+        $("#yearSelection").append(`<div data-year='${newYear}'>${newYear}</div>`)
+    }
+})

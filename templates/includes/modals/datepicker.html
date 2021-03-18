@@ -1,14 +1,35 @@
-<div class="modal fade" id="datepickerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+<div id="datepickerModal">    
     <div class="datepicker-header d-flex justify-content-between">
-        <span class="mx-3" id="prev-month-button">
+        <div class="mx-3" id="prev-month-button" {% if past_dates %}date-past-dates="true" {% endif %}>
             <i class="fas fa-chevron-left"></i>
-        </span>
-        <p id="viewMonthText" class="d-inline-block"><span id="monthText">Month</span> <span id="yearText">Year</span></p>
-        <span class="mx-3" id="next-month-button">
+        </div>
+        <div id="viewMonthYear">
+            <div class="mr-3 d-inline-block dropdown-container">
+                <p id="monthText"><span class="mr-2"></span><i class="fas fa-chevron-down"></i></p>
+                <div class="d-none modal-dropdown font-futura-light" id="monthSelection">
+                    <div data-month="1">January</div>
+                    <div data-month="2">February</div>
+                    <div data-month="3">March</div>
+                    <div data-month="4">April</div>
+                    <div data-month="5">May</div>
+                    <div data-month="6">June</div>
+                    <div data-month="7">July</div>
+                    <div data-month="8">August</div>
+                    <div data-month="9">September</div>
+                    <div data-month="10">October</div>
+                    <div data-month="11">November</div>
+                    <div data-month="12">December</div>
+                </div>
+            </div>
+            <div class="d-inline-block dropdown-container">
+                <p id="yearText"><span class="mr-2"></span><i class="fas fa-chevron-down"></i></p>
+                <div class="d-none modal-dropdown font-futura-light" id="yearSelection">
+                </div>
+            </div>
+        </div>
+        <div class="mx-3" id="next-month-button">
             <i class="fas fa-chevron-right"></i>
-        </span>
+        </div>
     </div>
     <div class="datepicker-content text-center">
         <table>
@@ -86,11 +107,10 @@
             <input type="checkbox" name="multiple_dates" id="id_multiple_dates">
         </div>
         {% endif %}
-        <div class="d-flex justify-content-around">
+        <div class="d-flex justify-content-around mb-3">
             <span class="onwards-button text-black" id="cancel-date">Cancel</span>
+            <span class="onwards-button text-black" id="today-date">Today</span>
             <span class="onwards-button text-black" id="confirm-date">Confirm</span>
         </div>
-    </div>
-    </div>
     </div>
 </div>

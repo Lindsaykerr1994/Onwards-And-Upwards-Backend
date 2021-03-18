@@ -92,7 +92,8 @@ def add_app(request):
     if not request.user.is_superuser:
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
-    if request.method == "GET":
+    clientId = None
+    if request.GET:
         clientId = request.GET['clientId']
         client = Client.objects.get(pk=clientId)
     else:
@@ -153,7 +154,6 @@ def add_app(request):
         'client': client,
         'clients': clients,
         'form': form,
-        'add_app': True
     }
     return render(request, 'appointments/add_app.html', context)
 

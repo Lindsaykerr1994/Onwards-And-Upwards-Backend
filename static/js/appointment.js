@@ -7,20 +7,30 @@ $("input[name='discount']").change(calculatePrice);
 
 function handleClientChange() {
     var clientNo = $("#id_client").val();
-    console.log(clientNo)
-    var clientOpt = $(`#client-select .onwards-select-items div[data-pkey='${clientNo}']`);
-    var firstName = clientOpt.attr("data-first-name");
-    $("#id_client_first_name").val(firstName);
-    var lastName = clientOpt.attr("data-last-name");
-    $("#id_client_last_name").val(lastName);
-    var emailAdd = clientOpt.attr("data-email");
-    $("#id_client_email").val(emailAdd);
-    var phoneNum = clientOpt. attr("data-phone");
-    $("#id_client_phone").val(phoneNum)
-    $(".form-input input[type='text']").trigger('change');
-    $(".form-input input[type='email']").trigger('change');
-    $("#client-fieldset input[type='text']").attr("readonly", true);
-    $("#client-fieldset input[type='email']").attr("readonly", true);
+    if(clientNo == "new"){
+        $("#id_client_first_name").val("");
+        $("#id_client_last_name").val("");
+        $("#id_client_email").val("");
+        $("#id_client_phone").val(phoneNum);
+        $(".form-input input[type='text']").trigger('change');
+        $(".form-input input[type='email']").trigger('change');
+        $("#client-fieldset input[type='text']").attr("readonly", false);
+        $("#client-fieldset input[type='email']").attr("readonly", false);
+    } else {
+        var clientOpt = $(`#client-select .onwards-select-items div[data-pkey='${clientNo}']`);
+        var firstName = clientOpt.attr("data-first-name");
+        $("#id_client_first_name").val(firstName);
+        var lastName = clientOpt.attr("data-last-name");
+        $("#id_client_last_name").val(lastName);
+        var emailAdd = clientOpt.attr("data-email");
+        $("#id_client_email").val(emailAdd);
+        var phoneNum = clientOpt. attr("data-phone");
+        $("#id_client_phone").val(phoneNum)
+        $(".form-input input[type='text']").trigger('change');
+        $(".form-input input[type='email']").trigger('change');
+        $("#client-fieldset input[type='text']").attr("readonly", true);
+        $("#client-fieldset input[type='email']").attr("readonly", true);
+    }
 };
 function handleActivityChange() {
     console.log("changed activity");
