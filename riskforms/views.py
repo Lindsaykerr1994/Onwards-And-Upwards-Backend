@@ -131,8 +131,6 @@ def update_raform(request, part_id):
     if request.method == "POST":
         participant = Participant.objects.get(pk=part_id)
         form = request.FILES['document']
-        participant.manual_form = form
-        participant.save(update_fields=['manual_form'])
 
         return redirect(reverse('view_participant',
                         args=[participant.pk]))
@@ -144,7 +142,6 @@ def delete_raform(request, part_id):
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     participant = Participant.objects.get(pk=part_id)
-    participant.manual_form.delete()
     return redirect(reverse('view_participant',
                     args=[participant.pk]))
 
