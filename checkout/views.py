@@ -105,6 +105,14 @@ def checkout_success(request, receipt_no):
     return render(request, 'checkout/checkout_success.html', context)
 
 
+def already_paid(request, appointment_number):
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    context = {
+        'appointment': appointment
+    }
+    return render(request, 'checkout/already_paid.html', context)
+
+
 @login_required
 def send_payment_request(request, appointment_number):
     if not request.user.is_staff:
@@ -127,3 +135,4 @@ def send_payment_request(request, appointment_number):
         settings.DEFAULT_FROM_EMAIL,
         [cust_email]
     )
+    return redirect(reverse('view_app', args=[appointment_number]))

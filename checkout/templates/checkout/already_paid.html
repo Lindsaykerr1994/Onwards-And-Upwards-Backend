@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="row header-container">
+            <div class="col-11 mx-auto">
+                <div class="row mb-3">
+                    <div class="col-12 onwards-header">
+                        <h3>Thank You!</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10 mx-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <p>Our system indicates that this booking has already been paid for.</p>
+                        <p>Booking Number: {{ appointment.appointment_number }}</p>
+                        <p>If you believe this is an error, please contact us please contact us at <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>, or send us an email at: <span class="font-futura-medium">XX</span>, and we will do our best to address this issue.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <p>In the meantime, you will be able to now register participants for this session, using the link directly below.</p>
+                        <button class="onwards-button"><a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Add Your Details</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

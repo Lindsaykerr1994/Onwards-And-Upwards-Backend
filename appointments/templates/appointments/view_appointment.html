@@ -150,6 +150,8 @@
                             </div>
                             {% else %}
                             <div class="col-12">
+                                {% if payments %}
+                                {% for payment in payments %}
                                 <div class="row">
                                     <div class="col-6 font-futura-medium">
                                         <p>Date Paid:</p>
@@ -158,6 +160,17 @@
                                         <p>{{ payment.date }}</p>
                                     </div>
                                 </div>
+                                {% endfor %}
+                                {% else %}
+                                <div class="row">
+                                    <div class="col-6 font-futura-medium">
+                                        <p>Date Paid:</p>
+                                    </div>
+                                    <div class="col-6 font-futura-light">
+                                        <p>Manually Paid</p>
+                                    </div>
+                                </div>
+                                {% endif %}
                             </div>
                             {% endif %}
                         </div>
