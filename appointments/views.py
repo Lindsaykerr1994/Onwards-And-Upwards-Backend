@@ -76,11 +76,10 @@ def view_appoinment(request, appointment_number):
         return redirect(reverse('home'))
     appointment = get_object_or_404(Appointment,
                                     appointment_number=appointment_number)
-    payment = []
+    payments = []
     if appointment.isPaid:
         all_payments = Payment.objects.all()
         payments = all_payments.filter(appointment=appointment)
-
     all_parts = Participant.objects.all()
     participants = all_parts.filter(appointment=appointment)
     context = {
