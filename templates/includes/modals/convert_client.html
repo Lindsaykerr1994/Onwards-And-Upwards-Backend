@@ -16,7 +16,7 @@
                             <p class="font-futura-light">Would you like to associate with an existing client?</p>
                             <input type="hidden" value="{{ participant.pk }}" id="partId-input">
                             <input type="hidden" value="{{ appointment.appointment_number }}" id="appId-input">
-                            <select id="select-client">
+                            <select id="select-client" class="w-100">
                             <option value="0">Select A Client</option>
                             {% for client in clients %}
                                 <option value="{{ client.pk }}">{{ client.first_name }} {{ client.last_name }}</option>
@@ -26,10 +26,10 @@
                     </div>
                     <div class="row my-2">
                         <div class="col-6 d-flex justify-content-center">
-                            <button type="button" class="onwards-button"><a href="{% url 'convert_client' participant.pk %}?newClient=true&appId={{appointment.appointment_number}}">New Client <i class="fas fa-user-plus ml-2"></i></a></button>
+                            <button type="button" class="onwards-button text-black"><a href="{% url 'convert_client' participant.pk %}?newClient=true&appId={{appointment.appointment_number}}">New Client <i class="fas fa-user-plus ml-2"></i></a></button>
                         </div>
                         <div class="col-6 d-flex justify-content-center">
-                            <button type="button" class="onwards-button font-futura-medium" id="existing-client">Existing Client <i class="fas fa-user-friends"></i></button>
+                            <button type="button" class="onwards-button font-futura-medium text-black" id="existing-client">Existing Client <i class="fas fa-user-friends"></i></button>
                         </div>
                 </div>
             </div>
