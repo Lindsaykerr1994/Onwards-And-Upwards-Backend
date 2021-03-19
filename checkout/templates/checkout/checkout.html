@@ -10,84 +10,116 @@
 {% block content %}
     <div class="body-container container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col-10 mx-auto mb-3">
                 <h3 class="d-inline-block">Onwards And Upwards Checkout</h3>
                 <h4>Checkout Form For Appointment: {{ appointment.appointment_number }}</h4>
             </div>
         </div>
         <div class="row">
-            <div class="col-6" id="checkout-form">
-                <form method="POST" class="onwards-form mx-auto" id="payment-form" >
+            <div class="col-11 col-lg-6 mx-auto" id="checkout-form">
+                <form method="POST" class="onwards-form mx-auto" action="{% url 'checkout' appointment.appointment_number %}" id="payment-form" >
                     {% csrf_token %}
                     <input type="hidden" 
                     value="{{appointment.appointment_number}}" 
                     name="appointment_number">
                     <fieldset>
-                    <legend>Personal Details:</legend>
-                    <input type="text" name="full_name" placeholder="Full Name">
-                    <input type="text" name="email" placeholder="Email Address">
-                    <input type="text" name="phone_number" placeholder="Phone Number">
+                        <p>Personal Details</p>
+                        <hr>
+                        <div class="form-input">
+                            <label for="full_name">Full Name*</label>
+                            <input type="text" name="full_name" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="email">Email Address*</label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="phone_number">Phone Number*</label>
+                            <input type="text" name="phone_number" required>
+                        </div>
                     </fieldset>
                     <fieldset>
-                    <legend>Billing Details: </legend>
-                    <input type="text" name="street_address1" placeholder="Street Address 1">
-                    <input type="text" name="street_address2" placeholder="Street Address 2">
-                    <input type="text" name="town_or_city" placeholder="Town Or City">
-                    <input type="text" name="postcode" placeholder="Post Code">
-                    <input type="text" name="county" placeholder="County">
-                    <input type="text" name="country" placeholder="Country">
-                    <div class="row">
+                        <p>Billing Details</p>
+                        <hr>
+                        <div class="form-input">
+                            <label for="street_address1">Street Address*</label>
+                            <input type="text" name="street_address1" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="street_address2">Street Address2</label>
+                            <input type="text" name="street_address2">
+                        </div>
+                        <div class="form-input">
+                            <label for="town_or_city">Town Or City*</label>
+                            <input type="text" name="town_or_city" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="postcode">Post Code*</label>
+                            <input type="text" name="postcode">
+                        </div>
+                        <div class="form-input">
+                            <label for="county">County*</label>
+                            <input type="text" name="county" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="country">Country*</label>
+                            <input type="text" name="country" required>
+                        </div>
+                    </fieldset>
+                    <div class="row px-3">
                         <div class="col-6">
                             <p>Total:</p>
                         </div>
                         <div class="col-6">
                             <p class="text-right">{{ appointment.appointment_price }}</p>
                         </div>
+                        <hr>
                     </div>
-                    </fieldset>
                     <fieldset>
-                        <legend class="">Payment</legend>
+                        <p>Payment</p>
+                        <hr>
                         <!-- A Stripe card element will go here -->
-                        <div class="mb-3" id="card-element"></div>
+                        <div class="mb-3 form-input" id="card-element"></div>
                         <!-- Used to display form errors -->
                         <div class="mb-3 text-danger" id="card-errors" role="alert"></div>
                         <!-- Pass the client secret to the view so we can get the payment intent id -->
                         <input type="hidden" value="{{ client_secret }}" name="client_secret">
                     </fieldset>
-                    <button id="submit-button">Submit</button>
+                    <button class="submit-button" id="submit-button">Submit</button>
                 </form>
             </div>
-            <div class="col-6" id="appointment-details">
+            <div class="col-11 col-lg-6 mx-auto" id="appointment-details">
+                <h4 class="text-underline">Appointment Details:</h4>
                 <div class="row">
-                    <div class="col-6">
-                        Appointment Date:
+                    <div class="col-6 font-futura-medium">
+                        <p>Appointment Date:</p>
                     </div>
-                    <div class="col-6">
-                        {{ appointment.appointment_date }} ({{ appointment.appointment_date|date:'d/m/Y' }})
+                    <div class="col-6 font-futura-light">
+                        <p>{{ appointment.appointment_date }} ({{ appointment.appointment_date|date:'d/m/Y' }})</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
-                        Appointment Time:
+                    <div class="col-6 font-futura-medium">
+                        <p>Appointment Time:</p>
                     </div>
-                    <div class="col-6">
-                        {{ appointment.appointment_time|time:'H:i' }} ({{ appointment.course.length }} Hours)
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        Activity, Course:
-                    </div>
-                    <div class="col-6">
-                        {{ appointment.activity }}, {{ appointment.course }}
+                    <div class="col-6 font-futura-light">
+                        <p>{{ appointment.appointment_time|time:'H:i' }} ({{ appointment.course.length }} Hours)</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
-                        Booking Detail:
+                    <div class="col-6 font-futura-medium">
+                        <p>Activity - Course:</p>
                     </div>
-                    <div class="col-6">
-                        {{ appointment.client.first_name }} {{ appointment.client.last_name }}
+                    <div class="col-6 font-futura-light">
+                        <p>{{ appointment.activity }} - {{ appointment.course }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Booking Detail:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <p>{{ appointment.client.first_name }} {{ appointment.client.last_name }}</p>
                     </div>
                 </div>
             </div>
