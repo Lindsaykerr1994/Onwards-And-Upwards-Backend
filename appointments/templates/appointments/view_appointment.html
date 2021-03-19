@@ -143,7 +143,7 @@
                         <div class="row">
                             {% if not appointment.isPaid %}
                             <div class="col-6 d-flex justify-content-center">
-                                <button class="onwards-button"><a href="">Send Payment Request</a></button>
+                                <button class="onwards-button"><a href="{% url 'send_payment' appointment.appointment_number %}">Send Payment Request</a></button>
                             </div>
                             <div class="col-6 d-flex justify-content-center">
                                 <button class="onwards-button"><a href="{% url 'mark_as_paid' appointment.appointment_number %}">Mark as Paid</a></button>

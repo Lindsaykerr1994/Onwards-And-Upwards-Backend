@@ -35,7 +35,7 @@ def checkout(request, appointment_number):
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     appointment = Appointment.objects.get(appointment_number=appointment_number)
     if appointment.isPaid:
-        print("Redirect to already paid template")
+        return redirect(reverse('already_paid', args=[appointment_number]))
     else:
         if request.method == "POST":
             form_data = {
@@ -63,7 +63,9 @@ def checkout(request, appointment_number):
                 return redirect(reverse('checkout_success',
                                 args=[payment.receipt_no]))
             else:
-                print(form.errors)
+                messages.error(request, ('There was an error with your form. '
+                                         'Please double check your \
+information.'))
         else:
             total = appointment.appointment_price
             stripe_total = round(total * 100)
