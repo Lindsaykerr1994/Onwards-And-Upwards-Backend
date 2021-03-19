@@ -149,11 +149,15 @@
                                 <button class="onwards-button"><a href="{% url 'mark_as_paid' appointment.appointment_number %}">Mark as Paid</a></button>
                             </div>
                             {% else %}
-                            <div class="col-6 font-futura-medium">
-                                Date Paid:
-                            </div>
-                            <div class="col-6 font-futura-light">
-                                {{ payment.date }}
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-6 font-futura-medium">
+                                        <p>Date Paid:</p>
+                                    </div>
+                                    <div class="col-6 font-futura-light">
+                                        <p>{{ payment.date }}</p>
+                                    </div>
+                                </div>
                             </div>
                             {% endif %}
                         </div>

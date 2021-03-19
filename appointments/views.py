@@ -78,14 +78,15 @@ def view_appoinment(request, appointment_number):
                                     appointment_number=appointment_number)
     payment = []
     if appointment.isPaid:
-        payment = Payment.objects.get(appointment=appointment)
+        all_payments = Payment.objects.all()
+        payments = all_payments.filter(appointment=appointment)
 
     all_parts = Participant.objects.all()
     participants = all_parts.filter(appointment=appointment)
     context = {
         'appointment': appointment,
         'participants': participants,
-        'payment': payment
+        'payments': payments
     }
     return render(request, 'appointments/view_appointment.html', context)
 
