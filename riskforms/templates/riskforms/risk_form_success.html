@@ -17,7 +17,7 @@
                 </p>
                 <div class="row">
                     <div class="col-12 font-futura-light">
-                        <p>You can view your completed Risk Acknowledgement Form <a href="{% url 'view_raform' participant.pk %}" target="_blank">here</a></p>
+                        <p>You can view your completed Risk Acknowledgement Form <a href="{% url 'view_raform' participant.pk %}" target="_blank" class="text-orange">here</a></p>
                         <p class="small">To download, right click on the link and select 'Save Link As'.</p>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="row my-3">
                             <div class="col-12 text-center font-futura-medium">
-                                <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}" class="onwards-button text-black">View Our Kit List</a>
+                                <a href="{% url 'onlykitlist' appointment.appointment_number %}?partId={{ participant.pk}}" class="onwards-button text-black">View Our Kit List</a>
                             </div>
                         </div>
                     </div>

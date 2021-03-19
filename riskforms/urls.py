@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('kitlist_terms/<appointment_number>', views.kitlist_and_terms,
          name="kitlist_and_terms"),
+    path('kitlist/<appointment_number>', views.onlykitlist,
+         name="onlykitlist"),
     path('add/<appointment_number>', views.add_participant_form,
          name="add_part_form"),
     path('view_participant/<int:partId>',

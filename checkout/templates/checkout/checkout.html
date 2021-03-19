@@ -139,4 +139,95 @@
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}
     <script src="{% static 'js/stripe.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var input;
+            var allTextInputs = $("input[type='text']");
+            for(let i=0;i<allTextInputs.length;i++){
+                input = allTextInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allEmailInputs = $("input[type='email']");
+            for(let i=0;i<allEmailInputs.length;i++){
+                input = allEmailInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allNumInputs = $("input[type='number']");
+            for(let i=0;i<allNumInputs.length;i++){
+                input = allNumInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allTextareas = $("textarea");
+            for(let i=0;i<allTextareas.length;i++){
+                input = allTextareas[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+        })
+        $(".form-input").focusin(function(){
+            $(this).addClass("activeInput");
+        })
+        $(".form-input").focusout(function(){
+            $(this).removeClass("activeInput");
+        })
+        $(".form-input input[type='text']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+        $(".form-input input[type='number']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+        $(".form-input textarea").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+        $(".form-input input[type='email']").change(function(){
+            var inputVal = $(this).val();
+            if(typeof(inputVal) !== 'undefined'){
+                if(inputVal.length > 0){
+                    $(this).parent().addClass("stickLabel");
+                } else {
+                    $(this).parent().removeClass("stickLabel");
+                }
+            }
+        });
+    </script>
 {% endblock %}

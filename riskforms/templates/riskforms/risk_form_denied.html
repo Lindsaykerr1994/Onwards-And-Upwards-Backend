@@ -3,19 +3,34 @@
 
 {% block content %}
     <div class="container-fluid body-container">
-        <div class="row">
-            <div class="col-12">
-                <p>Reference No: {{ appointment.appointment_number }}</p>
+        <div class="row mb-3">
+            <div class="col-11 mx-auto font-futura-light">
+                <h3>Request Denied</h3>
+                <p>Reference No.: {{ appointment.appointment_number }}</p>
                 <p>
                     Thank you for your interest with <strong>Onwards And Upwards</strong>.
                     <br>
-                    Unfortunately our system indicates that we are unable to process any more participants for this appointment.
+                    Unfortunately our system indicates that we are unable to process any more participants for this booking.
                     <br>
-                    This may be caused by our system automatically retrieving your information from a previous appointment.
+                    This may be caused by our system automatically retrieving your information from a previous booking that you had with us.
+                </p>
+                <p>If you see your name listed below, then you are registered for this session.</p>
+                <ul>
+                {% for part in participants %}
+                <li class="small">
+                    {{ part.first_name }} {{ part.last_name }}
+                </li>
+                {% endfor %}
+                </ul>
+                <p>
+                    If you believe there is an error, then please contact us via <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>.
                     <br>
-                    If you believe there is an error, then please contact us via <a href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>.
+                    Alternatively, you can send us an email at:
                     <br>
-                    If you are part of a group session with us, and have yet to enter your information in order to participate with a scheduled session, then please contact the person who made the booking with us.
+                    <strong>tony@onwards-and-upwards.com</strong>
+                </p>
+                <p>
+                    If you are part of a group session with us, and have yet to enter your information in order to participate with a scheduled session, then please contact the person who made the booking with us, and ask then to use the reference number as shown above.
                 </p>
             </div>
         </div>

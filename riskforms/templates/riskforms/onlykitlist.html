@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="row mb-3">
+            <div class="col-11 mx-auto">
+                <h3 class="text-underline">Kitlist</h3>
+            </div>
+        </div>
+        <div class="row mb-3 font-futura-light">
+            <div class="col-11 mx-auto">
+                <h5 class="text-underline">{{ appointment.activity }} {{ appointment.course }}</h5>
+                <p class="ml-3">We request that you bring:</p>
+                <ul class="ml-3">
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                </ul>
+                <p class="ml-3">We will provide:</p>
+                <ul class="ml-3">
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mb-3 font-futura-light">
+            <div class="col-11 mx-auto text-center">
+                <button class="onwards-button"><a href="{% url 'risk_form_success' appointment.appointment_number partId %}">Go Back</a></button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

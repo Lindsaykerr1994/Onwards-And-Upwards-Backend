@@ -77,10 +77,8 @@ def add_participant_form(request, appointment_number):
             emer_name = form_data['emergency_contact_name']
             if full_name == emer_name:
                 messages.error(request,
-                               ('You cannot make your emergency contact\
-                                yourself'))
-                return redirect(reverse('add_part_form',
-                                args=[appointment_number]))
+                               ('You cannot make yourself your emergency \
+                                contact'))
             else:
                 partForm = ParticipantForm(form_data)
                 if partForm.is_valid():
@@ -105,7 +103,7 @@ def add_participant_form(request, appointment_number):
 
 def _send_confirmation_email(appointment, participant):
     """Send the user a confirmation email"""
-    part_email = participant.email
+    part_email = participant.email_address
     subject = render_to_string(
         'riskforms/email_template/pdf_success_subject.txt',
         {'appointment': appointment})
@@ -159,8 +157,8 @@ def remove_participant(request):
         participant.appointment.remove(removeApp)
         appointments = participant.appointment.all()
         if len(appointments) == 0:
+            messages.success(request, f'We have deleted participant as this was their only related session.')
             participant.delete()
-            messages.success(request, f'Deleted this participant')
         else:
             messages.success(request, f'Successfully removed \
             {participant.first_name} {participant.last_name} as a participant\
@@ -214,7 +212,6 @@ def _generate_form_number():
 def risk_form_success(request, appointment_number, part_id):
     participant = get_object_or_404(Participant, pk=part_id)
     appointment = Appointment.objects.get(appointment_number=appointment_number)
-    ra_form = RAForm.objects.all()
     participants = Participant.objects.all()
     participants = participants.filter(appointment=appointment)
     if participants:
@@ -225,7 +222,6 @@ def risk_form_success(request, appointment_number, part_id):
     context = {
         'participant': participant,
         'appointment': appointment,
-        'ra_form': ra_form,
         'parts': participants,
         'remaining_forms': remaining_forms
     }
@@ -234,8 +230,11 @@ def risk_form_success(request, appointment_number, part_id):
 
 def risk_form_denied(request, appointment_number):
     appointment = Appointment.objects.get(appointment_number=appointment_number)
+    all_parts = Participant.objects.all()
+    participants = all_parts.filter(appointment=appointment)
     context = {
-        'appointment': appointment
+        'appointment': appointment,
+        'participants': participants
     }
     return render(request, 'riskforms/risk_form_denied.html', context)
 
@@ -246,4 +245,17 @@ def kitlist_and_terms(request, appointment_number):
     context = {
         'appointment': appointment
     }
-    return render(request, 'riskforms/kitlist.html', context)
+    return render(request, 'riskforms/kitlist_and_terms.html', context)
+
+
+def onlykitlist(request, appointment_number):
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    partId = None
+    if request.method == "GET":
+        partId = request.GET['partId']
+
+    context = {
+        'appointment': appointment,
+        'partId': partId
+    }
+    return render(request, 'riskforms/onlykitlist.html', context)
