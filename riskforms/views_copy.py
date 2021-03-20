@@ -54,70 +54,50 @@ def add_participant_form(request, appointment_number):
                         args=[appointment_number]))
     else:
         if request.method == "POST":
-            full_name = request.POST['first_name'] + " " + request.POST['last_name']
-            emer_name = request.POST['emergency_contact_name']
+            form_data = {
+                'first_name': request.POST['first_name'],
+                'last_name': request.POST['last_name'],
+                'date_of_birth': request.POST['date_of_birth'],
+                'email_address': request.POST['email_address'],
+                'phone_number': request.POST['phone_number'],
+                'address_line1': request.POST['address1'],
+                'address_line2': request.POST['address2'],
+                'address_line3': request.POST['address3'],
+                'town_or_city': request.POST['town_or_city'],
+                'postcode': request.POST['postcode'],
+                'emergency_contact_name': request.POST['emergency_name'],
+                'emergency_contact_number': request.POST['emergency_number'],
+                'dec_illness': request.POST['dec_illness'],
+                'dec_medication': request.POST['dec_medication'],
+                'dec_abs_cond': request.POST['dec_abs_cond'],
+                'acknowledgement_of_risk': request.POST['ack_of_risk'],
+                'signed_by': request.POST['signed_by'],
+                'date_signed': request.POST['date_signed']
+            }
+            if form_data['address_line2'] is None:
+                form_data['address_line2'] = " "
+            if form_data['address_line3'] is None:
+                form_data['address_line3'] = " "
+            full_name = form_data['first_name'] + " " + form_data['last_name']
+            emer_name = form_data['emergency_contact_name']
             if full_name == emer_name:
                 messages.error(request,
                                ('You cannot make yourself your emergency \
                                 contact'))
             else:
-                already_exist = False
-                try:
-                    participant = Participant.objects.get(
-                        first_name__iexact=request.POST['first_name'],
-                        last_name__iexact=request.POST['last_name'],
-                        date_of_birth__iexact=request.POST['date_of_birth'],
-                        email_address__iexact=request.POST['email_address'],
-                        phone_number__iexact=request.POST['phone_number'],
-                    )
-                    already_exist = True
-                    print("found participant")
-                    changes = False
-                    if participant.emergency_contact_name != request.POST['emergency_contact_name']:
-                        participant.emergency_contact_name = request.POST['emergency_contact_name']
-                        participant.emergency_contact_number = request.POST['emergency_contact_number']
-                        changes = True
-                    if participant.address_line1 != request.POST['address_line1']:
-                        participant.address_line1 = request.POST['address_line1']
-                        participant.address_line2 = request.POST['address_line2']
-                        participant.address_line3 = request.POST['address_line3']
-                        participant.town_or_city = request.POST['town_or_city']
-                        participant.postcode = request.POST['postcode']
-                        changes = True
-                    if participant.dec_abs_cond != request.POST['dec_abs_cond']:
-                        participant.dec_medication = request.POST['dec_medication']
-                        participant.dec_illness = request.POST['dec_illness']
-                        changes = True
-                    if changes is True:
-                        participant.acknowledgement_of_risk = request.POST['acknowledgement_of_risk']
-                        participant.signed_by = request.POST['signed_by']
-                        participant.appointment.add(appointment)
-                        _send_confirmation_email(appointment, participant)
-                        messages.success(request, 'We have found your information from a previous session that you have attended.''However, we noticed some changes in your information, so we have gone ahead and updated that.')
-                        return redirect(reverse('risk_form_success',
-                                        args=[appointment.appointment_number,
-                                                participant.pk]))  
-                    else:
-                        messages.success(request, 'We have found your information from a previous session that you have attended'"We're glad to see you back!") 
-                        return redirect(reverse('risk_form_success',
-                                        args=[appointment.appointment_number,
-                                                participant.pk]))  
-                except Participant.DoesNotExist:
-                    print("no participant found")
-                    partForm = ParticipantForm(request.POST)
-                    if partForm.is_valid():
-                        participant = partForm.save()
-                        participant.appointment.add(appointment)
-                        _send_confirmation_email(appointment, participant)
-                        messages.success(request, 'Registration completed. \
-                            Thank you!')
-                        return redirect(reverse('risk_form_success',
-                                        args=[appointment.appointment_number,
-                                                participant.pk]))
-                    else:
-                        print(partForm.errors)
-                        messages.error(request,
-                                    ('Please check that form is valid'))
+                partForm = ParticipantForm(form_data)
+                if partForm.is_valid():
+                    participant = partForm.save()
+                    participant.appointment.add(appointment)
+                    _send_confirmation_email(appointment, participant)
+                    messages.success(request, 'Registration completed. \
+                        Thank you!')
+                    return redirect(reverse('risk_form_success',
+                                    args=[appointment.appointment_number,
+                                            participant.pk]))
+                else:
+                    messages.error(request,
+                                   ('Please check that form is valid'))
         partForm = ParticipantForm()
     context = {
         'appointment': appointment,

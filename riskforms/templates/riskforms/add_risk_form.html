@@ -52,15 +52,15 @@
                         </div>
                         <div class="form-input">
                             <label for="address1">Address Line 1 *</label>
-                            <input type="text" name="address1" required>
+                            <input type="text" name="address_line1" required>
                         </div>
                         <div class="form-input">
                             <label for="address2">Address Line 2</label>
-                            <input type="text" name="address2">
+                            <input type="text" name="address_line2">
                         </div>
                         <div class="form-input">
                             <label for="address3">Address Line 3</label>
-                            <input type="text" name="address3">
+                            <input type="text" name="address_line3">
                         </div>
                         <div class="twoInput d-flex justify-content-between">
                             <div class="form-input">
@@ -78,11 +78,11 @@
                         <hr>
                         <div class="form-input">
                             <label for="emergency_name">Emergency Contact Name *</label>
-                            <input type="text" name="emergency_name" required>
+                            <input type="text" name="emergency_contact_name" required>
                         </div>
                         <div class="form-input">
                             <label for="emergency_number">Emergency Contact Number *</label>
-                            <input type="text" name="emergency_number" required>
+                            <input type="text" name="emergency_contact_number" required>
                         </div>
                     </fieldset>
                     <fieldset>
@@ -109,7 +109,7 @@
                         </div>
                     </fieldset>
                     <fieldset>
-                        <input type="hidden" name="ack_of_risk" id="ack_of_risk">
+                        <input type="hidden" name="acknowledgement_of_risk" id="acknowledgement_of_risk">
                         <input type="hidden" name="signed_by" id="signed_by">
                         <input type="hidden" name="date_signed" id="date_signed">
                     </fieldset>
@@ -255,7 +255,7 @@
                     $("#error-message").text("");
                     $("#signed_by").val(signName);
                     $("#date_signed").val(signDate);
-                    $("#ack_of_risk").val(true);
+                    $("#acknowledgement_of_risk").val(true);
                     $("#ra-form").submit();
                 } else {
                     $("#error-message").text("Please ensure the form is valid");
