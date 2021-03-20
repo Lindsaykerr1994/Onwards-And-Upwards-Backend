@@ -108,7 +108,7 @@ def add_participant_form(request, appointment_number):
                     if partForm.is_valid():
                         participant = partForm.save()
                         participant.appointment.add(appointment)
-                        _send_confirmation_email(appointment, participant)
+                        # _send_confirmation_email(appointment, participant)
                         messages.success(request, 'Registration completed. \
                             Thank you!')
                         return redirect(reverse('risk_form_success',
