@@ -127,7 +127,7 @@ def send_payment_request(request, appointment_number):
         'checkout/email_template/payment_success_subject.txt',
         {'appointment': appointment})
     body = render_to_string(
-        'checkout/email_templatepayment_success_body.txt',
+        'checkout/email_template/payment_success_body.txt',
         {'appointment': appointment,
          'contact_email': settings.DEFAULT_FROM_EMAIL})
 
