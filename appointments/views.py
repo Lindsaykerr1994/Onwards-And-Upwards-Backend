@@ -54,7 +54,7 @@ def all_appointments(request):
     up_apps = []
     past_apps = []
     for app in appointments:
-        if app.appointment_date > today:
+        if app.appointment_date >= today:
             up_apps.append(app)
     for app in appointments:
         if app.appointment_date < today:
@@ -148,13 +148,20 @@ def add_app(request):
             appointment = form.save()
             # Now we need to create an appointment number
             app_num = _generate_app_number(appointment, client)
+            # If everything works to this point, we want to check if there is already another appointment with the same appointment number.
+            same_number = _filter_by_appnumber(app_num)
+            if same_number:
+                # There is an appointment with the same number.
+                # Delete this appointment and inform of the error.
+                appointment.delete()
+                messages.error(request, 'There is already any existing booking with the same reference number. If you wish to continue, please delete the existing booking, and re-enter the form.')
+                return redirect(reverse('all_appointments'))
             appointment.appointment_number = app_num
             appointment.client = client
             appointment.save(update_fields=["appointment_number", "client"])
             messages.success(request, 'Successfully added booking!')
             return redirect(reverse('view_app', args=[app_num]))
         else:
-            print(form.errors)
             messages.error(request, 'Unable to create booking. Please check \
             that the form is valid.')
     if request.method == "GET":
@@ -234,7 +241,6 @@ def delete_app(request, appointment_number):
     if not request.user.is_staff:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
-
     appointment = get_object_or_404(Appointment,
                                     appointment_number=appointment_number)
     appointment.delete()
@@ -258,7 +264,7 @@ def mark_as_paid(request, appointment_number):
 def _generate_app_number(appointment, client):
     app_date = appointment.appointment_date.strftime("%d-%m-%Y")
     app_date = app_date.split("-")
-    date_string = app_date[2]+app_date[1]+app_date[0][2:4]
+    date_string = app_date[0]+app_date[1]+app_date[2][2:4]
     course_code = appointment.course.course_code
     course_code = int(course_code)
     if course_code < 10:
@@ -268,6 +274,23 @@ def _generate_app_number(appointment, client):
     abbr = client.abbreviation
     app_num = date_string+abbr+course_code
     return app_num
+
+
+def _filter_by_appnumber(app_num):
+    app_exists = False
+    # Get all appointments
+    apps = Appointment.objects.all()
+    # Filter by appointment_number
+    apps = apps.filter(appointment_number=app_num)
+    # If there is more than one appointment with this app_num
+    # Including the new appointment
+    # Then return true
+    if len(apps) == 1:
+        print("found another appointment")
+        app_exists = True
+    else:
+        print("no other appointments")
+    return app_exists
 
 
 def _generate_client_abbreviation(last_name):
