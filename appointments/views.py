@@ -93,126 +93,85 @@ def view_appoinment(request, appointment_number):
 @login_required
 def add_app(request):
     if not request.user.is_staff:
-        messages.error(request, "Sorry, I don't want you doing that.")
+        messages.error(request, "Sorry, you do not have permission\
+         to access this page.")
         return redirect(reverse('home'))
-    clientId = None
-    if request.GET:
-        clientId = request.GET['clientId']
-        client = Client.objects.get(pk=clientId)
-    else:
-        client = []
     if request.method == "POST":
         clientNum = request.POST['client']
-        if clientNum is None or clientNum == "0":
-            clientLast = request.POST['last_name']
-            abbr = clientLast[0:3]
-            abbr = abbr.upper()
-            all_clients = Client.objects.all()
-            all_clients = all_clients.filter(abbreviation=abbr)
-            if len(all_clients) != 0:
-                newAbbr = request.POST['last_name']
-                newAbbr = newAbbr[0]+newAbbr[2]+newAbbr[3]
-                abbr = newAbbr.upper()
-                all_clients = Client.objects.all()
-                all_clients = all_clients.filter(abbreviation=abbr)
-                if len(all_clients) != 0:
-                    messages.info(request,
-                                 f'Updated client abbreviation to: {newAbbr}. There is another client with this abbreviation. You will need to declare a new abbreviation.')
-                else:
-                    messages.success(request,
-                                 f'Updated client abbreviation to: {newAbbr}')
-            client_data = {
-                'first_name': request.POST['first_name'],
-                'last_name': request.POST['last_name'],
-                'abbreviation': abbr,
-                'email_address': request.POST['email'],
-                'phone_number': request.POST['phone'],
-                'root_of_inquiry': "OTH"
-            }
-            clientForm = ClientForm(client_data)
-            if clientForm.is_valid():
-                client = clientForm.save()
-                clientNum = client.id
-                courseId = request.POST['course']
-                course = Course.objects.get(pk=courseId)
-                form_data = {
-                    'activity': request.POST['activity'],
-                    'course': request.POST['course'],
-                    'client': client,
-                    'appointment_date': request.POST['appointment_date'],
-                    'appointment_time': request.POST['appointment_time'],
-                    'isSolo': request.POST.get('isSolo'),
-                    'appointment_participants': request.POST['appointment_participants'],
-                    'appointment_location': request.POST['appointment_location'],
-                    'appointment_price': request.POST['appointment_price'],
-                    'add_notes': request.POST['add_notes']
-                }
-                form = AppointmentForm(form_data)
-                if form.is_valid():
-                    app_date = request.POST['appointment_date']
-                    app_date = app_date.split("-")
-                    ap = app_date[2]+app_date[1]+app_date[0][2:4]
-                    courseCode = course.course_code
-                    courseCode = int(courseCode)
-                    if courseCode < 10:
-                        courseCode = "0"+str(courseCode)
-                    else:
-                        courseCode = str(courseCode)
-                    abbr = client.abbreviation
-                    appNum = ap+abbr+courseCode
-                    appointment = form.save()
-                    appointment.client = client
-                    appointment.appointment_number = appNum
-                    appointment.save(update_fields=["appointment_number", "client"])
-                    messages.success(request, 'Successfully added appointment')
-                    return redirect(reverse('view_app',
-                                            args=[appointment.appointment_number]))
-                else:
-                    messages.error(request,
-                                ('Please check that form is valid'))
-            else:
-                messages.error(request,
-                               ('Could not create a new client,\
-therefore could not create appointment.'))
-                return redirect(reverse('add_app'))
+        # If there is no client selected, this value with be 0 be default
+        if clientNum == "0":
+            # No client selected
+            # Search if there is a client with the same details
+            try:
+                client = Client.objects.get(
+                    first_name__iexact=request.POST['first_name'],
+                    last_name__iexact=request.POST['last_name'],
+                    email_address__iexact=request.POST['email'],
+                    phone_number__iexact=request.POST['phone']
+                )
+                messages.info(request, 'Found client profile with matching \
+                information. We have used this client to create this booking.')
+            except Client.DoesNotExist:
+                # Create client profile
+                client = None
+                try:
+                    # Need to find suitable client abbreviation
+                    # Where clientAbbr will = return of function
+                    last_name = request.POST['last_name']
+                    clientAbbr = _generate_client_abbreviation(last_name)
+                    client = Client.objects.create(
+                        first_name=request.POST['first_name'],
+                        last_name=last_name,
+                        abbreviation=clientAbbr,
+                        email_address=request.POST['email'],
+                        phone_number=request.POST['phone'],
+                        street_address1="N/A",
+                        street_address2="N/A",
+                        town_or_city="N/A",
+                        postcode="N/A",
+                        additional_info="Created through appointment page",
+                        root_of_inquiry="OTH"
+                    )
+                except:
+                    # Client cannot be created, return to form.
+                    messages.error(request, 'Was not able to create client profile. Please check form and try again.')
+                    return redirect(reverse('add_app'))
         else:
-            courseId = request.POST['course']
-            course = Course.objects.get(pk=courseId)
-            form = AppointmentForm(request.POST)
-            if form.is_valid():
-                app_date = request.POST['appointment_date']
-                app_date = app_date.split("-")
-                ap = app_date[2]+app_date[1]+app_date[0][2:4]
-                courseCode = course.course_code
-                courseCode = int(courseCode)
-                if courseCode < 10:
-                    courseCode = "0"+str(courseCode)
-                else:
-                    courseCode = str(courseCode)
-                clientNum = request.POST['client']
-                client = Client.objects.get(pk=clientNum)
-                abbr = client.abbreviation
-                appNum = ap+client.abbreviation+courseCode
-                appointment = form.save()
-                appointment.client = client
-                appointment.appointment_number = appNum
-                appointment.save(update_fields=["appointment_number", "client"])
-                messages.success(request, 'Successfully added appointment')
-                return redirect(reverse('view_app',
-                                        args=[appointment.appointment_number]))
-            else:
-                messages.error(request,
-                            ('Please check that form is valid'))
-    else:
-        form = AppointmentForm()
+            # Find client using the value entered in the form
+            client = Client.objects.get(pk=clientNum)
+        # By this point, client has been either:
+        # Selected in the form using dropdown
+        # Founnd using the entered information
+        # Created using the entered information
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            appointment = form.save()
+            # Now we need to create an appointment number
+            app_num = _generate_app_number(appointment, client)
+            appointment.appointment_number = app_num
+            appointment.client = client
+            appointment.save(update_fields=["appointment_number", "client"])
+            messages.success(request, 'Successfully added booking!')
+            return redirect(reverse('view_app', args=[app_num]))
+        else:
+            print(form.errors)
+            messages.error(request, 'Unable to create booking. Please check \
+            that the form is valid.')
+    if request.method == "GET":
+        clientId = request.GET.get('clientId',0)
+        if clientId != 0:
+            client = Client.objects.get(pk=clientId)
+        else:
+            client = []
+    form = AppointmentForm()
     activities = Activity.objects.all()
     courses = Course.objects.all()
     clients = Client.objects.all()
     context = {
         'activities': activities,
         'courses': courses,
-        'client': client,
         'clients': clients,
+        'client': client,
         'form': form,
     }
     return render(request, 'appointments/add_app.html', context)
@@ -294,3 +253,60 @@ def mark_as_paid(request, appointment_number):
     messages.success(request, 'Marked as paid!')
     return redirect(reverse('view_app',
                             args=[appointment.appointment_number]))
+
+
+def _generate_app_number(appointment, client):
+    app_date = appointment.appointment_date.strftime("%d-%m-%Y")
+    app_date = app_date.split("-")
+    date_string = app_date[2]+app_date[1]+app_date[0][2:4]
+    course_code = appointment.course.course_code
+    course_code = int(course_code)
+    if course_code < 10:
+        course_code = "0"+str(course_code)
+    else:
+        course_code = str(course_code)
+    abbr = client.abbreviation
+    app_num = date_string+abbr+course_code
+    return app_num
+
+
+def _generate_client_abbreviation(last_name):
+    abbr = last_name[0:3]
+    abbr = abbr.upper()
+    client_exists = False
+    try:
+        client = Client.objects.get(abbreviation=abbr)
+        client_exists = True
+    except Client.DoesNotExist:
+        return abbr
+    if client_exists:
+        # Client with this abbreviation
+        # Try another combination
+        a = 0
+        lLN = len(last_name)
+        # where abbr = last_name[a]+last_name[b]+last_name[c]
+        while a < (lLN-2):
+            b = a+1
+            while b < (lLN-1):
+                c = b+1
+                while c < lLN:
+                    # Iterate through possible values for c
+                    abbr = last_name[a]+last_name[b]+last_name[c]
+                    abbr = abbr.upper()
+                    try:
+                        client = Client.objects.get(abbreviation=abbr)
+                        # If client exists c+=1
+                        c += 1
+                    except Client.DoesNotExist:
+                        # If no client exists
+                        return abbr
+                b += 1
+            a += 1
+        if client_exists:
+            # If we go through all possibilities for the abbreviation
+            # Set a default abbreviation and tell staff to manually update
+            abbr = "ZZZ"
+            client_exists = False
+    else:
+        # No client with this abbreviation exists
+        return abbr

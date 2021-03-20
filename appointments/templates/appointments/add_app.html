@@ -32,7 +32,7 @@
                             <p class="fieldset-header">Client Details</p>
                             <hr>
                             <div id="client-select" class="form-input onwards-select">
-                                <input type="hidden" id="id_client" name="client">
+                                <input type="hidden" id="id_client" name="client" value="0">
                                 <div class="onwards-select-display">
                                     <p>Select A Client</p>
                                     <span><i class="fas fa-chevron-down"></i></span>
@@ -178,6 +178,49 @@
     <script src="{% static 'js/appointment.js' %}"></script>
     <script src="{% static 'js/datepicker.js' %}"></script>
     <script type="text/javascript">
+        $(document).ready(function(){
+            var input;
+            var allTextInputs = $("input[type='text']");
+            for(let i=0;i<allTextInputs.length;i++){
+                input = allTextInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allEmailInputs = $("input[type='email']");
+            for(let i=0;i<allEmailInputs.length;i++){
+                input = allEmailInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allNumInputs = $("input[type='number']");
+            for(let i=0;i<allNumInputs.length;i++){
+                input = allNumInputs[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+            var allTextareas = $("textarea");
+            for(let i=0;i<allTextareas.length;i++){
+                input = allTextareas[i];
+                inputVal = input.value;
+                if(typeof(inputVal) !== 'undefined'){
+                    if(inputVal.length > 0){
+                        input.parentElement.classList.add("stickLabel");
+                    }
+                }
+            };
+        });
         $(".form-input").focusin(function(){
             $(this).addClass("activeInput");
         })

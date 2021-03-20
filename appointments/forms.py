@@ -6,14 +6,13 @@ class AppointmentForm(forms.ModelForm):
 
     class Meta:
         model = Appointment
-        exclude = ('created_date', 'appointment_number', 'isPaid')
+        exclude = ('created_date', 'appointment_number', 'client', 'isPaid')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         placeholders = {
             'activity': 'Select An Activity',
             'course': 'Select A Course',
-            'client': 'Client',
             'appointment_date': 'Date',
             'appointment_time': 'Time',
             'appointment_participants': 'Number Of Participants',
