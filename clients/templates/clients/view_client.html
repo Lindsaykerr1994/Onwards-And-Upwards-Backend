@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load my_filter %}
+
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
@@ -127,19 +129,24 @@
                                 <p>{{ root_of_inquiry }}</p>
                             </div>
                         </div>
+                        <hr>
                         <div class="row">
                             <div class="col-6 font-futura-medium">
-                                <p>Risk Acknowledgement Forms</p>
+                                <p>Participants</p>
                             </div>
                             <div class="col-6 font-futura-light">
-                                {% if participant %}
-                                <button class="onwards-button">
-                                    <a target="_blank" href="{% url 'view_raform' participant.pk %}">Generate PDF</a>
-                                </button>
-                                {% endif %}
+                                {% for participant in participants %}
+                                <div class="row">
+                                    <div class="col-12">
+                                        <a href="{% url 'view_participant' participant.pk %}?clientId={{client.pk}}" class="text-black">{{ participant.first_name }} {{ participant.last_name }}</a>
+                                        <button class="onwards-button">
+                                            <a target="_blank" href="{% url 'view_raform' participant.pk %}">R.A. Form</a>
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
-                        <hr>
                     </div>
                 </div>
             </div>
@@ -169,20 +176,16 @@
                                         <td>{{ app.appointment_number }}</td>
                                         <td>{{ app.appointment_date }}</td>
                                         <td>{{ app.activity }} - {{ app.course }}</td>
-                                        <td></td>
-                                    </tr>
-                                {% endfor %}
-                                {% for app in up_part_apps %}
-                                    <tr>
                                         <td>
-                                            <a href="{% url 'view_app' app.appointment_number %}" class="text-black">
-                                                <i class="fas fa-search"></i>
-                                            </a>
-                                        </td>
-                                        <td>{{ app.appointment_number }}</td>
-                                        <td>{{ app.appointment_date }}</td>
-                                        <td>{{ app.activity }} - {{ app.course }}</td>
-                                        <td>Participant</td>
+                                            {% if app|is_participant:client and app.client == client %}
+                                            Both
+                                            {% else %}
+                                                {% if app|is_participant:client %}
+                                                Participant
+                                                {% else %}
+                                                Booking
+                                                {% endif %}
+                                            {% endif %}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -207,7 +210,7 @@
                                 {% for app in past_apps %}
                                     <tr>
                                         <td>
-                                            <a href="{% url 'view_app' app.appointment_number %}">
+                                            <a class="text-black" href="{% url 'view_app' app.appointment_number %}">
                                                 <i class="fas fa-search"></i>
                                             </a>
                                         </td>

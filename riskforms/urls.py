@@ -20,5 +20,5 @@ urlpatterns = [
          name="risk_form_denied"),
     path('delete_raform/<int:part_id>',
          views.delete_raform, name="delete_raform"),
-    path('view_pdf/<int:part_id>', views.view_pdf, name="view_raform")
+    path('view_pdf/<int:part_id>', views.view_pdf, name="view_raform"),
 ]

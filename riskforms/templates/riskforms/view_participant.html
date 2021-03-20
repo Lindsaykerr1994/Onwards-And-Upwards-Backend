@@ -13,9 +13,13 @@
                 <div class="row mb-3">
                     <div class="col-9 onwards-header">
                         {% if appointment %}
-                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'view_app' appointment.appointment_number %}">View Appointment</a></h3>
+                            <h3 class="d-inline-block"><a class="link-specs" href="{% url 'view_app' appointment.appointment_number %}">View Appointment</a></h3>
                         {% else %}
-                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'all_appointments' %}">All Appointments</a></h3>
+                            {% if client %}
+                            <h3 class="d-inline-block"><a class="link-specs" href="{% url 'view_client' client.pk %}">View Client</a></h3>
+                            {% else %}
+                            <h3 class="d-inline-block"><a class="link-specs" href="{% url 'all_appointments' %}">All Appointments</a></h3>
+                            {% endif %}
                         {% endif %}
                         <i class="fas fa-chevron-right"></i>
                         <h4 class="link-sibling d-inline-block">View Participant</h4>

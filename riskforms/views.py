@@ -20,17 +20,22 @@ def view_participant(request, partId):
         messages.error(request, "Sorry, I don't want you doing that.")
         return redirect(reverse('home'))
     clients = Client.objects.all()
+    appointment = None
+    client = None
     if request.GET:
-        appId = request.GET['appId']
-        appointment = Appointment.objects.get(appointment_number=appId)
-    else:
-        appointment = []
+        if 'appId' in request.GET:
+            appId = request.GET['appId']
+            appointment = Appointment.objects.get(appointment_number=appId)
+        if 'clientId' in request.GET:
+            clientId = request.GET['clientId']
+            client = Client.objects.get(pk=clientId)
     participant = Participant.objects.get(pk=partId)
     partApps = participant.appointment.all()
     context = {
         'participant': participant,
         'clients': clients,
         'appointment': appointment,
+        'client': client,
         'partApps': partApps
     }
     return render(request, 'riskforms/view_participant.html', context)
