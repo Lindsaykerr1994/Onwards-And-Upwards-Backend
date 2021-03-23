@@ -105,7 +105,7 @@
                                 <td>{{ part.email_address }}</td>
                                 <td>{{ part.phone_number }}</td>
                                 <td class="delete-btn" data-partid="{{ part.pk }}" data-partname="{{ part.first_name }} {{ part.last_name }}">
-                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteParttModal">
+                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deletePartModal">
                                     <i class="fas fa-trash text-danger"></i>
                                 </button>
                             </td>
@@ -116,4 +116,35 @@
             </div>
         </div>
     </div>
+    {% include 'includes/modals/delete_part.html' %}
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+    <script>
+        $(".delete-btn").click(function(){
+            var partId = $(this).attr("data-partid");
+            var partName = $(this).attr("data-partname");
+            $("#partNameText").text(partName);
+            currentURL = window.location.href;
+            newUrl = `${currentURL}delete_participant/${appId}`;
+            $("#confirm-delete").click(function(){
+                window.location = newUrl;
+            })
+        })
+        $(".search-term").click(function(){
+            var currentUrl = new URL(window.location);
+            currentUrl.searchParams.delete("q");
+            window.location.replace(currentUrl);
+        })
+        $('thead th.thead-sort').click(function() {
+            var selector = $(this);
+            var currentUrl = new URL(window.location);
+            var sort = selector.attr("data-sort");
+            var direction = selector.attr("data-dir")
+            currentUrl.searchParams.set("sort", sort);
+            currentUrl.searchParams.set("direction", direction);
+            window.location.replace(currentUrl);
+        })
+    </script>
 {% endblock %}

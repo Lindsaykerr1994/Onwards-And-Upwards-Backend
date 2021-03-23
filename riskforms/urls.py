@@ -17,6 +17,8 @@ urlpatterns = [
          views.update_raform, name="update_raform"),
     path('remove_participant', views.remove_participant,
          name="remove_participant"),
+    path('delete_participant/<part_id>', views.delete_participant,
+         name="delete_part"),
     path('success/<appointment_number>/<int:part_id>',
          views.risk_form_success, name="risk_form_success"),
     path('request_denied/<appointment_number>', views.risk_form_denied,

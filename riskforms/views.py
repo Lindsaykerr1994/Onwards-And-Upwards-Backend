@@ -273,6 +273,17 @@ def remove_participant(request):
     return redirect(reverse('view_app', args=[appId]))
 
 
+@login_required
+def delete_participant(request, part_id):
+    if not request.user.is_staff:
+        messages.error(request, "Sorry, you don't have permission to do that.")
+        return redirect(reverse('home'))
+    participant = get_object_or_404(Participant, pk=part_id)
+    participant.delete()
+    messages.success(request, 'Participant deleted!')
+    return redirect(reverse('all_parts'))
+
+
 def view_pdf(request, part_id):
     template_path = 'riskforms/pdf_template/risk_acknowledgement.html'
     part = get_object_or_404(Participant, pk=part_id)
