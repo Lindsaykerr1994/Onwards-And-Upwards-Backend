@@ -14,13 +14,32 @@
                     </a>
                     <div class="dropdown-menu border-0" aria-labelledby="user-options">
                         {% if request.user.is_authenticated %}
-                            {% if request.user.is_superuser %}
-                                <a href="{% url 'all_appointments' %}" class="dropdown-item">Appointments</a>
-                                <a href="{% url 'all_clients' %}" class="dropdown-item">Clients</a>
+                            {% if request.user.is_staff %}
+                                <a href="{% url 'all_appointments' %}" class="dropdown-item">
+                                    <i class="fas fa-calendar mr-2"></i>
+                                    Appointments
+                                </a>
+                                <a href="{% url 'all_clients' %}" class="dropdown-item">
+                                    <i class="fas fa-users mr-2"></i>
+                                    Clients
+                                </a>
+                                <a href="{% url 'all_parts' %}" class="dropdown-item">
+                                    <i class="fas fa-user-friends mr-2"></i>
+                                    Participants
+                                </a>
+                                <a href="{% url 'all_notifications' %}" class="dropdown-item">
+                                    <i class="fas fa-envelope-open-text mr-2"></i>
+                                    Notifications</a>
                             {% endif %}
-                            <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
+                            <a href="{% url 'account_logout' %}" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Logout
+                            </a>
                         {% else %}
-                            <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
+                            <a href="{% url 'account_login' %}" class="dropdown-item">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Login
+                            </a>
                         {% endif %}
                     </div>
                 </li>

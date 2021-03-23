@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="header-container row my-3 px-5">
+            <div class="col-12">
+                <h1>Messages</h1>
+            </div>
+        </div>
+        <div class="row my-3 px-5">
+            <div class="col-12">
+                <table class="table table-hover">
+                    <thead>
+                        <th>Date</th>
+                        <th>Message</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        {% if notifications %}
+                        {% for note in notifications %}
+                        <tr>
+                            <td>{{ note.date_created }}</td>
+                            <td>{{ note.message }}</td>
+                            <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
+                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteAppModal">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="3">
+                                You currently have no notifications
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

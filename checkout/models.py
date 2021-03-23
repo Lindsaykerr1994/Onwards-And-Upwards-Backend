@@ -39,17 +39,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.receipt_no
-
-
-class RiskAcknowledgement(models.Model):
-    acknowledgement_no = models.CharField(max_length=32, null=False,
-                                          blank=False)
-    appointment_no = models.ForeignKey(Appointment, null=False,
-                                       blank=False, on_delete=models.CASCADE,
-                                       related_name='riskacknowledgement')
-    date_created = models.DateField(auto_now_add=True)
-    form_pdf_url = models.URLField(max_length=1024, null=True, blank=True)
-    form_pdf = models.FileField(null=True, blank=True)
-
-    def __str__(self):
-        return self.acknowledgement_no
