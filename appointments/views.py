@@ -27,20 +27,20 @@ def all_appointments(request):
         if 'sort' in request.GET:
             sortkey = request.GET['sort']
             sort = sortkey
-            if sortkey == 'name':
-                sortkey = 'last_name'
             if sortkey == 'date':
                 sortkey = 'appointment_date'
+            if sortkey == 'appNum':
+                sortkey = 'appointment_number'
             if 'direction' in request.GET:
                 direction = request.GET['direction']
                 if direction == 'desc':
                     sortkey = f'-{sortkey}'
             appointments = appointments.order_by(sortkey)
 
-        if 'activity' in request.GET:
-            activities = request.GET['activity'].split(',')
-            appointments = appointments.filter(activity__name__in=activities)
-            activities = Activity.objects.filter(name__in=activities)
+        # if 'activity' in request.GET:
+        #     activities = request.GET['activity'].split(',')
+        #     appointments = appointments.filter(activity__name__in=activities)
+        #     activities = Activity.objects.filter(name__in=activities)
 
         if 'q' in request.GET:
             query = request.GET['q']

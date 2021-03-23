@@ -40,6 +40,9 @@
     right: 0;
     top: 0;
 }
+.form-input.checkbox-input {
+    height: auto;
+}
 .onwards-form.small-onwards-form .form-input {
     width: 330px;
 }

@@ -19,6 +19,7 @@ thead {
 tbody {
     max-height: 185px;
     font-family: 'Futura Light';
+    overflow-y: auto;
 }
 tr {
     height: 37px !important;

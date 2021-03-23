@@ -31,7 +31,9 @@
                     </div>
                 </form>
                 {% if search_term %}
-                <p>Searching for: "{{ search_term }}"</p>
+                <div>
+                    <span class="search-term">"{{ search_term }}" <i class="fas fa-times"></i></span>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -39,15 +41,19 @@
             <div class="col mx-auto">
                 <div class="row">
                     <div class="col-2 offset-10">
-                        <a href="{% url 'add_client' %}" class="d-inline-block float-right icon-btn">
-                            <i class="fas fa-user-plus"></i>
-                        </a>
+                        <div class="tooltip-container">
+                            <span>New Client</span><span> </span>
+                            <a href="{% url 'add_client' %}" class="d-inline-block float-right icon-btn">
+                                <i class="fas fa-user-plus"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <table class="table table-hover">
                     <thead>
                         <th></th>
-                        <th data-sort="last_name" 
+                        <th data-sort="last_name"
+                        class="thead-sort"
                             {% if current_sorting == 'last_name' %}
                                 {% if current_direction == 'asc' %}
                                 data-dir="desc"
@@ -59,7 +65,8 @@
                             {% endif %}>
                             Last Name
                         </th>
-                        <th data-sort="first_name" 
+                        <th data-sort="first_name"
+                        class="thead-sort"
                             {% if current_sorting == 'first_name' %}
                                 {% if current_direction == 'asc' %}
                                 data-dir="desc"
@@ -71,7 +78,8 @@
                             {% endif %}>
                             First Name
                         </th>
-                        <th data-sort="abbreviation" 
+                        <th data-sort="abbreviation"
+                        class="thead-sort" 
                             {% if current_sorting == 'abbreviation' %}
                                 {% if current_direction == 'asc' %}
                                 data-dir="desc"
@@ -81,7 +89,8 @@
                             {% else %}
                                 data-dir="desc"
                             {% endif %}>ABBR.</th>
-                        <th data-sort="email_address" 
+                        <th data-sort="email_address"
+                        class="thead-sort"
                             {% if current_sorting == 'email_address' %}
                                 {% if current_direction == 'asc' %}
                                 data-dir="desc"
@@ -93,7 +102,8 @@
                             {% endif %}>
                             Email Address
                         </th>
-                        <th data-sort="phone_number" 
+                        <th data-sort="phone_number"
+                        class="thead-sort"
                             {% if current_sorting == 'phone_number' %}
                                 {% if current_direction == 'asc' %}
                                 data-dir="desc"
@@ -196,9 +206,7 @@
                 window.location = newUrl;
             })
         })
-    </script>
-    <script type="text/javascript">
-        $('thead th').click(function() {
+        $('thead th.thead-sort').click(function() {
             var selector = $(this);
             var currentUrl = new URL(window.location);
             var sort = selector.attr("data-sort");
@@ -206,6 +214,18 @@
             currentUrl.searchParams.set("sort", sort);
             currentUrl.searchParams.set("direction", direction);
             window.location.replace(currentUrl);
+        })
+        $(".search-term").click(function(){
+            var currentUrl = new URL(window.location);
+            currentUrl.searchParams.delete("q");
+            window.location.replace(currentUrl);
+        })
+        $(".icon-btn").hover(function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeIn("fast");
+        }, function(){
+            var testEl = $(this).parent().children("span");
+            testEl.fadeOut("fast");
         })
     </script>
 {% endblock %} 

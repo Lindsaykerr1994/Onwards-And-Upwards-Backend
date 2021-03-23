@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="row px-5" id="welcome-container">
+            <div class="col-12 col-lg-6">
+                <h3>All Participants</h3>
+            </div>
+            <div class="col-2 d-none d-lg-block"></div>
+            <div class="col-12 col-lg-4">
+                <form method="GET" action="{% url 'all_parts' %}" class="search-form">
+                    <div class="input-group w-100">
+                        <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search">
+                        <div class="input-group-append">
+                            <button class="form-control btn btn-black border border-black rounded-0" type="submit">
+                                <span class="icon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                {% if search_term %}
+                <div>
+                    <span class="search-term">"{{ search_term }}" <i class="fas fa-times"></i></span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row my-3 px-3 px-lg-5">
+            <div class="col">
+                <table class="table table-hover">
+                    <thead>
+                        <th></th>
+                        <th data-sort="last_name"
+                        class="thead-sort"
+                                {% if current_sorting == 'last_name' %}
+                                    {% if current_direction == 'asc' %}
+                                    data-dir="desc"
+                                    {% else %}
+                                    data-dir="asc"
+                                    {% endif %}
+                                {% else %}
+                                    data-dir="desc"
+                                {% endif %}>
+                            Last Name
+                        </th>
+                        <th data-sort="first_name"
+                            class="thead-sort"
+                                {% if current_sorting == 'first_name' %}
+                                    {% if current_direction == 'asc' %}
+                                    data-dir="desc"
+                                    {% else %}
+                                    data-dir="asc"
+                                    {% endif %}
+                                {% else %}
+                                    data-dir="desc"
+                                {% endif %}>
+                            First Name
+                        </th>
+                        <th data-sort="email_address"
+                            class="thead-sort"
+                                {% if current_sorting == 'email_address' %}
+                                    {% if current_direction == 'asc' %}
+                                    data-dir="desc"
+                                    {% else %}
+                                    data-dir="asc"
+                                    {% endif %}
+                                {% else %}
+                                    data-dir="desc"
+                                {% endif %}>
+                            Email Address
+                        </th>
+                            <th data-sort="phone_number"
+                            class="thead-sort"
+                                {% if current_sorting == 'phone_number' %}
+                                    {% if current_direction == 'asc' %}
+                                    data-dir="desc"
+                                    {% else %}
+                                    data-dir="asc"
+                                    {% endif %}
+                                {% else %}
+                                    data-dir="desc"
+                                {% endif %}>
+                            Phone No.
+                        </th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        {% for part in participants %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'view_participant' part.pk %}">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </td>
+                                <td>{{ part.last_name }}</td>
+                                <td>{{ part.first_name }}</td>
+                                <td>{{ part.email_address }}</td>
+                                <td>{{ part.phone_number }}</td>
+                                <td class="delete-btn" data-partid="{{ part.pk }}" data-partname="{{ part.first_name }} {{ part.last_name }}">
+                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteParttModal">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </button>
+                            </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

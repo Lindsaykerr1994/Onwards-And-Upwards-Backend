@@ -22,7 +22,7 @@
         </div>
         <div class="row">
             <div class="col-11 mx-auto">
-                <form method="POST" class="onwards-form mx-auto" id="ra-form" action="{% url 'add_part_form' appointment.appointment_number %}">
+                <form method="POST" class="onwards-form mx-auto" id="ra-form" action="{% url 'manually_add_participant' appointment.appointment_number %}">
                     {% csrf_token %}
                     <fieldset>
                         <p>Participant Details</p>
@@ -100,14 +100,14 @@
                             </label>
                             <textarea name="dec_medication" id="dec_med" required></textarea>
                         </div>
-                        <div class="form-input no-border checkbox-input d-flex justify-content-between">
+                        <div class="form-input checkbox-input d-flex justify-content-between">
                             <p class="small font-futura-light">I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.</p>
                             <label class="ck-container">
                                 <input type="checkbox" id="dec_abs_cond" name="dec_abs_cond">
                                 <span class="checkmark"></span>
                             </label>
                         </div>
-                        <div class="form-input no-border checkbox-input d-flex justify-content-between">
+                        <div class="form-input checkbox-input d-flex justify-content-between">
                             <p class="small font-futura-light">If you do not wish to be photographed for the purposes of our own marketing then please check this box.</p>
                             <label class="ck-container">
                                 <input type="checkbox" id="media_acceptance" name="media_acceptance">
@@ -120,14 +120,11 @@
                         <input type="hidden" name="signed_by" id="signed_by">
                         <input type="hidden" name="date_signed" id="date_signed">
                     </fieldset>
-                    <button type="button" class="submit-button" data-toggle="modal" data-target="#confirmRAModal" id="openRAModal-btn">
-                        Submit
-                    </button>
+                    <input type="submit" class="form-input submit-button">
                 </form>
             </div>
         </div>
     </div>
-    {% include 'includes/modals/confirm_raform.html' %}
 {% endblock %}
 
 {% block postloadjs %}

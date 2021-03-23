@@ -101,7 +101,9 @@
                         {% endfor %}
                         <p>We still require {{ remaining_forms }} form(s).<br>
                         All participants must complete and sign the form in order to participant in this session.</p>
-                        <button class="onwards-button"><a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Add Your Details</a></button>
+                        <button class="onwards-button">
+                            <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a>
+                        </button>
                     </div>
                 </div>
                 {% endif %}
@@ -109,12 +111,12 @@
                 <div class="row my-3">
                     <div class="col-12">
                         <p>We currently have no participants registered for this session</p>
-                        <button class="onwards-button"><a href="{% url 'add_part_form' appointment.appointment_number %}">Add Your Details</a></button>
+                        <button class="onwards-button"><a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a></button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <p>If you have participated with us before and have completed a Risk Acknowledgment Form, either using this system or on paper, please contact us at <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>, or send us an email at: <span class="font-futura-medium">XX</span>, and we will do our best to address this issue.</p>
+                        <p>If you have participated with us before and have completed a Risk Acknowledgment Form, either using this system or on paper, please contact us at <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>, or send us an email at: <span class="font-futura-medium">tony@onwards-and-upwards.com</span>, and we will do our best to address this issue.</p>
                     </div>
                 </div>
             {% endif %}
@@ -122,7 +124,7 @@
         </div>
         <div class="row my-3">
             <div class="col-11 mx-auto font-futura-light">
-                <p>If you believe there is any error with any of the details shown above, please do not to hesistate to contact us at <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>, or send us an email at: <span class="font-futura-medium">XX</span>.<br>
+                <p>If you believe there is any error with any of the details shown above, please do not to hesistate to contact us at <a class="text-orange font-futura-medium" href="https://www.onwards-and-upwards.com/" target="_blank">our website</a>, or send us an email at: <span class="font-futura-medium">tony@onwards-and-upwards.com</span>.<br>
                 Plesae use the booking reference number allocated at the top of the page.</p>
             </div>
         </div>

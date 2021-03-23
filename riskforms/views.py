@@ -15,6 +15,40 @@ from clients.models import Client
 
 
 @login_required
+def all_participants(request):
+    if not request.user.is_staff:
+        messages.error(request, "Sorry, You don't have permission to do that.")
+        return redirect(reverse('home'))
+    participants = Participant.objects.all()
+    query = None
+    sort = None
+    direction = None
+    if request.GET:
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort']
+            sort = sortkey
+            if sortkey == 'date':
+                sortkey = 'appointment_date'
+            if 'direction' in request.GET:
+                direction = request.GET['direction']
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}'
+            participants = participants.order_by(sortkey)
+        if 'q' in request.GET:
+            query = request.GET['q']
+            if not query:
+                messages.error(request,
+                               ("You didn't enter any search criteria!"))
+                return redirect(reverse('all_participants'))
+            queries = Q(participant__last_name__icontains=query) | Q(participant__first_name__icontains=query)
+            participants = participants.filter(queries)
+    context = {
+        'participants': participants
+    }
+    return render(request, 'riskforms/all_participants.html', context)
+
+
+@login_required
 def view_participant(request, partId):
     if not request.user.is_staff:
         messages.error(request, "Sorry, I don't want you doing that.")
@@ -61,7 +95,6 @@ def add_participant_form(request, appointment_number):
                                ('You cannot make yourself your emergency \
                                 contact'))
             else:
-                already_exist = False
                 try:
                     participant = Participant.objects.get(
                         first_name__iexact=request.POST['first_name'],
@@ -70,9 +103,9 @@ def add_participant_form(request, appointment_number):
                         email_address__iexact=request.POST['email_address'],
                         phone_number__iexact=request.POST['phone_number'],
                     )
-                    already_exist = True
-                    print("found participant")
                     changes = False
+                    if participant.client:
+                        print("testing participant.client")
                     if participant.emergency_contact_name != request.POST['emergency_contact_name']:
                         participant.emergency_contact_name = request.POST['emergency_contact_name']
                         participant.emergency_contact_number = request.POST['emergency_contact_number']
@@ -89,6 +122,7 @@ def add_participant_form(request, appointment_number):
                         participant.dec_illness = request.POST['dec_illness']
                         changes = True
                     if changes is True:
+                        participant.media_acceptance = request.POST['media_acceptance']
                         participant.acknowledgement_of_risk = request.POST['acknowledgement_of_risk']
                         participant.signed_by = request.POST['signed_by']
                         participant.appointment.add(appointment)
@@ -98,17 +132,26 @@ def add_participant_form(request, appointment_number):
                                         args=[appointment.appointment_number,
                                                 participant.pk]))  
                     else:
+                        participant.appointment.add(appointment)
                         messages.success(request, 'We have found your information from a previous session that you have attended'"We're glad to see you back!") 
                         return redirect(reverse('risk_form_success',
                                         args=[appointment.appointment_number,
-                                                participant.pk]))  
+                                                participant.pk]))
                 except Participant.DoesNotExist:
-                    print("no participant found")
                     partForm = ParticipantForm(request.POST)
                     if partForm.is_valid():
                         participant = partForm.save()
                         participant.appointment.add(appointment)
-                        # _send_confirmation_email(appointment, participant)
+                        # If appointment is solo, or any has one participant
+                        # See if participant and client match
+                        if appointment.appointment_participants == 1:
+                            client = appointment.client
+                            if client.first_name == participant.first_name and client.last_name == participants.last_name:
+                                # Client and participant names match
+                                # This does not guarantee, but we can assume they are the same
+                                participant.client = client
+                                participant.save(update_fields=['client'])
+                        _send_confirmation_email(appointment, participant)
                         messages.success(request, 'Registration completed. \
                             Thank you!')
                         return redirect(reverse('risk_form_success',
@@ -124,6 +167,49 @@ def add_participant_form(request, appointment_number):
         'form': partForm,
     }
     return render(request, 'riskforms/add_risk_form.html', context)
+
+
+@login_required
+def manually_add_participant(request, appointment_number):
+    if not request.user.is_staff:
+        messages.error(request, 'Sorry, but you do not have the permission to visit this page.')
+        return redirect(reverse('home'))
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    if request.method == "POST":
+        try:
+            participant = Participant.objects.get(
+                first_name__iexact=request.POST['first_name'],
+                last_name__iexact=request.POST['last_name'],
+                date_of_birth__iexact=request.POST['date_of_birth'],
+                email_address__iexact=request.POST['email_address'],
+                phone_number__iexact=request.POST['phone_number']
+            )
+            if not participant.client:
+                if appointment.appointment_participants == 1:
+                    client = appointment.client
+                    if participant.first_name == client.first_name and participant.last_name == client.last_name:
+                        participant.client = client
+                        participant.save(update_fields=['client'])
+            participant.appointment.add(appointment)
+            return redirect(reverse('view_app', args=[appointment_number]))
+        except Participant.DoesNotExist:
+            form = ParticipantForm(request.POST)
+            if form.is_valid():
+                participant = form.save()
+                participant.appointment.add(appointment)
+                if appointment.appointment_participants == 1:
+                    client = appointment.client
+                    if participant.first_name == client.first_name and participant.last_name == client.last_name:
+                        participant.client = client
+                        participant.save(update_fields=['client'])
+            else:
+                messages.error(request, "There is an error in the form. Please check the values enter and try again.")
+    form = ParticipantForm()
+    context = {
+        'appointment': appointment,
+        'form': form
+    }
+    return render(request, 'riskforms/manual_add_form.html', context)
 
 
 def _send_confirmation_email(appointment, participant):
@@ -181,13 +267,9 @@ def remove_participant(request):
         removeApp = Appointment.objects.get(appointment_number=appId)
         participant.appointment.remove(removeApp)
         appointments = participant.appointment.all()
-        if len(appointments) == 0:
-            messages.success(request, f'We have deleted participant as this was their only related session.')
-            participant.delete()
-        else:
-            messages.success(request, f'Successfully removed \
-            {participant.first_name} {participant.last_name} as a participant\
-             from appointment: {removeApp.appointment_number}')
+        messages.success(request, f'Successfully removed \
+        {participant.first_name} {participant.last_name} as a participant\
+            from appointment: {removeApp.appointment_number}')
     return redirect(reverse('view_app', args=[appId]))
 
 

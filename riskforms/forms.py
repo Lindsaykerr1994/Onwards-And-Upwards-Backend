@@ -26,6 +26,7 @@ class ParticipantForm(forms.ModelForm):
             'dec_illness': 'Declaration Of Illness',
             'dec_medication': 'Declaration Of Medication',
             'dec_abs_cond': 'Declaration Of Absence of Condition',
+            'media_acceptance': 'Media Acceptance',
             'acknowledgement_of_risk': 'Acknowledgement',
             'signed_by': 'Signed By',
             'date_signed': 'Date Signed'

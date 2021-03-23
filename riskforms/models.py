@@ -25,6 +25,7 @@ class Participant(models.Model):
     dec_illness = models.TextField(null=True, blank=True)
     dec_medication = models.TextField(null=True, blank=True)
     dec_abs_cond = models.BooleanField(default=False)
+    media_acceptance = models.BooleanField(default=True)
     acknowledgement_of_risk = models.BooleanField(default=False)
     # This needs to be default false so that the client
     # has to manually change it.

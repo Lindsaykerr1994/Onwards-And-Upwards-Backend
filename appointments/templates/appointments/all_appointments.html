@@ -43,9 +43,9 @@
                     </div>
                     <div class="col-2">
                         <div class="tooltip-container">
-                            <span>New Appointment</span><span> </span>
+                            <span>New Session</span><span> </span>
                             <a href="{% url 'add_app' %}" id="new-appt-btn" class="d-inline-block float-right icon-btn" >
-                                <i class="fas fa-calendar-plus"></i>
+                                <i id="no-search" class="fas fa-calendar-plus"></i>
                             </a>
                         </div>
                     </div>
@@ -53,10 +53,50 @@
                 <table class="table table-hover">
                     <thead>
                         <th></th>
-                        <th>Ref. No.</th>
-                        <th>Date</th>
-                        <th>Client</th>
-                        <th>Activity</th>
+                        <th data-sort="appNum"
+                        class="thead-sort"
+                        {% if current_sorting == 'appNum' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>Ref. No.</th>
+                        <th data-sort="date"
+                        class="thead-sort"
+                        {% if current_sorting == 'date' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>Date</th>
+                        <th data-sort="client"
+                        class="thead-sort"
+                        {% if current_sorting == 'client' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>Client</th>
+                        <th data-sort="activity"
+                        class="thead-sort"
+                        {% if current_sorting == 'activity' %}
+                                {% if current_direction == 'asc' %}
+                                data-dir="desc"
+                                {% else %}
+                                data-dir="asc"
+                                {% endif %}
+                            {% else %}
+                                data-dir="desc"
+                            {% endif %}>Activity</th>
                         <th></th>
                     </thead>
                     <tbody>
@@ -132,7 +172,7 @@
                 window.location = newUrl;
             })
         })
-        $(".search-term i").click(function(){
+        $(".search-term").click(function(){
             var currentUrl = new URL(window.location);
             currentUrl.searchParams.delete("q");
             window.location.replace(currentUrl);
@@ -143,6 +183,16 @@
         }, function(){
             var testEl = $(this).parent().children("span");
             testEl.fadeOut("fast");
+        })
+        
+        $('thead th.thead-sort').click(function() {
+            var selector = $(this);
+            var currentUrl = new URL(window.location);
+            var sort = selector.attr("data-sort");
+            var direction = selector.attr("data-dir")
+            currentUrl.searchParams.set("sort", sort);
+            currentUrl.searchParams.set("direction", direction);
+            window.location.replace(currentUrl);
         })
     </script>
     <script>

@@ -212,7 +212,14 @@
                 </div>
                 <div class="row">
                         <div class="col-12">
-                            <h4 class="text-underline">Participants Details:</h4>
+                            <div class="row">
+                                <div class="col-9">
+                                <h4 class="text-underline">Participants Details:</h4>
+                                </div>
+                                <div class="col-3 text-right">
+                                    <a href="{% url 'manually_add_participant' appointment.appointment_number %}" class="icon-btn"><i class="fas fa-user-plus"></i></a>
+                                </div>
+                            </div>
                             {% if participants %}
                                 {% for part in participants %}
                                     <div class="row my-3">
