@@ -295,16 +295,16 @@ function setDays(todaysDate, viewMonth){
                     $(".calendar-row .is-empty").attr("data-date","");
                     $(".calendar-row .is-empty").attr("data-month","");
                     $(".calendar-row .is-empty").attr("data-year","");
-                    if(viewMonth['month']===todaysDate['month']&&viewMonth['year']===todaysDate['year']){
-                        allCells = $('.calendar-row .cell-occupied');
-                        for(k=0;k<allCells.length;k++){
-                            if(allCells[k].textContent<todaysDate['day']){
-                                allCells[k].className += " cell-disabled";
-                            } else if(allCells[k].textContent===todaysDate['day']){
+                    // if(viewMonth['month']===todaysDate['month']&&viewMonth['year']===todaysDate['year']){
+                    //     allCells = $('.calendar-row .cell-occupied');
+                    //     for(k=0;k<allCells.length;k++){
+                    //         if(allCells[k].textContent<todaysDate['day']){
+                    //             allCells[k].className += " cell-disabled";
+                    //         } else if(allCells[k].textContent===todaysDate['day']){
                                 
-                            };
-                        }
-                    }
+                    //         };
+                    //     }
+                    // }
                     if(dateSelected!=null){
                         for(ii=0;ii<dateSelected.length;ii++){
                             var sD = dateSelected[ii].split("-");
