@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid body-container">
+        <div class="header-container row px-5">
+            <div class="col">
+                <div class="row mb-3">
+                    <div class="col-9 onwards-header">
+                        <h3 class="d-inline-block"><a class="link-specs" href="{% url 'all_notifications' %}">All Notifications</a></h3>
+                        <i class="fas fa-chevron-right"></i>
+                        <h4 class="link-sibling d-inline-block">View Notification</h4>
+                    </div>
+                    <div class="col-3 text-right">
+                        <a class="text-danger" href="{% url 'delete_note' notification.pk %}">
+                            <button type="button" class="btn btn-light">
+                                    <i class="fas fa-trash text-danger"></i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                {% if notification.classification == "PAY" %}
+                <div class="row">
+                    <div class="col-12">
+                        <h5>{{ notification.date_created }} - New Payment For Booking 
+                        <a href="{% url 'view_app' appointment.appointment_number %}" class="d-inline-block link-specs">{{ appointment.appointment_number }}</a></h5>
+                    </div>
+                </div>
+                {% else %}
+                <div class="row">
+                    <div class="col-12">
+                        <h5>{{ notification.date_created }} - New {{ notification.get_classification_display }} Registration
+                        <a href="{% url 'view_participant' participant.pk %}" class="d-inline-block link-specs">{{ participant.first_name }} {{ participant.last_name }}</a></h5>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% if notification.classification == "PAY" %}
+        <div class="row px-5 mb-3">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-11 mx-auto">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4 class="text-underline">Payment Details:</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Receipt Number:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ payment.receipt_no }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Date Paid:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ payment.date }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Amount By:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ payment.checkout_total }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Paid By:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ payment.full_name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row px-5 mb-3">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-11 mx-auto">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4 class="text-underline">Participant Details:</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Participant Name:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ participant.first_name }} {{ participant.last_name }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Date Of Birth:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ participant.date_of_birth|date:"d-m-Y" }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Email Address:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ participant.email_address }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Phone Number:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ participant.phone_number }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Address:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                <p>{{ participant.address_line1 }}</p>
+                                {% if participant.address_line2 %}
+                                <p>{{ participant.address_line2 }}</p>
+                                {% endif %}
+                                {% if participant.address_line3 %}
+                                <p>{{ participant.address_line3 }}</p>
+                                {% endif %}
+                                <p>{{ participant.town_or_city }}</p>
+                                <p>{{ participant.postcode }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row px-5 mb-3">
+            <div class="col-11 mx-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="text-underline">Booking Details:</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Booking Number:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <a href="{% url 'view_app' appointment.appointment_number %}" class="link-specs">{{ appointment.appointment_number }}</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Booking Name:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <a class="link-specs" href="{% url 'view_client' appointment.client.pk %}">{{ appointment.client }}</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Booking Date:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <p>{{ appointment.appointment_date }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 font-futura-medium">
+                        <p>Booking Time:</p>
+                    </div>
+                    <div class="col-6 font-futura-light">
+                        <p>{{ appointment.appointment_time }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2 offset-10 text-left">
+                        <a class="onwards-button text-black" href="{% url 'view_app' appointment.appointment_number %}">View Booking</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -115,10 +115,14 @@ class StripeWH_Handler:
                         checkout_total=checkout_total,
                         stripe_pid=pid,
                     )
-                
-                if appointment:
-                    appointment.isPaid = True
-                    appointment.save(update_fields=['isPaid'])
+                    if appointment:
+                        appointment.isPaid = True
+                        appointment.save(update_fields=['isPaid'])
+                        notification = Notification.objects.create(
+                            message = "Appointment has been successfully paid for.",
+                            reference = appointment.appointment_number,
+                            classification = "PAY"
+                        )
             except Exception as e:
                 if payment:
                     payment.delete()

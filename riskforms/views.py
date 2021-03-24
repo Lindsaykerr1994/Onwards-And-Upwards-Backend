@@ -127,6 +127,13 @@ def add_participant_form(request, appointment_number):
                         participant.signed_by = request.POST['signed_by']
                         participant.appointment.add(appointment)
                         _send_confirmation_email(appointment, participant)
+                        notification = Notification.objects.create(
+                            message = "Participant has successfully registered.",
+                            participant = participant,
+                            appointment = appointment,
+                            reference = appointment.appointment_number,
+                            classification = "PAR"
+                        )
                         messages.success(request, 'We have found your information from a previous session that you have attended.''However, we noticed some changes in your information, so we have gone ahead and updated that.')
                         return redirect(reverse('risk_form_success',
                                         args=[appointment.appointment_number,
@@ -151,6 +158,13 @@ def add_participant_form(request, appointment_number):
                                 # This does not guarantee, but we can assume they are the same
                                 participant.client = client
                                 participant.save(update_fields=['client'])
+                        notification = Notification.objects.create(
+                            message = "Participant has successfully registered.",
+                            particpant = participant,
+                            appointment = appointment,
+                            reference = appointment.appointment_number,
+                            classification = "PAR"
+                        )
                         _send_confirmation_email(appointment, participant)
                         messages.success(request, 'Registration completed. \
                             Thank you!')

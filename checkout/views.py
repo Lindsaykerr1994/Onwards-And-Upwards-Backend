@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from appointments.models import Appointment
 from riskforms.models import Participant
+from home.models import Notification
 from .models import Payment
 from .forms import PaymentForm
 import stripe
@@ -56,6 +57,11 @@ def checkout(request, appointment_number):
                 payment.stripe_pid = pid
                 payment.appointment = appointment
                 payment.checkout_total = appointment.appointment_price
+                notification = Notification.objects.create(
+                    message = "Appointment has been successfully paid for.",
+                    reference = appointment.appointment_number,
+                    classification = "PAY"
+                )
                 appointment.isPaid = True
                 appointment.save(update_fields=['isPaid'])
                 payment.save(update_fields=["appointment", "checkout_total",

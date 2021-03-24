@@ -150,7 +150,12 @@ h1, h2, h3, h4, h5{
 .link-sibling {
     margin-left: 30px;
 }
+.onwards-header svg {
+    position: relative;
+    top: -5px;
+}
 /* Search Bars + Related */
+
 .search-form {
     margin-bottom: 5px;
     border: 1px solid transparent;

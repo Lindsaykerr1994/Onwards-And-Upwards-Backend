@@ -63,7 +63,7 @@
                         </div>
                         <div class="form-input">
                             <label for="country">Country*</label>
-                            <input type="text" name="country" required>
+                            {{ form.country }}
                         </div>
                     </fieldset>
                     <div class="row px-3">
@@ -229,5 +229,13 @@
                 }
             }
         });
+        $(".form-input select").change(function(){
+            var inputVal = $(this).val();
+            if(inputVal.length > 0){
+                $(this).parent().addClass("stickLabel");
+            } else {
+                $(this).parent().removeClass("stickLabel");
+            }
+        })
     </script>
 {% endblock %}

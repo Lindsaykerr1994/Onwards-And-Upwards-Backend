@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+{% endblock %}
+
 {% block content %}
     <div class="container-fluid body-container">
         <div class="header-container row my-3 px-5">
             <div class="col-12">
-                <h1>Messages</h1>
+                <h1>Notfications</h1>
             </div>
         </div>
         <div class="row my-3 px-5">
             <div class="col-12">
                 <table class="table table-hover">
                     <thead>
+                        <th></th>
+                        <th>Ref. No.</th>
                         <th>Date</th>
                         <th>Message</th>
                         <th></th>
@@ -20,8 +26,14 @@
                         {% if notifications %}
                         {% for note in notifications %}
                         <tr>
+                            {% if note.read %}
+                            <td><i class="far fa-dot-circle text-primary ml-2"></i></td>
+                            {% else %}
+                            <td><i class="fas fa-dot-circle text-primary ml-2"></i></td>
+                            {% endif %}
+                            <td>{{ note.reference }}</td>
                             <td>{{ note.date_created }}</td>
-                            <td>{{ note.message }}</td>
+                            <td><a class="text-black" href="{% url 'view_notification' note.pk %}">{{ note.get_classification_display }} - {{ note.message }}</a></td>
                             <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
                                 <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteAppModal">
                                     <i class="fas fa-trash text-danger"></i>

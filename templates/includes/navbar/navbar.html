@@ -12,7 +12,7 @@
                     <a class="text-black nav-link" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <button><i class="fas fa-bars fa-lg"></i></button>
                     </a>
-                    <div class="dropdown-menu border-0" aria-labelledby="user-options">
+                    <div class="dropdown-menu" aria-labelledby="user-options">
                         {% if request.user.is_authenticated %}
                             {% if request.user.is_staff %}
                                 <a href="{% url 'all_appointments' %}" class="dropdown-item">
@@ -27,7 +27,9 @@
                                     <i class="fas fa-user-friends mr-2"></i>
                                     Participants
                                 </a>
-                                <a href="{% url 'all_notifications' %}" class="dropdown-item">
+                                <a href="{% url 'all_notifications' %}" class="dropdown-item"
+                                id="notifications-dropdown">
+                                    <span id="notification-number">{{ notes_count }}</span>
                                     <i class="fas fa-envelope-open-text mr-2"></i>
                                     Notifications</a>
                             {% endif %}
