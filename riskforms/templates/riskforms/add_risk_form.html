@@ -261,9 +261,15 @@
                 if(signName.length > 0 && signDate.length > 0){
                     $("#error-message").text("");
                     $("#signed_by").val(signName);
-                    $("#date_signed").val(signDate);
-                    $("#acknowledgement_of_risk").val(true);
-                    $("#ra-form").submit();
+                    if(checkDateValidation(signDate)){                    
+                        arrangeDate = signDate.split("/");
+                        signDate = arrangeDate[1]+"/"+arrangeDate[0]+"/"+arrangeDate[2]
+                        $("#date_signed").val(signDate);
+                        $("#acknowledgement_of_risk").val(true);
+                        $("#ra-form").submit();
+                    } else {
+                        $("#error-message").text("Please enter a valid date");
+                    };
                 } else {
                     $("#error-message").text("Please ensure the form is valid");
                 }
@@ -271,5 +277,37 @@
                 $("#error-message").text("You must acknowledge the risk to continue");
             }
         })
+        function checkDateValidation(date){
+            var splitDate = date.split("/");
+            if(splitDate.length != 3){
+                return false;
+            }
+            var day = splitDate[0];
+            if(day.length>2){
+                return false;
+            }
+            var month = splitDate[1];
+            if(month.length>2){
+                return false;
+            }
+            var year = splitDate[2];
+            if(year.length>4){
+                return false;
+            }
+            var fullDate = new Date;
+            var thisDay = fullDate.getFullYear();
+            var thisMonth = fullDate.getMonth() + 1;
+            var thisDay = fullDate.getDate();
+            if(parseInt(day) > thisDay){
+                return false;
+            }
+            if(parseInt(month) > thisMonth){
+                return false;
+            }
+            if(parseInt(year) > thisYear){
+                return false;
+            }
+            return true;
+        }
     </script>
 {% endblock %}

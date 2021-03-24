@@ -7,8 +7,15 @@
         </button>
       </div>
       <div class="modal-body">
-        <p class="small">I hereby acknowledge and agree that the activities supervised by Onwards And Upwards and its associates have inherent risks. I have full knowledge of the nature and extent of all risks associated with these activities. I understand that failure to exercise due care and to follow guidance and instructions whilst on session may result in my injury or death.</p>
-        <input type="checkbox" name="ack_checkbox" id="ack_checkbox">
+        <p class="small font-futura-light">I hereby acknowledge and agree that the activities supervised by Onwards And Upwards and its associates have inherent risks. I have full knowledge of the nature and extent of all risks associated with these activities. I understand that failure to exercise due care and to follow guidance and instructions whilst on session may result in my injury or death.</p>
+        <div class="onwards-form small-onwards-form border-0 p-0 mb-3">
+            <div class="form-input no-border checkbox-input d-flex justify-content-end">
+                <label class="ck-container">
+                    <input type="checkbox" name="ack_checkbox" id="ack_checkbox">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+        </div>
         <div class="onwards-form small-onwards-form">
             <fieldset>
                 <div class="form-input">
@@ -17,7 +24,7 @@
                 </div>
                 <p class="small">Signed by a legal guardian if participant is under 18 years old</p>
                 <div class="form-input">
-                    <label for="date-input">Date Signed:</label>
+                    <label for="date-input">Date Signed (DD/MM/YYYY):</label>
                     <input type="text" name="date-input">
                 </div>
             </fieldset>
