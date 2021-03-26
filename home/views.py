@@ -14,12 +14,9 @@ def index(request):
         return redirect(reverse('home'))
     profile = get_object_or_404(User, id=request.user.id)
     appointments = Appointment.objects.all()
-    notifications = Notification.objects.all()
-    length_notes = len(notifications)
     context = {
         'profile': profile,
         'appointments': appointments,
-        'length_notes': length_notes
     }
     return render(request, 'home/index.html', context)
 

@@ -5,7 +5,8 @@ from .models import Notification
 
 def notifications_contents(request):
     notifications = Notification.objects.all()
-    notes_count = len(notifications)
+    unread = notifications.filter(read=False)
+    notes_count = len(unread)
 
     context = {
         'notes_count': notes_count,

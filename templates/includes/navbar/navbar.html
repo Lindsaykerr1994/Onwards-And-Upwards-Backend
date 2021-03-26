@@ -29,7 +29,11 @@
                                 </a>
                                 <a href="{% url 'all_notifications' %}" class="dropdown-item"
                                 id="notifications-dropdown">
-                                    <span id="notification-number">{{ notes_count }}</span>
+                                    {% if notes_count > 0 %}
+                                    <span id="notification-number">
+                                        {{ notes_count }}
+                                    </span>
+                                    {% endif %}
                                     <i class="fas fa-envelope-open-text mr-2"></i>
                                     Notifications</a>
                             {% endif %}
