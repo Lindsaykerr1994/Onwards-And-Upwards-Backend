@@ -2,30 +2,67 @@
     <style>
         @page {
             size: a4 portrait;
-            @frame risk_frame{
-                -pdf-frame-content: personal_frame;
-                left: 50pt; width: 512pt; top: 60pt; height: 480pt;
-            }
-            @frame footer_frame{
-                -pdf-frame-content: footer_content;
-                left: 50pt; width: 512pt; top: 772pt; height: 20pt;
-            }
+            margin: 15pt;
+        }
+        @frame header_frame{
+            -pdf-frame-content: header_frame;
+            border-bottom: 1pt solid black;
+            top: 0pt; height: 100pt; padding-top: 0pt;
+            margin-left: 25pt; margin-right: 25pt;
+        }
+        @frame body_frame{
+            -pdf-frame-content: body_frame;
+            top: 100pt; padding: 25pt;
+        }
+        @frame footer_frame{
+            -pdf-frame-content: footer_frame;
+            left: 50pt; width: 512pt; bottom: 0pt; height: 100pt;
+        }
+        table {
+            border-style: solid; border-width: 1pt; border-color: black;
+            padding: 5pt;
+        }
+        table p {
+            font-size: 8pt;
+            margin: 0pt;
+        }
+        h3 {
+            border-bottom-style:solid; border-bottom-width:1pt;border-bottom-color:black;
+        }
+        p {
+            font-size: 10pt;
         }
     </style>
     <meta charset="utf-8">
-    <title>Risk Acknowledgment Form {{first_name}} {{last_name}}</title>
+    <title>Risk Acknowledgment Form - {{first_name}} {{last_name}}</title>
 </head>
 <body>
-    <div id="risk_frame">
+    <div id="header_frame">
+        <table style="border:0pt;padding:0pt;">
+            <tr>
+                <td colspan="3">
+                <h1 style="font-size:16pt;margin-bottom:0pt;">ONWARDS AND UPWARDS</h1>
+                <h2 style="font-size:14pt;margin:0pt;text-decoration:underline;">RISK ACKNOWLEDGMENT DECLARATION</h2>
+                We provide services which include coaching, guiding, training and instruction. Most activities within sport and
+                exercise involve a risk to the participant. Anyone who participates in an activity supervised by us must read,
+                understand and agree to the terms covered in this document. By reading and signing this form you are accepting
+                and acknowledging the risks and responsibilities detailed below on behalf of you and/or (as their parent / legal
+                guardian) any participants under the age of 18. Personal information supplied will be kept and used by us only.
+                </td>
+                <td colspan="1" align="center"><img src="media/oaulogo.png" style="height: 100pt;width:90pt;" /></td>
+            </tr>
+        </table>
+    </div>
+    <div id="body_frame">
         <div id="personal_frame">
-            <p>Personal Information:</p>
-            <table>
+            <h3 align="left">PERSONAL INFORMATION:</h3>
+            <table style="margin-bottom:20pt;">
                 <tr>
                     <td colspan="2">Name: {{ first_name }} {{ last_name }}</td>
                     <td colspan="2">Date Of Birth: {{ date_of_birth }}</td>
                 </tr>
                 <tr>
-                    <td colspan="3">Address: {{ address_line1 }} {{ address_line2 }}</td>
+                    <td colspan="3">Address: {{ address_line1 }} {% if address_line2 %}, {{ address_line2 }}{% endif %}, {{ town_or_city }}</td>
                     <td colspan="1">Postcode: {{ postcode }}</td>
                 </tr>
                 <tr>
@@ -35,45 +72,57 @@
             </table>
         </div>
         <div id="emergency_frame">
-            <p>Emergency Contact:</p>
-            <table>
+            <h3>EMERGENCY CONTACT:</h3>
+            <table style="margin-bottom:20pt;">
                 <tr>
                     <td colspan="2">Name: {{ emergency_contact_name }}</td>
                     <td colspan="2">Tel: {{ emergency_contact_number }}</td>
                 </tr>
             </table>
-            <p>Declaration Of Fitness:</p>
-            <table>
-                <tr>
-                    <td colspan="4">Please declare any recent or ongoing injury/condition/illness: {{ dec_illness }}</td>
+            <h3>DECLARATION OF FITNESS:</h3>
+            <table style="margin-bottom:20pt;">
+                <tr style="border-bottom:0pt;">
+                    <td colspan="4">Please declare any recent or ongoing injury/condition/illness:</td>
                 </tr>
-                <tr>
-                    <td colspan="4">Please declare any medication recently or currently taken: {{ dec_medication }}</td>
+                <tr style="border-top:0pt;">
+                    <td colspan="4">{{ dec_illness }}</td>
+                </tr>
+                <tr style="border-bottom:0pt;">
+                    <td colspan="4">Please declare any medication recently or currently taken:</td>
+                </tr>
+                <tr style="border-top:0pt;">
+                    <td colspan="4">{{ dec_medication }}</td>
                 </tr>
                 <tr>
                     <td colspan="3">I certify that to the best of my knowledge I do not suffer from a medical condition which might have the effect of making it more likely that I could be involved in an accident resulting in injury to myself or others.</td>
+                    <td colspan="1" align="center" style="font-size:16pt;padding-top:6pt;">{% if dec_abs_cond %}✔{% endif %}</td>
                 </tr>
             </table>
         </div>
         <div>
-            <p>Acknowledgement Of Risk</p>
-            <table>
+            <h3>ACKNOWLEDGMENT OF RISK:</h3>
+            <table style="margin-bottom:20pt;">
                 <tr>
                     <td colspan="4">
                         I hereby acknowledge and agree that the activities supervised by Onwards And Upwards and its associates have inherent risks. I have full knowledge of the nature and extent of all risks associated with these activities. I understand that failure to exercise due care and to follow guidance and instructions whilst on session may result in my injury or death.
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2">PARTICIPANT’S SIGNATURE: (or legal guardian if under 18) {{ signed_by }}</td>
-                    <td colspan="2">DATE: {{ date_signed }}</td>
+                <tr style="border-bottom: 0pt;">
+                    <td colspan="2">PARTICIPANT’S SIGNATURE: (or legal guardian if under 18)</td>
+                    <td colspan="2">DATE: </td>
+                </tr>
+                <tr style="border-top:0pt;">
+                    <td colspan="2" style="margin:0pt;">{{ signed_by }}</td>
+                    <td colspan="2" style="margin:0pt;">{{ date_signed|date:"d/m/Y" }}</td>
                 </tr>
             </table>
+            <p>If you do not wish to be photographed for the purposes of our own marketing then please put a cross in this box <span style="border-bottom:1pt solid black;">{% if not media_acceptance %}X{% endif %}</span></p>
         </div>
-        <div id="footer_frame">
-            <p>TONY KERR ・ ONWARDS AND UPWARDS OUTDOOR ADVENTURES</p>
-            <p>16 LONG GREY ・ FLECKNEY ・ LEICESTERSHIRE ・ LE8 8TB</p>
-            <p>07774 804669 ・ TONY@ONWARDS-AND-UPWARDS.COM</p>
-        </div>
+    </div>
+    <div id="footer_frame">
+        <p align="center" style="margin:0pt;">TONY KERR ・ ONWARDS AND UPWARDS OUTDOOR ADVENTURES</p>
+        <p align="center">16 LONG GREY ・ FLECKNEY ・ LEICESTERSHIRE ・ LE8 8TB</p>
+        <p align="center">07774 804669 ・ TONY@ONWARDS-AND-UPWARDS.COM</p>
     </div>
 </body>
 </html>
