@@ -254,7 +254,8 @@ def update_raform(request, part_id):
     if request.method == "POST":
         participant = Participant.objects.get(pk=part_id)
         form = request.FILES['document']
-
+        participant.manual_form = form
+        participant.save(update_fields=['manual_form'])
         return redirect(reverse('view_participant',
                         args=[participant.pk]))
 
