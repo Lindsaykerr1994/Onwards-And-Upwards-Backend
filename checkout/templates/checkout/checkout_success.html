@@ -28,34 +28,34 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Activity, Course:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>{{ appointment.activity }}, {{ appointment.course }}</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Date:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>{{ appointment.appointment_date }}</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Time:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>{{ appointment.appointment_time }}</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Number Of Participants:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>{% if appointment.isSolo %}
                             Solo
                             {% else %}
@@ -65,10 +65,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-6 font-futura-medium">
                         <p>Booking Name:</p>
                     </div>
-                    <div class="col-6">
+                    <div class="col-6 font-futura-light">
                         <p>{{ appointment.client.first_name }} {{ appointment.client.last_name }}</p>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                         {% endfor %}
                         <p>We still require {{ remaining_forms }} form(s).<br>
                         All participants must complete and sign the form in order to participant in this session.</p>
-                        <button class="onwards-button">
+                        <button class="onwards-button mx-auto">
                             <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a>
                         </button>
                     </div>
@@ -111,7 +111,7 @@
                 <div class="row my-3">
                     <div class="col-12">
                         <p>We currently have no participants registered for this session</p>
-                        <button class="onwards-button"><a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a></button>
+                        <button class="onwards-button mx-auto"><a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a></button>
                     </div>
                 </div>
                 <div class="row">

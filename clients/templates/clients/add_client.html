@@ -235,6 +235,7 @@
             abbr = abbr.slice(0,3);
             abbr = abbr.toUpperCase();
             $("#id_abbr").val(abbr);
+            $('#id_abbr').trigger('change');
         })
     </script>
 {% endblock %} 
