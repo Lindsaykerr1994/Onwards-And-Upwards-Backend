@@ -267,8 +267,6 @@
                         $("#date_signed").val(signDate);
                         $("#acknowledgement_of_risk").val(true);
                         $("#ra-form").submit();
-                    } else {
-                        $("#error-message").text("Please enter a valid date");
                     };
                 } else {
                     $("#error-message").text("Please ensure the form is valid");
@@ -280,31 +278,38 @@
         function checkDateValidation(date){
             var splitDate = date.split("/");
             if(splitDate.length != 3){
+                $("#error-message").text("Please enter a valid date.");
                 return false;
             }
             var day = splitDate[0];
-            if(day.length>2){
+            if(day.length!=2){
+                $("#error-message").text("Please enter a valid date.");
                 return false;
             }
             var month = splitDate[1];
-            if(month.length>2){
+            if(month.length!=2){
+                $("#error-message").text("Please enter a valid month.");
                 return false;
             }
             var year = splitDate[2];
-            if(year.length>4){
+            if(year.length!=4){
+                $("#error-message").text("Please enter a valid year.");
                 return false;
             }
             var fullDate = new Date;
-            var thisDay = fullDate.getFullYear();
+            var thisYear = fullDate.getFullYear();
             var thisMonth = fullDate.getMonth() + 1;
             var thisDay = fullDate.getDate();
-            if(parseInt(day) > thisDay){
+            if(parseInt(day) != thisDay){
+                $("#error-message").text("You must sign this document with today's date");
                 return false;
             }
-            if(parseInt(month) > thisMonth){
+            if(parseInt(month) != thisMonth){
+                $("#error-message").text("You must sign this document with today's date.");
                 return false;
             }
-            if(parseInt(year) > thisYear){
+            if(parseInt(year) != thisYear){
+                $("#error-message").text("You must sign this document with today's date.");
                 return false;
             }
             return true;

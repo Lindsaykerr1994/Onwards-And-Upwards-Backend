@@ -153,7 +153,7 @@ def add_participant_form(request, appointment_number):
                         # See if participant and client match
                         if appointment.appointment_participants == 1:
                             client = appointment.client
-                            if client.first_name == participant.first_name and client.last_name == participants.last_name:
+                            if client.first_name == participant.first_name and client.last_name == participant.last_name:
                                 # Client and participant names match
                                 # This does not guarantee, but we can assume they are the same
                                 participant.client = client
