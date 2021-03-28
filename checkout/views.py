@@ -63,6 +63,7 @@ def checkout(request, appointment_number):
                     classification = "PAY"
                 )
                 appointment.isPaid = True
+                _send_confirmation_email(payment)
                 appointment.save(update_fields=['isPaid'])
                 payment.save(update_fields=["appointment", "checkout_total",
                              "stripe_pid"])
@@ -144,3 +145,21 @@ def send_payment_request(request, appointment_number):
         [cust_email]
     )
     return redirect(reverse('view_app', args=[appointment_number]))
+
+
+def _send_confirmation_email(payment):
+    """Send the user a confirmation email"""
+    cust_email = payment.email
+    subject = render_to_string(
+        'checkout/email_template/payment_success_subject.txt',
+        {'payment': payment})
+    body = render_to_string(
+        'checkout/email_templatepayment_success_body.txt',
+        {'payment': payment, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [cust_email]
+    )
