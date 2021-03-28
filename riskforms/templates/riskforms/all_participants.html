@@ -93,6 +93,7 @@
                         <th></th>
                     </thead>
                     <tbody>
+                        {% if participants %}
                         {% for part in participants %}
                             <tr>
                                 <td>
@@ -111,6 +112,11 @@
                             </td>
                             </tr>
                         {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5">You currently have no participants registered.</td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
