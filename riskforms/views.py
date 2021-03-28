@@ -174,7 +174,7 @@ def add_participant_form(request, appointment_number):
                     else:
                         print(partForm.errors)
                         messages.error(request,
-                                    ('Please check that form is valid'))
+                                    ('Please check that form is valid {partForm.errors}'))
         partForm = ParticipantForm()
     context = {
         'appointment': appointment,
