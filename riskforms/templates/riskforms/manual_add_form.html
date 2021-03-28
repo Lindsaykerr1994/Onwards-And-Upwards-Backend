@@ -240,33 +240,5 @@
                 $("#dec_med").attr("readonly", false);
             }
         });
-        $("#openRAModal-btn").click(function(e){
-            e.stopPropagation();
-            var form = $("#ra-form");
-            form.validate();
-            if(form.valid()){
-                $("#confirmRAModal").modal('show');
-            } else {
-                console.log("error in form")
-            }
-        })
-        $("#confirm-btn").click(function(e){
-            e.stopPropagation();
-            var signName = $("input[name='signing-input']").val();
-            var signDate = $("input[name='date-input']").val();
-            if($("#ack_checkbox").is(":checked")){
-                if(signName.length > 0 && signDate.length > 0){
-                    $("#error-message").text("");
-                    $("#signed_by").val(signName);
-                    $("#date_signed").val(signDate);
-                    $("#acknowledgement_of_risk").val(true);
-                    $("#ra-form").submit();
-                } else {
-                    $("#error-message").text("Please ensure the form is valid");
-                }
-            } else {
-                $("#error-message").text("You must acknowledge the risk to continue");
-            }
-        })
     </script>
 {% endblock %}

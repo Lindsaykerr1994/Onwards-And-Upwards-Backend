@@ -60,11 +60,6 @@
                                 <p>{{ appointment.client.first_name }} {{ appointment.client.last_name }}</p>
                             </div>
                         </div>
-                        <div class="row my-3">
-                            <div class="col-12 text-center font-futura-medium">
-                                <a href="{% url 'onlykitlist' appointment.appointment_number %}?partId={{ participant.pk}}" class="onwards-button text-black">View Our Kit List</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -85,9 +80,12 @@
                     {% endfor %}
                     </ul>
                 <p>If you wish, you can share the following link to other members of your session to register. However we will be only allowing maximum number of <strong>{{ appointment.appointment_participants }}</strong> people to register for this session.</p>
-                <a href="">Link</a>
-                <p class="font-futura-medium">For the safety of Onwards And Upwards staff, and for other members of this session, you will not be allowed to participate if you have not completed a Risk Acknowledgement Form.</p>
-                <a href="{% url 'add_part_form' appointment.appointment_number  %}" class="onwards-button text-decoration-none text-black mx-3">Register Participant</a>
+                <a href="">https://</a>
+                <p class="font-futura-medium">Each participant must register and complete a Risk Acknowledgement Declaration.</p>
+                <div class="row text-center">
+                    <a href="{% url 'add_part_form' appointment.appointment_number  %}" class="onwards-button text-decoration-none text-black mx-3">Register Participant</a>
+                    <a href="{% url 'onlykitlist' appointment.appointment_number %}?partId={{ participant.pk}}" class="onwards-button text-black mx-3">View Our Kit List</a>
+                </div>
                 {% else %}
                 <p>Our system indicates that we have reached our quota for the number of registered participants for this booking.</p>
                 {% endif %}

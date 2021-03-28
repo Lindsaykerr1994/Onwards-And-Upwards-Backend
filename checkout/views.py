@@ -130,10 +130,10 @@ def send_payment_request(request, appointment_number):
     """Send the user a confirmation email"""
     cust_email = appointment.client.email_address
     subject = render_to_string(
-        'checkout/email_template/payment_success_subject.txt',
+        'checkout/email_template/payment_request_subject.txt',
         {'appointment': appointment})
     body = render_to_string(
-        'checkout/email_template/payment_success_body.txt',
+        'checkout/email_template/payment_request_body.txt',
         {'appointment': appointment,
          'contact_email': settings.DEFAULT_FROM_EMAIL})
 
