@@ -161,7 +161,7 @@ def add_participant_form(request, appointment_number):
                                 participant.save(update_fields=['client'])
                         notification = Notification.objects.create(
                             message = "Participant has successfully registered.",
-                            particpant = participant,
+                            participant = participant,
                             appointment = appointment,
                             reference = appointment.appointment_number,
                             classification = "PAR"
