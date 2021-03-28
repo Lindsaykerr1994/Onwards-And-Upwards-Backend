@@ -12,6 +12,7 @@ from .models import Participant
 from .forms import ParticipantForm
 from appointments.models import Appointment
 from clients.models import Client
+from home.models import Notification
 
 
 @login_required
@@ -174,7 +175,7 @@ def add_participant_form(request, appointment_number):
                     else:
                         print(partForm.errors)
                         messages.error(request,
-                                    (f'Please check that form is valid {partForm.errors}'))
+                                    (f'Please check that form is valid'))
         partForm = ParticipantForm()
     context = {
         'appointment': appointment,
