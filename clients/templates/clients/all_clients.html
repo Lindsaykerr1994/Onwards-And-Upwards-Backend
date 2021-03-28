@@ -49,126 +49,222 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-hover">
-                    <thead>
-                        <th></th>
-                        <th data-sort="last_name"
-                        class="thead-sort"
-                            {% if current_sorting == 'last_name' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
-                            {% else %}
-                                data-dir="desc"
-                            {% endif %}>
-                            Last Name
-                        </th>
-                        <th data-sort="first_name"
-                        class="thead-sort"
-                            {% if current_sorting == 'first_name' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
-                            {% else %}
-                                data-dir="desc"
-                            {% endif %}>
-                            First Name
-                        </th>
-                        <th data-sort="abbreviation"
-                        class="thead-sort" 
-                            {% if current_sorting == 'abbreviation' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
-                            {% else %}
-                                data-dir="desc"
-                            {% endif %}>ABBR.</th>
-                        <th data-sort="email_address"
-                        class="thead-sort"
-                            {% if current_sorting == 'email_address' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
-                            {% else %}
-                                data-dir="desc"
-                            {% endif %}>
-                            Email Address
-                        </th>
-                        <th data-sort="phone_number"
-                        class="thead-sort"
-                            {% if current_sorting == 'phone_number' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
-                            {% else %}
-                                data-dir="desc"
-                            {% endif %}>
-                            Phone No.
-                        </th>
-                        <th>Next Appt.</th>
-                        <th>Delete?</th>
-                    </thead>
-                    <tbody>
-                        {% if clients %}
-                        {% for client in clients %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'view_client' client.pk %}">
-                                    <i class="fas fa-search"></i>
-                                </a>
-                            </td>
-                            <td>{{ client.last_name }}</td>
-                            <td>{{ client.first_name }}</td>
-                            <td>({{ client.abbreviation }})</td>
-                            {% if client.email_address %}
-                            <td>{{ client.email_address }}</td>
-                            {% else %}
-                            <td>N/A</td>
-                            {% endif %}
-                            {% if client.phone_number %}
-                            <td>{{ client.phone_number }}</td>
-                            {% else %}
-                            <td>N/A</td>
-                            {% endif %}
-                            {% if client.next_appt %}
-                            <td>{{ client.next_appt }}</td>
-                            {% else %}
-                            <td>
-                                {% for app in appointments|in_client:client %}
-                                    {% if forloop.first %}
-                                    {{ app.appointment_date }}
+                <div class="row d-lg-none">
+                    <div class="col-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <th></th>
+                                <th data-sort="last_name"
+                                class="thead-sort"
+                                    {% if current_sorting == 'last_name' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    Last Name
+                                </th>
+                                <th data-sort="first_name"
+                                class="thead-sort"
+                                    {% if current_sorting == 'first_name' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    First Name
+                                </th>
+                                <th data-sort="email_address"
+                                class="thead-sort"
+                                    {% if current_sorting == 'email_address' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    Email Address
+                                </th>
+                                <th data-sort="phone_number"
+                                class="thead-sort"
+                                    {% if current_sorting == 'phone_number' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    Phone No.
+                                </th>
+                            </thead>
+                            <tbody>
+                                {% if clients %}
+                                {% for client in clients %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'view_client' client.pk %}">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{ client.last_name }}</td>
+                                    <td>{{ client.first_name }}</td>
+                                    {% if client.email_address %}
+                                    <td>{{ client.email_address }}</td>
+                                    {% else %}
+                                    <td>N/A</td>
                                     {% endif %}
-                                {% empty %}
-                                    N/A
+                                    {% if client.phone_number %}
+                                    <td>{{ client.phone_number }}</td>
+                                    {% else %}
+                                    <td>N/A</td>
+                                    {% endif %}
+                                </tr>
                                 {% endfor %}
-                            </td>
-                            <td class="delete-btn" data-clientid="{{ client.pk }}" data-clientname="{{ client.first_name }} {{ client.last_name }}">
-                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteClientModal">
-                                    <i class="fas fa-trash text-danger"></i>
-                                </button>
-                            </td>
-                            {% endif %}
-                        </tr>
-                        {% endfor %}
-                        {% else %}
-                        <tr>
-                            <td colspan="7">
-                                You have no registered clients at this moment
-                            </td>
-                        </tr>
-                        {% endif %}
-                    </tbody>
-                </table>
+                                {% else %}
+                                <tr>
+                                    <td colspan="7">
+                                        You have no registered clients at this moment
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row d-none d-lg-block">
+                    <div class="col-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <th></th>
+                                <th data-sort="last_name"
+                                class="thead-sort"
+                                    {% if current_sorting == 'last_name' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    Last Name
+                                </th>
+                                <th data-sort="first_name"
+                                class="thead-sort"
+                                    {% if current_sorting == 'first_name' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    First Name
+                                </th>
+                                <th data-sort="abbreviation"
+                                class="thead-sort" 
+                                    {% if current_sorting == 'abbreviation' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>ABBR.</th>
+                                <th data-sort="email_address"
+                                class="thead-sort"
+                                    {% if current_sorting == 'email_address' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    Email Address
+                                </th>
+                                <th data-sort="phone_number"
+                                class="thead-sort"
+                                    {% if current_sorting == 'phone_number' %}
+                                        {% if current_direction == 'asc' %}
+                                        data-dir="desc"
+                                        {% else %}
+                                        data-dir="asc"
+                                        {% endif %}
+                                    {% else %}
+                                        data-dir="desc"
+                                    {% endif %}>
+                                    Phone No.
+                                </th>
+                                <th class="d-lg-none">Next Appt.</th>
+                                <th>Delete?</th>
+                            </thead>
+                            <tbody>
+                                {% if clients %}
+                                {% for client in clients %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'view_client' client.pk %}">
+                                            <i class="fas fa-search"></i>
+                                        </a>
+                                    </td>
+                                    <td>{{ client.last_name }}</td>
+                                    <td>{{ client.first_name }}</td>
+                                    <td class="d-lg-none">({{ client.abbreviation }})</td>
+                                    {% if client.email_address %}
+                                    <td>{{ client.email_address }}</td>
+                                    {% else %}
+                                    <td>N/A</td>
+                                    {% endif %}
+                                    {% if client.phone_number %}
+                                    <td>{{ client.phone_number }}</td>
+                                    {% else %}
+                                    <td>N/A</td>
+                                    {% endif %}
+                                    {% if client.next_appt %}
+                                    <td class="d-lg-none">{{ client.next_appt }}</td>
+                                    {% else %}
+                                    <td>
+                                        {% for app in appointments|in_client:client %}
+                                            {% if forloop.first %}
+                                            {{ app.appointment_date }}
+                                            {% endif %}
+                                        {% empty %}
+                                            N/A
+                                        {% endfor %}
+                                    </td>
+                                    <td class="delete-btn" data-clientid="{{ client.pk }}" data-clientname="{{ client.first_name }} {{ client.last_name }}">
+                                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteClientModal">
+                                            <i class="fas fa-trash text-danger"></i>
+                                        </button>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="7">
+                                        You have no registered clients at this moment
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
