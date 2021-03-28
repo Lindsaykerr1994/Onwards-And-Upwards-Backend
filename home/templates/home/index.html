@@ -121,7 +121,7 @@
             var appId = $(this).attr("data-appid");
             $("#appIdText").text(appId);
             currentURL = window.location.href;
-            newUrl = `${currentURL}/appointments/delete_appointment/${appId}`;
+            newUrl = `${currentURL}appointments/delete_appointment/${appId}`;
             $("#confirm-delete").click(function(){
                 window.location = newUrl;
             })
