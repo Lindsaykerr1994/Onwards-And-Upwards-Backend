@@ -133,7 +133,7 @@
             var partName = $(this).attr("data-partname");
             $("#partNameText").text(partName);
             currentURL = window.location.href;
-            newUrl = `${currentURL}delete_participant/${appId}`;
+            newUrl = `${currentURL}delete_participant/${partId}`;
             $("#confirm-delete").click(function(){
                 window.location = newUrl;
             })
