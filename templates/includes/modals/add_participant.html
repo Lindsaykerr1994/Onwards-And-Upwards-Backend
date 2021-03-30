@@ -1,0 +1,40 @@
+<div class="modal fade" id="addParticipantModal" tabindex="-1" aria-labelledby="add participant to booking modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Participant To Booking</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="font-futura-light">Would you like to create a new participant?</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="font-futura-light">Would you like to add an existing participant?</p>
+                            <input type="hidden" value="{{ appointment.appointment_number }}" id="appId-input">
+                            <select id="select-part" class="w-100">
+                            <option value="0">Select A Participant</option>
+                            {% for part in all_parts %}
+                                <option value="{{ part.pk }}">{{ part.first_name }} {{ part.last_name }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row my-2">
+                        <div class="col-6 d-flex justify-content-center">
+                            <button type="button" class="onwards-button text-black"><a href="{% url 'manually_add_participant' appointment.appointment_number %}">New Participant <i class="fas fa-user-plus ml-2"></i></a></button>
+                        </div>
+                        <div class="col-6 d-flex justify-content-center">
+                            <button type="button" class="onwards-button font-futura-medium text-black" id="existing-part">Existing Participant <i class="fas fa-user-friends"></i></button>
+                        </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -24,6 +24,9 @@ class Appointment(models.Model):
                                             null=False, default=0)
     add_notes = models.TextField(null=True, blank=True)
     isPaid = models.BooleanField(default=False, null=False, blank=False)
+    paymentRequest = models.SmallIntegerField(null=False, blank=False,
+                                              default=0)
+    paymentSent = models.DateTimeField(null=False, blank=False)
 
     def __str__(self):
         return self.appointment_number

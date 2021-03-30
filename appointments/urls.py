@@ -11,5 +11,7 @@ urlpatterns = [
     path('delete_appointment/<appointment_number>', views.delete_app,
          name="delete_app"),
     path('mark_as_paid/<appointment_number>', views.mark_as_paid,
-         name="mark_as_paid")
+         name="mark_as_paid"),
+    path('add_participant/<int:part_id>/<appointment_number>',
+         views.add_participant, name="add_participant")
 ]

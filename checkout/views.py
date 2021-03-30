@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.utils import timezone
 from django.template.loader import render_to_string
 from appointments.models import Appointment
 from riskforms.models import Participant
@@ -128,6 +129,9 @@ def send_payment_request(request, appointment_number):
         messages.error(request, "Sorry, you don't have permission to do this.")
         return redirect(reverse('home'))
     appointment = Appointment.objects.get(appointment_number=appointment_number)
+    appointment.paymentRequest += 1
+    appointment.paymentSent = timezone.now
+    appointment.save(update_fields=['paymentRequest', 'paymentSent'])
     """Send the user a confirmation email"""
     cust_email = appointment.client.email_address
     subject = render_to_string(

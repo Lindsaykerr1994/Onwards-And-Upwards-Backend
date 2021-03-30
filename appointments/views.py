@@ -85,6 +85,7 @@ def view_appoinment(request, appointment_number):
     context = {
         'appointment': appointment,
         'participants': participants,
+        'all_parts': all_parts,
         'payments': payments
     }
     return render(request, 'appointments/view_appointment.html', context)
@@ -259,6 +260,17 @@ def mark_as_paid(request, appointment_number):
     messages.success(request, 'Marked as paid!')
     return redirect(reverse('view_app',
                             args=[appointment.appointment_number]))
+
+
+def add_participant(request, part_id, appointment_number):
+    if not request.user.is_staff:
+        messages.error(request, "Sorry, I don't want you doing that.")
+        return redirect(reverse('home'))
+    participant = Participant.objects.get(pk=part_id)
+    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    participant.appointment.add(appointment)
+    messages.success(request, f'Successfully add {participant.first_name} {participant.last_name} to booking: {appointment.appointment_number}')
+    return redirect(reverse('view_app', args=[appointment.appointment_number]))
 
 
 def _generate_app_number(appointment, client):
