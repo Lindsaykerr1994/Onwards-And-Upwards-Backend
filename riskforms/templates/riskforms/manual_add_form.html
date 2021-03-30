@@ -117,7 +117,7 @@
                     </fieldset>
                     <fieldset>
                         <input type="hidden" name="acknowledgement_of_risk" id="acknowledgement_of_risk">
-                        <input type="hidden" name="signed_by" id="signed_by">
+                        <input type="hidden" name="signed_by" id="signed_by" value="Created by Onwards And Upwards">
                         <input type="hidden" name="date_signed" id="date_signed">
                     </fieldset>
                     <input type="submit" class="form-input submit-button">
@@ -173,6 +173,14 @@
                     }
                 }
             };
+            var dateTime = new Date();
+            var dateToday = dateTime.getDate();
+            var monthToday = dateTime.getMonth() + 1;
+            if(monthToday<10){
+                monthToday = `0${monthToday}`
+            }
+            var yearToday = dateTime.getFullYear();
+            $("#date_signed").val(`${monthToday}/${dateToday}/${yearToday}`);
         });
         $(".form-input").focusin(function(){
             $(this).addClass("activeInput");

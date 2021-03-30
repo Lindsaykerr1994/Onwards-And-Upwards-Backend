@@ -217,8 +217,11 @@ def manually_add_participant(request, appointment_number):
                     if participant.first_name == client.first_name and participant.last_name == client.last_name:
                         participant.client = client
                         participant.save(update_fields=['client'])
+                messages.success(request, f'Successfully created new participant and added to booking: {appointment.appointment_number}')
+                return redirect(reverse('view_app', args=[appointment.appointment_number]))
             else:
                 messages.error(request, "There is an error in the form. Please check the values enter and try again.")
+                print(form.errors)
     form = ParticipantForm()
     context = {
         'appointment': appointment,

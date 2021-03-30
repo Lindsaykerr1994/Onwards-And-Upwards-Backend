@@ -262,7 +262,11 @@
                                                     <p>Risk Acknowledgement Form:</p>
                                                 </div>
                                                 <div class="col-6 font-futura-light">
-                                                    Form will go here
+                                                    {% if part.manual_form %}
+                                                    <a href="{{ participant.manual_form.url }}" target="_blank" class="text-break">{{ participant.manual_form }}</a>
+                                                    {% else %}
+                                                    <a href="{% url 'view_raform' part.pk %}" class="onwards-button text-black d-inline-block align-middle" target="_blank">Generate PDF</a>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
