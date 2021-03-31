@@ -209,7 +209,7 @@
                                     {% endif %}>
                                     Phone No.
                                 </th>
-                                <th class="d-lg-none">Next Appt.</th>
+                                <th>Next Appt.</th>
                                 <th>Delete?</th>
                             </thead>
                             <tbody>
@@ -223,7 +223,7 @@
                                     </td>
                                     <td>{{ client.last_name }}</td>
                                     <td>{{ client.first_name }}</td>
-                                    <td class="d-lg-none">({{ client.abbreviation }})</td>
+                                    <td>({{ client.abbreviation }})</td>
                                     {% if client.email_address %}
                                     <td>{{ client.email_address }}</td>
                                     {% else %}
@@ -235,7 +235,7 @@
                                     <td>N/A</td>
                                     {% endif %}
                                     {% if client.next_appt %}
-                                    <td class="d-lg-none">{{ client.next_appt }}</td>
+                                    <td>{{ client.next_appt }}</td>
                                     {% else %}
                                     <td>
                                         {% for app in appointments|in_client:client %}

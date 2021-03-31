@@ -87,7 +87,6 @@ input [type="number"] {
 }
 .form-input input:not([type="checkbox"]), .form-input select{
     border: 0;
-    height: 34px;
     position: absolute;
     bottom: 0;
 }
