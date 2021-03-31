@@ -123,7 +123,7 @@ def add_participant_form(request, appointment_number):
                         participant.dec_illness = request.POST['dec_illness']
                         changes = True
                     if changes is True:
-                        participant.media_acceptance = request.POST['media_acceptance']
+                        participant.media_acceptance = request.POST.get('media_acceptance')
                         participant.acknowledgement_of_risk = request.POST['acknowledgement_of_risk']
                         participant.signed_by = request.POST['signed_by']
                         participant.appointment.add(appointment)
