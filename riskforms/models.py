@@ -27,6 +27,7 @@ class Participant(models.Model):
     dec_abs_cond = models.BooleanField(default=False)
     media_acceptance = models.BooleanField(default=True)
     acknowledgement_of_risk = models.BooleanField(default=False)
+    manual_form = models.FileField(null=True, blank=True)
     # This needs to be default false so that the client
     # has to manually change it.
     signed_by = models.CharField(max_length=64, null=False, blank=False)

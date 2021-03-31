@@ -109,6 +109,13 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
     width: 430px;
     margin: 0 25px 8px 25px;
 }
+.datepicker-footer .form-input.checkbox-input {
+    margin: 0 auto!important;
+}
+.datepicker-footer .checkbox-input .checkmark {
+    left: 190px;
+    top: -5px;
+}
 .twoInput .form-input {
     width: 210px!important;
     display: inline-block;
@@ -124,6 +131,12 @@ input:focus, input:active, select:focus, select:active, textarea:focus, textarea
     z-index: 2;
     margin-bottom: 0;
     font-family: 'Futura Light';
+}
+.datepicker-footer .form-input.checkbox-input label{
+    top: 0px;
+}
+#datepickerModal .datepicker-footer .form-input.checkbox-input.activeInput label {
+    top: 0px;
 }
 .form-input.activeInput:not(.checkbox-input):not(.solo-input) label{
     font-size: 10px;

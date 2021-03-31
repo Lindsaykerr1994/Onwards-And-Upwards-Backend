@@ -102,12 +102,15 @@
     </div>
     <div class="datepicker-footer">
         {% if add_app %}
-        <div class="d-flex justify-content-center">
-            <p class="d-inline-block">Multiple Dates?</p>
-            <input type="checkbox" name="multiple_dates" id="id_multiple_dates">
-        </div>
+            <div class="checkbox-input form-input d-flex justify-content-start mb-2 mx-auto">
+                <p class="order-2">Multiple Dates?</p>
+                <label class="ck-container order-1">
+                    <input type="checkbox" name="multiple_dates" id="id_multiple_dates">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
         {% endif %}
-        <div class="d-flex justify-content-around mb-3">
+        <div class="d-flex justify-content-around my-3">
             <span class="onwards-button text-black" id="cancel-date">Cancel</span>
             <span class="onwards-button text-black" id="today-date">Today</span>
             <span class="onwards-button text-black" id="confirm-date">Confirm</span>

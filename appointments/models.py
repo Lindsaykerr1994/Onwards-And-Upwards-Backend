@@ -26,7 +26,8 @@ class Appointment(models.Model):
     isPaid = models.BooleanField(default=False, null=False, blank=False)
     paymentRequest = models.SmallIntegerField(null=False, blank=False,
                                               default=0)
-    paymentSent = models.DateTimeField(null=False, blank=False)
+    paymentSent = models.DateTimeField(null=True, blank=True)
+    rel_apps = models.ManyToManyField('self')
 
     def __str__(self):
         return self.appointment_number

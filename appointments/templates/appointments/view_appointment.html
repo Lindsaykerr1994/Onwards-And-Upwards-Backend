@@ -119,6 +119,16 @@
                                 <p>{{ appointment.add_notes }}</p>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-6 font-futura-medium">
+                                <p>Related Appointments:</p>
+                            </div>
+                            <div class="col-6 font-futura-light">
+                                {% for rel_app in rel_apps %}
+                                    <a href="{% url 'view_app' rel_app.appointment_number %}" class="link-specs d-block">{{ rel_app.appointment_number }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
                         <hr>
                         <div class="row">
                             <div class="col-6 font-futura-medium">
@@ -150,7 +160,9 @@
                             </div>
                             <div class="col-10  offset-1 my-2">
                                 <p class="small text-info ml-3 my-0">Payment Requests Sent: {{ appointment.paymentRequest }}</p>
+                                {% if appointment.paymentRequest != 0 %}
                                 <p class="small text-info ml-3 my-0">Most Recent Request: {{ appointment.paymentSent }}</p>
+                                {% endif %}
                             </div>
                             {% else %}
                             <div class="col-12">
@@ -282,6 +294,7 @@
         </div>
     </div>
     {% include 'includes/modals/add_participant.html' %}
+    {% include 'includes/modals/send_multiple_requests.html' %}
 {% endblock %}
 
 {% block postloadjs %}

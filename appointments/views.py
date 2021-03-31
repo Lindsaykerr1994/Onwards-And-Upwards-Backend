@@ -82,11 +82,13 @@ def view_appoinment(request, appointment_number):
         payments = all_payments.filter(appointment=appointment)
     all_parts = Participant.objects.all()
     participants = all_parts.filter(appointment=appointment)
+    rel_apps = appointment.rel_apps.all()
     context = {
         'appointment': appointment,
         'participants': participants,
         'all_parts': all_parts,
-        'payments': payments
+        'payments': payments,
+        'rel_apps': rel_apps
     }
     return render(request, 'appointments/view_appointment.html', context)
 
@@ -145,6 +147,50 @@ def add_app(request):
         # Founnd using the entered information
         # Created using the entered information
         form = AppointmentForm(request.POST)
+        multiple_dates = request.POST['multiple_dates']
+        if multiple_dates:
+            dates = request.POST['appointment_date']
+            dates = dates.split(",")
+            rel_app_nums = []
+            for date in dates:
+                form_data = {
+                    "activity": request.POST['activity'],
+                    "course": request.POST['course'],
+                    "appointment_date": date,
+                    "appointment_time": request.POST['appointment_time'],
+                    "appointment_participants": request.POST['appointment_participants'],
+                    "appointment_location": request.POST['appointment_location'],
+                    "isSolo": request.POST['isSolo'],
+                    "appointment_price": request.POST['appointment_price'],
+                    "add_notes": request.POST['add_notes']
+                }
+                form = AppointmentForm(form_data)
+                if form.is_valid():
+                    appointment = form.save()
+                    app_num = _generate_app_number(appointment, client)
+                    same_number = _filter_by_appnumber(app_num)
+                    if same_number:
+                        appointment.delete()
+                        messages.error(request, 'There is already any existing booking with the same reference number. If you wish to continue, please delete the existing booking, and re-enter the form.')
+                        return redirect(reverse('all_appointments'))
+                    appointment.appointment_number = app_num
+                    appointment.client = client
+                    appointment.save(update_fields=["appointment_number", "client"])
+                    messages.success(request, f'Successfully add booking:\
+                                    {appointment.appointment_number}')
+                    rel_app_nums.append(app_num)
+                else:
+                    messages.error(request, f'Unable to create booking for date: {date}')
+                    print(form.errors)
+                    return redirect(reverse('add_app'))
+            for app in rel_app_nums:
+                appointment = Appointment.objects.get(appointment_number=app)
+                for add_num in rel_app_nums:
+                    if app != add_num:
+                        add_to = Appointment.objects.get(appointment_number=add_num)
+                        appointment.rel_apps.add(add_to)
+            messages.success(request, f'Successfully created all bookings for client: {client.first_name} {client.last_name}')
+            return redirect(reverse('all_appointments'))
         if form.is_valid():
             appointment = form.save()
             # Now we need to create an appointment number
@@ -161,6 +207,7 @@ def add_app(request):
             appointment.client = client
             appointment.save(update_fields=["appointment_number", "client"])
             messages.success(request, 'Successfully added booking!')
+            print("We need appointment number here")
             return redirect(reverse('view_app', args=[app_num]))
         else:
             messages.error(request, 'Unable to create booking. Please check \
@@ -181,6 +228,7 @@ def add_app(request):
         'clients': clients,
         'client': client,
         'form': form,
+        'add_app': True
     }
     return render(request, 'appointments/add_app.html', context)
 
