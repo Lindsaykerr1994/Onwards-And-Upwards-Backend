@@ -160,7 +160,7 @@ def add_app(request):
                     "appointment_time": request.POST['appointment_time'],
                     "appointment_participants": request.POST['appointment_participants'],
                     "appointment_location": request.POST['appointment_location'],
-                    "isSolo": request.POST['isSolo'],
+                    "isSolo": request.POST.get('isSolo'),
                     "appointment_price": request.POST['appointment_price'],
                     "add_notes": request.POST['add_notes']
                 }
