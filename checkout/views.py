@@ -130,7 +130,6 @@ def send_payment_request(request, appointment_number):
         return redirect(reverse('home'))
     appointment = Appointment.objects.get(appointment_number=appointment_number)
     appointment.paymentRequest += 1
-    appointment.paymentSent = timezone.now
     appointment.save(update_fields=['paymentRequest', 'paymentSent'])
     """Send the user a confirmation email"""
     cust_email = appointment.client.email_address
