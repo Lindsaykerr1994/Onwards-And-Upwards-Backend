@@ -12,6 +12,8 @@ urlpatterns = [
     path('wh/', webhook, name="webhook"),
     path('send_payment_request/<appointment_number>',
          views.send_payment_request, name="send_payment"),
+    path('send_multiple_request/<appointment_numbers>',
+         views.send_multiple_requests, name="send_multi_req"),
     path('already_paid/<appointment_number>', views.already_paid,
          name="already_paid")
 ]

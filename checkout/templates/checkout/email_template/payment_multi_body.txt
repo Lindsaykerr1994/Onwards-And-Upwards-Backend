@@ -1,0 +1,21 @@
+Hello {{ appointment.client.first_name }} {{ appointment.client.last_name }}!
+
+This is a confirmation of your bookings with Onwards And Upwards:
+
+Session Number: {% for num in appNums %}{% if forloop.first %}{{ num }}{% else %}, {{ num}}{% endif %}{% endfor %}
+Activity - Course: {{ appointment.activity }} - {{ appointment.course }}
+Session Dates: {% for date in appDates %}{% if forloop.first %}{{date|date:"Y-m-d"}}{% else %}, {{date|date:"Y-m-d"}}{% endif %}{% endfor %}
+Session Time: {{ appointment.appointment_time }}
+Session Location: {{ appointment.appointment_location }}
+Number Of Participants: {{ appointment.appointment_participants }}
+
+We ask for you to pay the amount of £{{ total_price }} in full before progressing. You may do so using the following link:
+https://www.onwards-and-upwards.herokuapp.com/checkout/{{ appointment.appointment_number }}?multiple=true&appId={% for num in appNums %}{% if forloop.first %}{{ num }}{% else %}+{{ num }}{% endif %}{% endfor %}
+
+If you have any questions, feel free to contact us at {{ contact_email }}.
+
+Thank you, and we look forward to seeing you {{ appointment.appointment_date|date:"jS M, Y" }}!
+
+Sincerely,
+
+Onwards And Upwards

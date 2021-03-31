@@ -180,7 +180,7 @@ def add_app(request):
                                     {appointment.appointment_number}')
                     rel_app_nums.append(app_num)
                 else:
-                    messages.error(request, f'Unable to create booking for date: {date}')#
+                    messages.error(request, f'Unable to create booking for date: {date}')
                     messages.error(request, f'{form.errors}')
                     return redirect(reverse('add_app'))
             for app in rel_app_nums:

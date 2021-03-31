@@ -150,6 +150,44 @@ def send_payment_request(request, appointment_number):
     return redirect(reverse('view_app', args=[appointment_number]))
 
 
+@login_required
+def send_multiple_requests(request, appointment_numbers):
+    if not request.user.is_staff:
+        messages.error(request, "Sorry, you don't have permission to do this.")
+        return redirect(reverse('home'))
+    if request.method == "GET":
+        currApp = request.GET.get('currApp')
+    appNums = appointment_numbers.split(",")
+    appDates = []
+    total_price = 0
+    for num in appNums:
+        appointment = Appointment.objects.get(appointment_number=num)
+        total_price += appointment.appointment_price
+        appDates.append(appointment.appointment_date)
+        appointment.paymentRequest += 1
+        appointment.save(update_fields=['paymentRequest'])
+    currAppObj = Appointment.objects.get(appointment_number=currApp)
+    cust_email = currAppObj.client.email_address
+    subject = render_to_string(
+        'checkout/email_template/payment_multi_subject.txt',
+        {'appNums': appNums})
+    body = render_to_string(
+        'checkout/email_template/payment_multi_body.txt',
+        {'appointment': currAppObj,
+         'appNums': appNums,
+         'appDates': appDates,
+         'total_price': total_price,
+         'contact_email': settings.DEFAULT_FROM_EMAIL})
+
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [cust_email]
+    )
+    return redirect(reverse('view_app', args=[currApp]))
+
+
 def _send_confirmation_email(payment):
     """Send the user a confirmation email"""
     cust_email = payment.email

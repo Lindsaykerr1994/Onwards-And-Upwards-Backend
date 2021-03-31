@@ -1,4 +1,4 @@
-<div class="modal fade" id="addParticipantModal" tabindex="-1" aria-labelledby="add participant to booking modal" aria-hidden="true">
+<div class="modal fade" id="multipleRequestsModal" tabindex="-1" aria-labelledby="send multiple payment requests modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,10 +8,46 @@
                 </button>
             </div>
             <div class="modal-body">
-                    
+                <div class="row">
+                    <div class="col-12">
+                        <p class="font-futura-medium">Select which session you wish to send a payment request for:</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="hidden" value="{{ appointment.appointment_number }}" id="current_app">
+                    <table class="table table-hover">
+                        <thead class="font-futura-medium">
+                            <th>
+                                <input type="checkbox" id="sel_all_apps">
+                            </th>
+                            <th>Ref. No.</th>
+                        </thead>
+                        <tbody class="font-futura-light">
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="sel_app_input" name="sel_{{appointment.appointment_number}}">
+                                </td>
+                                <td>{{ appointment.appointment_number }}</td>
+                            </tr>
+                            {% for app in rel_apps %}
+                            {% if not app.isPaid %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="sel_app_input" name="sel_{{app.appointment_number}}">
+                                </td>
+                                <td>{{ app.appointment_number }}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                <button type="button" class="onwards-button text-black" data-dismiss="modal">Cancel</button>
+                <button type="button" id="send_multi_req" class="onwards-button text-black">
+                    Send Requests
+                </button>
             </div>
         </div>
     </div>
