@@ -57,9 +57,11 @@ form.addEventListener('submit', function(ev) {
     // From using {% csrf_token %} in the form
     var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
     var appointment_no = $('input[name="appointment_number"]').val();
+    var multiple = $("input[name='multiple']").val();
     var postData = {
         'csrfmiddlewaretoken': csrfToken,
         'client_secret': clientSecret,
+        'multiple': multiple,
         'appointment_no': appointment_no
     };
     console.log(postData)
@@ -83,6 +85,7 @@ form.addEventListener('submit', function(ev) {
             },
         }).then(function(result) {
             if (result.error) {
+                print(result.error)
                 var errorDiv = document.getElementById('card-errors');
                 var html = `
                     <span class="icon" role="alert">

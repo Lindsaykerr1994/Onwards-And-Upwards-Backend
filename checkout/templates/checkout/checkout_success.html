@@ -15,7 +15,7 @@
         </div>
         <div class="row my-3 px-5">
             <div class="col-12 font-futura-light">
-                <p>Your card has been charged <span class="font-futura-medium">£{{ payment.checkout_total }}</span> for your booking: <span class="font-futura-medium">{{ appointment.appointment_number }}</span></p>
+                <p>Your card has been charged <span class="font-futura-medium">£{{ payment.checkout_total }}</span> for your booking(s): <span class="font-futura-medium">{% for app in appointments%}{% if forloop.first%}{{ app.appointment_number }}{% else %}, {{ app.appointment_numer }}{% endif %}{% endfor %}</span></p>
                 <p>We have sent a confirmation email to <span class="font-futura-medium">{{ payment.email }}</span> containing the following details</p>
                 <p>Your receipt number is: <span class="font-futura-medium">{{ payment.receipt_no }}</span></p>
             </div>
@@ -101,9 +101,15 @@
                         {% endfor %}
                         <p>We still require {{ remaining_forms }} form(s).<br>
                         All participants must complete and sign the form in order to participant in this session.</p>
+                        {% if multiple %}
+                        <button class="onwards-button mx-auto">
+                            <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}?multiple=true&appId={{appStr}}">Register A Participant</a>
+                        </button>
+                        {% else %}
                         <button class="onwards-button mx-auto">
                             <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a>
                         </button>
+                        {% endif %}
                     </div>
                 </div>
                 {% endif %}
@@ -111,7 +117,15 @@
                 <div class="row my-3">
                     <div class="col-12">
                         <p>We currently have no participants registered for this session</p>
-                        <button class="onwards-button mx-auto"><a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a></button>
+                        {% if multiple %}
+                        <button class="onwards-button mx-auto">
+                            <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}?multiple=true&appId={{appStr}}">Register A Participant</a>
+                        </button>
+                        {% else %}
+                        <button class="onwards-button mx-auto">
+                            <a href="{% url 'kitlist_and_terms' appointment.appointment_number %}">Register A Participant</a>
+                        </button>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">

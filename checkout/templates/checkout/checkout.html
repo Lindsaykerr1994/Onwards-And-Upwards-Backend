@@ -12,16 +12,26 @@
         <div class="row">
             <div class="col-10 mx-auto mb-3">
                 <h3 class="d-inline-block">Onwards And Upwards Checkout</h3>
-                <h4>Checkout Form For Appointment: {{ appointment.appointment_number }}</h4>
+                {% if multiple %}
+                <h4>Checkout Form For Sessions: {% for app in rel_apps %}{% if forloop.first %}{{ app.appointment_number }}{% else %}, {{ app.appointment_number }}{% endif %}{% endfor %}</h4>
+                {% else %}
+                <h4>Checkout Form For Session: {{ appointment.appointment_number }}</h4>
+                {% endif %}
             </div>
         </div>
         <div class="row">
             <div class="col-11 col-lg-6 mx-auto" id="checkout-form">
                 <form method="POST" class="onwards-form mx-auto" action="{% url 'checkout' appointment.appointment_number %}" id="payment-form" >
                     {% csrf_token %}
-                    <input type="hidden" 
-                    value="{{appointment.appointment_number}}" 
-                    name="appointment_number">
+                        <input type="hidden" value="true" name="multiple">
+                        <input type="hidden" value="{% for app in rel_apps %}{{app.appointment_number}}/{% endfor %}" name="appointment_number">
+                    {% if multiple %}
+                    {% else %}
+                        <input type="hidden" value="false" name="multiple">
+                        <input type="hidden" 
+                        value="{{appointment.appointment_number}}" 
+                        name="appointment_number">
+                    {% endif %}
                     <fieldset>
                         <p>Personal Details</p>
                         <hr>
@@ -71,7 +81,8 @@
                             <p>Total:</p>
                         </div>
                         <div class="col-6">
-                            <p class="text-right">{{ appointment.appointment_price }}</p>
+                            <input type="hidden" name="checkout_total" value="{{ total }}">
+                            <p class="text-right">{{ total }}</p>
                         </div>
                         <hr>
                     </div>
@@ -89,18 +100,22 @@
                 </form>
             </div>
             <div class="col-11 col-lg-6 mx-auto" id="appointment-details">
-                <h4 class="text-underline">Appointment Details:</h4>
+                <h4 class="text-underline">Session Details:</h4>
                 <div class="row">
                     <div class="col-6 font-futura-medium">
-                        <p>Appointment Date:</p>
+                        <p>Session Dates:</p>
                     </div>
                     <div class="col-6 font-futura-light">
-                        <p>{{ appointment.appointment_date }} ({{ appointment.appointment_date|date:'d/m/Y' }})</p>
+                        {% if multiple %}
+                        <p>{% for app in rel_apps %}{% if forloop.first %}{{ app.appointment_date|date:'d/m/Y' }}{% else %}, {{ app.appointment_date|date:'d/m/Y' }}{% endif %}{% endfor %}</p>
+                        {% else %}
+                        <p>{{ appointment.appointment_date|date:'d/m/Y' }}</p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-6 font-futura-medium">
-                        <p>Appointment Time:</p>
+                        <p>Session Time:</p>
                     </div>
                     <div class="col-6 font-futura-light">
                         <p>{{ appointment.appointment_time|time:'H:i' }} ({{ appointment.course.length }} Hours)</p>
@@ -116,7 +131,7 @@
                 </div>
                 <div class="row">
                     <div class="col-6 font-futura-medium">
-                        <p>Booking Detail:</p>
+                        <p>Booked By:</p>
                     </div>
                     <div class="col-6 font-futura-light">
                         <p>{{ appointment.client.first_name }} {{ appointment.client.last_name }}</p>

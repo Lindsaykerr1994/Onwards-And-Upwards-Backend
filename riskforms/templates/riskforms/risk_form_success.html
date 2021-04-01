@@ -6,7 +6,11 @@
         <div class="row mb-3">
             <div class="col-11 mx-auto">
                 <h3>Success!</h3>
+                {% if multiple %}
+                <p class="font-futura-light">Reference Nos.: {% for app in rel_apps %}{{ app.appointment_number }} {% endfor %}</p>
+                {% else %}
                 <p class="font-futura-light">Reference No: {{ appointment.appointment_number }}</p>
+                {% endif %}
                 <p class="font-futura-light">We look forwards to seeing you on {{ appointment.appointment_date|date:"jS M, Y" }}</p>
                 <p class="font-futura-light">
                     Thank you {{ participant.first_name }}, for registering with <strong>Onwards And Upwards</strong>.
@@ -33,7 +37,17 @@
                                 <p>Date:</p>
                             </div>
                             <div class="col-6 font-futura-light">
+                                {% if multiple %}
+                                {% for app in rel_apps %}
+                                {% if forloop.first %}
+                                {{ app.appointment_date }}
+                                {% else %}
+                                , {{ app.appointment_date }}
+                                {% endif %}
+                                {% endfor %}
+                                {% else %}
                                 <p>{{ appointment.appointment_date }}</p>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="row">

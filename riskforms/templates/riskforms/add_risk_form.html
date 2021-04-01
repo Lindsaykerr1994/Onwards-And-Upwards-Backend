@@ -17,7 +17,11 @@
         <div class="row">
             <div class="col-10 mx-auto mb-3">
                 <h3>Add Participant Form</h3>
+                {% if multiple %}
+                <h4>Appointments: {% for app in rel_apps %}{{ app.appointment_number}} {% endfor %}</h4>
+                {% else %}
                 <h4>Appointment: {{ appointment.appointment_number }}</h4>
+                {% endif %}
             </div>
         </div>
         <div class="row">
@@ -119,6 +123,13 @@
                         <input type="hidden" name="acknowledgement_of_risk" id="acknowledgement_of_risk">
                         <input type="hidden" name="signed_by" id="signed_by">
                         <input type="hidden" name="date_signed" id="date_signed">
+                        {% if multiple %}
+                        <input type="hidden" name="appointment_number" value="{{appStr}}">
+                        <input type="hidden" name="multiple" value="true">
+                        {% else %}
+                        <input type="hidden" name="appointment_number" value="{{appointment.appointment_number}}">
+                        <input type="hidden" name="multiple" value="false">
+                        {% endif %}
                     </fieldset>
                     <button type="button" class="submit-button" data-toggle="modal" data-target="#confirmRAModal" id="openRAModal-btn">
                         Submit

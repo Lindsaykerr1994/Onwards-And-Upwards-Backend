@@ -6,7 +6,6 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = (
         'receipt_no',
         'date',
-        'appointment',
         'full_name',
     )
 

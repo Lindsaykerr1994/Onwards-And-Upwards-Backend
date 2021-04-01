@@ -155,7 +155,11 @@
         <div class="row mb-3 font-futura-light">
             <div class="col-11 mx-auto text-center">
                 <p>By proceeding, I acknowledge the risks described above.</p>
+                {% if multiple %}
+                <button class="onwards-button"><a href="{% url 'add_part_form' appointment.appointment_number %}?multiple=true&appId={{appStr}}">Register</a></button>
+                {% else %}
                 <button class="onwards-button"><a href="{% url 'add_part_form' appointment.appointment_number %}">Register</a></button>
+                {% endif %}
             </div>
         </div>
     </div>

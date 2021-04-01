@@ -11,7 +11,7 @@ Payment Date: {{ payment.date }}
 If you have any questions, feel free to contact us at {{ contact_email }}.
 
 Additionally, before attending we require all participants to register with our system. They can do so using the following link:
-https://www.onwards-and-upwards.herokuapp.com/risk_forms/add/{{ payment.appointment.appointment_number }}
+https://onwards-and-upwards.herokuapp.com/risk_forms/add/{{ payment.appointment.appointment_number }}
 
 Thank you, and we look forward to seeing you {{ payment.appointment.appointment_date|date:"jS M, Y" }}!
 

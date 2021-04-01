@@ -43,6 +43,7 @@ class StripeWH_Handler:
         appointment_number = None
         if intent.metadata:
             appointment_number = intent.metadata.appointment_number
+            multiple = intent.metadata.multiple
         else:
             print("no metadata")
         checkout_total = round(intent.charges.data[0].amount / 100, 2)
@@ -81,7 +82,7 @@ class StripeWH_Handler:
             print("Trying to recreate payment")
             payment = None
             try:
-                print("gets this  far")
+                print("gets this far")
                 if not appointment_number:
                     print("no Appointment Number")
                     appointment = None
@@ -100,9 +101,10 @@ class StripeWH_Handler:
                         stripe_pid=pid,
                     )
                 else:
+                    if multiple:
+                        print("multiple")
                     appointment = Appointment.objects.get(appointment_number=appointment_number)
                     payment = Payment.objects.create(
-                        appointment=appointment,
                         full_name=billing_details.name,
                         email=billing_details.email,
                         phone_number=billing_details.phone,

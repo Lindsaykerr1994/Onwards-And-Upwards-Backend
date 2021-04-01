@@ -36,9 +36,20 @@ def checkout(request, appointment_number):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     appointment = Appointment.objects.get(appointment_number=appointment_number)
+    multiple = False
+    rel_apps = []
     if appointment.isPaid:
         return redirect(reverse('already_paid', args=[appointment_number]))
     else:
+        if request.method == "GET":
+            multiApps = request.GET.get('multiple')
+            if multiApps == "true":
+                multiple = True
+                appNums = request.GET.get('appId')
+                appNums = appNums.split(" ")
+                for num in appNums:
+                    app = Appointment.objects.get(appointment_number=num)
+                    rel_apps.append(app)
         if request.method == "POST":
             form_data = {
                 'full_name': request.POST['full_name'],
@@ -53,21 +64,32 @@ def checkout(request, appointment_number):
             }
             form = PaymentForm(form_data)
             if form.is_valid():
-                payment = form.save()
                 pid = request.POST.get('client_secret').split('_secret')[0]
+                multiple = request.POST['multiple']
+                payment = form.save()
                 payment.stripe_pid = pid
-                payment.appointment = appointment
-                payment.checkout_total = appointment.appointment_price
+                if multiple == "true":
+                    rel_nums = request.POST['appointment_number']
+                    rel_nums = rel_nums.split("/")
+                    rel_nums.pop()
+                    for num in rel_nums:
+                        num = num[0:11]
+                        print(num)
+                        app = Appointment.objects.get(appointment_number=num)
+                        print(app)
+                        payment.appointment.add(app)
+                        app.isPaid = True
+                        app.save(update_fields=['isPaid'])
+                else:
+                    payment.appointment.add(appointment)
+                payment.checkout_total = request.POST['checkout_total']
                 notification = Notification.objects.create(
-                    message = "Appointment has been successfully paid for.",
-                    reference = appointment.appointment_number,
+                    message = "Appointments has been successfully paid for.",
+                    reference = payment.receipt_no,
                     classification = "PAY"
                 )
-                appointment.isPaid = True
                 _send_confirmation_email(payment)
-                appointment.save(update_fields=['isPaid'])
-                payment.save(update_fields=["appointment", "checkout_total",
-                             "stripe_pid"])
+                payment.save(update_fields=["checkout_total", "stripe_pid"])
                 return redirect(reverse('checkout_success',
                                 args=[payment.receipt_no]))
             else:
@@ -75,8 +97,14 @@ def checkout(request, appointment_number):
                                          'Please double check your \
 information.'))
         else:
-            total = appointment.appointment_price
-            stripe_total = round(total * 100)
+            if multiApps != "true":
+                total = appointment.appointment_price
+                stripe_total = round(total * 100)
+            else:
+                total = 0
+                for app in rel_apps:
+                    total += app.appointment_price
+                stripe_total = round(total * 100)
             stripe.api_key = stripe_secret_key
             intent = stripe.PaymentIntent.create(
                 amount=stripe_total,
@@ -89,6 +117,9 @@ information.'))
     context = {
         'form': form,
         'appointment': appointment,
+        'multiple': multiple,
+        'rel_apps': rel_apps,
+        'total': total,
         'stripe_public_key': stripe_public_key,
         'client_secret': intent.client_secret
     }
@@ -97,8 +128,18 @@ information.'))
 
 def checkout_success(request, receipt_no):
     payment = get_object_or_404(Payment, receipt_no=receipt_no)
-    appNumber = payment.appointment
-    appointment = Appointment.objects.get(appointment_number=appNumber)
+    appNums = payment.appointment.all()
+    apps = []
+    appStr = ""
+    for num in appNums:
+        appointment = Appointment.objects.get(appointment_number=num)
+        apps.append(appointment)
+        appStr += f'{num}+'
+    if len(apps) > 1:
+        multiple = True
+    appStr = appStr[:-1]
+    print(appStr)
+    appointment = apps[0]
     participants = Participant.objects.all()
     participants = participants.filter(appointment=appointment)
     if participants:
@@ -109,6 +150,9 @@ def checkout_success(request, receipt_no):
     context = {
         'payment': payment,
         'appointment': appointment,
+        'multiple': multiple,
+        'appointments': apps,
+        'appStr': appStr,
         'participants': participants,
         'remaining_forms': remaining_forms
     }
@@ -195,7 +239,7 @@ def _send_confirmation_email(payment):
         'checkout/email_template/payment_success_subject.txt',
         {'payment': payment})
     body = render_to_string(
-        'checkout/email_templatepayment_success_body.txt',
+        'checkout/email_template/payment_success_body.txt',
         {'payment': payment, 'contact_email': settings.DEFAULT_FROM_EMAIL})
 
     send_mail(

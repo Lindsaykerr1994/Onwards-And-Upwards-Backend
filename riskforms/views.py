@@ -88,6 +88,20 @@ def add_participant_form(request, appointment_number):
         return redirect(reverse('risk_form_denied',
                         args=[appointment_number]))
     else:
+        if request.method == "GET":
+            appStr = ""
+            rel_apps = []
+            multiple = False
+            multiple = request.GET.get('multiple')
+            if multiple == "true":
+                multiple =  True
+                appId = request.GET.get('appId')
+                appId = appId.split(" ")
+                for num in appId:
+                    appStr += f'{num}+'
+                    app = Appointment.objects.get(appointment_number=num)
+                    rel_apps.append(app)
+                appStr = appStr[:-1]
         if request.method == "POST":
             full_name = request.POST['first_name'] + " " + request.POST['last_name']
             emer_name = request.POST['emergency_contact_name']
@@ -126,7 +140,15 @@ def add_participant_form(request, appointment_number):
                         participant.media_acceptance = request.POST.get('media_acceptance')
                         participant.acknowledgement_of_risk = request.POST['acknowledgement_of_risk']
                         participant.signed_by = request.POST['signed_by']
-                        participant.appointment.add(appointment)
+                        multiple = request.POST.get('multiple')
+                        if multiple == "true":
+                            appId = request.POST.get('appointment_number')
+                            appId = appId.split("+")
+                            for num in appId:
+                                app = Appointment.objects.get(appointment_number=num)
+                                participant.appointment.add(app)
+                        else:
+                            participant.appointment.add(appointment)
                         _send_confirmation_email(appointment, participant)
                         notification = Notification.objects.create(
                             message = "Participant has successfully registered.",
@@ -140,16 +162,36 @@ def add_participant_form(request, appointment_number):
                                         args=[appointment.appointment_number,
                                                 participant.pk]))  
                     else:
-                        participant.appointment.add(appointment)
-                        messages.success(request, 'We have found your information from a previous session that you have attended'"We're glad to see you back!") 
+                        multiple = request.POST.get('multiple')
+                        if multiple == "true":
+                            appStr = request.POST.get('appointment_number')
+                            appId = appStr.split("+")
+                            for num in appId:
+                                app = Appointment.objects.get(appointment_number=num)
+                                participant.appointment.add(app)
+                            messages.success(request, 'We have found your information from a previous session that you have attended'"We're glad to see you back!") 
+                            return redirect(reverse('risk_form_success',
+                                            args=[appStr, participant.pk]))
+                        else:
+                            participant.appointment.add(appointment)
+                            messages.success(request, 'We have found your information from a previous session that you have attended'"We're glad to see you back!") 
                         return redirect(reverse('risk_form_success',
                                         args=[appointment.appointment_number,
-                                                participant.pk]))
+                                              participant.pk]))
+                        
                 except Participant.DoesNotExist:
                     partForm = ParticipantForm(request.POST)
                     if partForm.is_valid():
                         participant = partForm.save()
-                        participant.appointment.add(appointment)
+                        multiple = request.POST.get('multiple')
+                        if multiple == "true":
+                            appStr = request.POST.get('appointment_number')
+                            appId = appStr.split("+")
+                            for num in appId:
+                                app = Appointment.objects.get(appointment_number=num)
+                                participant.appointment.add(app)
+                        else:
+                            participant.appointment.add(appointment)
                         # If appointment is solo, or any has one participant
                         # See if participant and client match
                         if appointment.appointment_participants == 1:
@@ -169,6 +211,9 @@ def add_participant_form(request, appointment_number):
                         _send_confirmation_email(appointment, participant)
                         messages.success(request, 'Registration completed. \
                             Thank you!')
+                        if multiple == "true":
+                            return redirect(reverse('risk_form_success', args=
+                                            [appStr, participant.pk]))
                         return redirect(reverse('risk_form_success',
                                         args=[appointment.appointment_number,
                                                 participant.pk]))
@@ -179,6 +224,9 @@ def add_participant_form(request, appointment_number):
         partForm = ParticipantForm()
     context = {
         'appointment': appointment,
+        'multiple': multiple,
+        'rel_apps': rel_apps,
+        'appStr': appStr,
         'form': partForm,
     }
     return render(request, 'riskforms/add_risk_form.html', context)
@@ -348,7 +396,17 @@ def _generate_form_number():
 
 def risk_form_success(request, appointment_number, part_id):
     participant = get_object_or_404(Participant, pk=part_id)
-    appointment = Appointment.objects.get(appointment_number=appointment_number)
+    appointment_number = appointment_number.split("+")
+    rel_apps = []
+    multiple = False
+    if len(appointment_number) > 1:
+        multiple = True
+        appointment = Appointment.objects.get(appointment_number=appointment_number[0])
+        for num in appointment_number:
+            app = Appointment.objects.get(appointment_number=num)
+            rel_apps.append(app)
+    else:
+        appointment = Appointment.objects.get(appointment_number=appointment_number)
     participants = Participant.objects.all()
     participants = participants.filter(appointment=appointment)
     if participants:
@@ -359,6 +417,8 @@ def risk_form_success(request, appointment_number, part_id):
     context = {
         'participant': participant,
         'appointment': appointment,
+        'multiple': multiple,
+        'rel_apps': rel_apps,
         'parts': participants,
         'remaining_forms': remaining_forms
     }
@@ -378,9 +438,22 @@ def risk_form_denied(request, appointment_number):
 
 def kitlist_and_terms(request, appointment_number):
     appointment = Appointment.objects.get(appointment_number=appointment_number)
-
+    appStr = ""
+    multiple = False
+    if request.method == 'GET':
+        multiple = request.GET.get('multiple')
+        if multiple == "true":
+            multiple = True
+            apps = request.GET.get('appId')
+            apps = apps.split(" ")
+            for num in apps:
+                appStr += f'{num}+'
+            appStr = appStr[:-1]
+    print(appStr)
     context = {
-        'appointment': appointment
+        'appointment': appointment,
+        'multiple': multiple,
+        'appStr': appStr
     }
     return render(request, 'riskforms/kitlist_and_terms.html', context)
 
