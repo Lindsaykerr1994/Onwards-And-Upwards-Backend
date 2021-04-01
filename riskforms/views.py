@@ -142,8 +142,8 @@ def add_participant_form(request, appointment_number):
                         participant.signed_by = request.POST['signed_by']
                         multiple = request.POST.get('multiple')
                         if multiple == "true":
-                            appId = request.POST.get('appointment_number')
-                            appId = appId.split("+")
+                            appStr = request.POST.get('appointment_number')
+                            appId = appStr.split("+")
                             for num in appId:
                                 app = Appointment.objects.get(appointment_number=num)
                                 participant.appointment.add(app)
@@ -158,9 +158,12 @@ def add_participant_form(request, appointment_number):
                             classification = "PAR"
                         )
                         messages.success(request, 'We have found your information from a previous session that you have attended.''However, we noticed some changes in your information, so we have gone ahead and updated that.')
+                        if multiple == "true":
+                            return redirect(reverse('risk_form_success',
+                                            args=[appStr, participant.pk]))
                         return redirect(reverse('risk_form_success',
                                         args=[appointment.appointment_number,
-                                                participant.pk]))  
+                                                participant.pk]))
                     else:
                         multiple = request.POST.get('multiple')
                         if multiple == "true":
@@ -174,7 +177,7 @@ def add_participant_form(request, appointment_number):
                                             args=[appStr, participant.pk]))
                         else:
                             participant.appointment.add(appointment)
-                            messages.success(request, 'We have found your information from a previous session that you have attended'"We're glad to see you back!") 
+                            messages.success(request, 'We have found your information from a previous session that you have attended.'"We're glad to see you back!") 
                         return redirect(reverse('risk_form_success',
                                         args=[appointment.appointment_number,
                                               participant.pk]))
