@@ -72,23 +72,26 @@ def checkout(request, appointment_number):
                     rel_nums = request.POST['appointment_number']
                     rel_nums = rel_nums.split("/")
                     rel_nums.pop()
+                    apps = []
                     for num in rel_nums:
                         num = num[0:11]
                         print(num)
                         app = Appointment.objects.get(appointment_number=num)
-                        print(app)
+                        apps.append(app)
+                        print(apps)
                         payment.appointment.add(app)
                         app.isPaid = True
                         app.save(update_fields=['isPaid'])
+                    _send_multiconfirmation_email(payment, apps)
                 else:
                     payment.appointment.add(appointment)
+                    _send_confirmation_email(payment)
                 payment.checkout_total = request.POST['checkout_total']
                 notification = Notification.objects.create(
                     message = "Appointments has been successfully paid for.",
                     reference = payment.receipt_no,
                     classification = "PAY"
                 )
-                _send_confirmation_email(payment)
                 payment.save(update_fields=["checkout_total", "stripe_pid"])
                 return redirect(reverse('checkout_success',
                                 args=[payment.receipt_no]))
@@ -241,6 +244,26 @@ def _send_confirmation_email(payment):
     body = render_to_string(
         'checkout/email_template/payment_success_body.txt',
         {'payment': payment, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [cust_email]
+    )
+
+
+def _send_multiconfirmation_email(payment, rel_apps):
+    """Send the user a confirmation email"""
+    firstApp = rel_apps[0]
+    cust_email = payment.email
+    subject = render_to_string(
+        'checkout/email_template/payment_success_subject.txt',
+        {'payment': payment})
+    body = render_to_string(
+        'checkout/email_template/payment_multisuccess_body.txt',
+        {'payment': payment, 'firstApp': firstApp, 'rel_apps': rel_apps,
+         'contact_email': settings.DEFAULT_FROM_EMAIL})
 
     send_mail(
         subject,

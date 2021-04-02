@@ -1,0 +1,1 @@
+Onwards And Upwards Payment Success: {{ payment.receipt_no }}
