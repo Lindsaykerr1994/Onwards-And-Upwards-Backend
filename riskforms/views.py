@@ -400,6 +400,7 @@ def _generate_form_number():
 def risk_form_success(request, appointment_number, part_id):
     participant = get_object_or_404(Participant, pk=part_id)
     appointment_number = appointment_number.split("+")
+    print(appointment_number)
     rel_apps = []
     multiple = False
     if len(appointment_number) > 1:
@@ -409,7 +410,9 @@ def risk_form_success(request, appointment_number, part_id):
             app = Appointment.objects.get(appointment_number=num)
             rel_apps.append(app)
     else:
-        appointment = Appointment.objects.get(appointment_number=appointment_number)
+        app_num = appointment_number[0]
+        print(app_num)
+        appointment = Appointment.objects.get(appointment_number=app_num)
     participants = Participant.objects.all()
     participants = participants.filter(appointment=appointment)
     if participants:
