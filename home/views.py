@@ -35,6 +35,7 @@ def notifications(request):
         messages.error(request, 'Sorry, you do not have permission to do that.')
         return redirect(reverse('home'))
     notifications = Notification.objects.all()
+    notifications = notifications.order_by('-date_created')
     context = {
         'notifications': notifications
     }
@@ -51,17 +52,17 @@ def view_notification(request, note_id):
     payment = None
     participant = None
     if notification.classification == "PAY":
-        appointment = notification.appointment
+        apps = notification.appointment.all()
         payment = notification.payment
     if notification.classification == "PAR":
         participant = notification.participant
-        appointment = notification.appointment
+        apps = notification.appointment.all()
     if not notification.read:
         notification.read = True
         notification.save(update_fields=['read'])
     context = {
         'notification': notification,
-        'appointment': appointment,
+        'apps': apps,
         'payment': payment,
         'participant': participant
     }

@@ -149,19 +149,30 @@ def add_participant_form(request, appointment_number):
                         if multiple == "true":
                             appStr = request.POST.get('appointment_number')
                             appId = appStr.split("+")
+                            apps = []
                             for num in appId:
                                 app = Appointment.objects.get(appointment_number=num)
+                                apps.append(app)
                                 participant.appointment.add(app)
+                            appointment = apps[0]
+                            notification = Notification.objects.create(
+                                message = "Participant has successfully registered.",
+                                participant = participant,
+                                reference = appointment.appointment_number,
+                                classification = "PAR"
+                            )
+                            for app in apps:
+                                notification.appointment.add(app)
                         else:
                             participant.appointment.add(appointment)
+                            notification = Notification.objects.create(
+                                message = "Participant has successfully registered.",
+                                participant = participant,
+                                appointment = appointment,
+                                reference = appointment.appointment_number,
+                                classification = "PAR"
+                            )
                         _send_confirmation_email(appointment, participant)
-                        notification = Notification.objects.create(
-                            message = "Participant has successfully registered.",
-                            participant = participant,
-                            appointment = appointment,
-                            reference = appointment.appointment_number,
-                            classification = "PAR"
-                        )
                         messages.success(request, 'We have found your information from a previous session that you have attended.''However, we noticed some changes in your information, so we have gone ahead and updated that.')
                         if multiple == "true":
                             return redirect(reverse('risk_form_success',
@@ -174,14 +185,32 @@ def add_participant_form(request, appointment_number):
                         if multiple == "true":
                             appStr = request.POST.get('appointment_number')
                             appId = appStr.split("+")
+                            apps = []
                             for num in appId:
                                 app = Appointment.objects.get(appointment_number=num)
+                                apps.append(app)
                                 participant.appointment.add(app)
+                            appointment = apps[0]
+                            notification = Notification.objects.create(
+                                message = "Participant has successfully registered.",
+                                participant = participant,
+                                reference = appointment.appointment_number,
+                                classification = "PAR"
+                            )
+                            for app in apps:
+                                notification.appointment.add(app)
                             messages.success(request, 'We have found your information from a previous session that you have attended'"We're glad to see you back!") 
                             return redirect(reverse('risk_form_success',
                                             args=[appStr, participant.pk]))
                         else:
                             participant.appointment.add(appointment)
+                            notification = Notification.objects.create(
+                                message = "Participant has successfully registered.",
+                                participant = participant,
+                                appointment = appointment,
+                                reference = appointment.appointment_number,
+                                classification = "PAR"
+                            )
                             messages.success(request, 'We have found your information from a previous session that you have attended.'"We're glad to see you back!") 
                         return redirect(reverse('risk_form_success',
                                         args=[appointment.appointment_number,
@@ -195,11 +224,29 @@ def add_participant_form(request, appointment_number):
                         if multiple == "true":
                             appStr = request.POST.get('appointment_number')
                             appId = appStr.split("+")
+                            apps = []
                             for num in appId:
                                 app = Appointment.objects.get(appointment_number=num)
+                                apps.append(app)
                                 participant.appointment.add(app)
+                            appointment = apps[0]
+                            notification = Notification.objects.create(
+                                message = "Participant has successfully registered.",
+                                participant = participant,
+                                reference = appointment.appointment_number,
+                                classification = "PAR"
+                            )
+                            for app in apps:
+                                notification.appointment.add(app)
                         else:
                             participant.appointment.add(appointment)
+                            notification = Notification.objects.create(
+                                message = "Participant has successfully registered.",
+                                participant = participant,
+                                appointment = appointment,
+                                reference = appointment.appointment_number,
+                                classification = "PAR"
+                            )
                         # If appointment is solo, or any has one participant
                         # See if participant and client match
                         if appointment.appointment_participants == 1:
@@ -209,13 +256,6 @@ def add_participant_form(request, appointment_number):
                                 # This does not guarantee, but we can assume they are the same
                                 participant.client = client
                                 participant.save(update_fields=['client'])
-                        notification = Notification.objects.create(
-                            message = "Participant has successfully registered.",
-                            participant = participant,
-                            appointment = appointment,
-                            reference = appointment.appointment_number,
-                            classification = "PAR"
-                        )
                         _send_confirmation_email(appointment, participant)
                         messages.success(request, 'Registration completed. \
                             Thank you!')
@@ -228,7 +268,7 @@ def add_participant_form(request, appointment_number):
                     else:
                         print(partForm.errors)
                         messages.error(request,
-                                    (f'Please check that form is valid'))
+                                       ('Please check that form is valid'))
         partForm = ParticipantForm()
     context = {
         'appointment': appointment,

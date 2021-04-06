@@ -36,21 +36,12 @@ def checkout(request, appointment_number):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     appointment = Appointment.objects.get(appointment_number=appointment_number)
-    multiple = False
     rel_apps = []
     if appointment.isPaid:
         return redirect(reverse('already_paid', args=[appointment_number]))
     else:
-        if request.method == "GET":
-            multiApps = request.GET.get('multiple')
-            if multiApps == "true":
-                multiple = True
-                appNums = request.GET.get('appId')
-                appNums = appNums.split(" ")
-                for num in appNums:
-                    app = Appointment.objects.get(appointment_number=num)
-                    rel_apps.append(app)
         if request.method == "POST":
+            multiple = False
             form_data = {
                 'full_name': request.POST['full_name'],
                 'email': request.POST['email'],
@@ -65,41 +56,66 @@ def checkout(request, appointment_number):
             form = PaymentForm(form_data)
             if form.is_valid():
                 pid = request.POST.get('client_secret').split('_secret')[0]
-                multiple = request.POST['multiple']
+                multi = request.POST['multiple']
                 payment = form.save()
                 payment.stripe_pid = pid
-                if multiple == "true":
+                apps = []
+                if multi == "true":
                     rel_nums = request.POST['appointment_number']
                     rel_nums = rel_nums.split("/")
                     rel_nums.pop()
-                    apps = []
+                    multiple = True
                     for num in rel_nums:
                         num = num[0:11]
-                        print(num)
                         app = Appointment.objects.get(appointment_number=num)
                         apps.append(app)
-                        print(apps)
                         payment.appointment.add(app)
                         app.isPaid = True
                         app.save(update_fields=['isPaid'])
+                    notification = Notification.objects.create(
+                        message="Appointments has been successfully paid for.",
+                        reference=payment.receipt_no,
+                        payment=payment,
+                        classification="PAY"
+                    )
+                    for app in apps:
+                        notification.appointment.add(app)
+                    print("Sending multi confirmation")
                     _send_multiconfirmation_email(payment, apps)
                 else:
                     payment.appointment.add(appointment)
+                    appointment.isPaid = True
+                    appointment.save(update_fields=["isPaid"])
+                    print("Sending confirmation")
                     _send_confirmation_email(payment)
+                    notification = Notification.objects.create(
+                        message="Appointment has been successfully paid for.",
+                        reference=payment.receipt_no,
+                        payment=payment,
+                        classification="PAY",
+                    )
+                    notification.appointment.add(appointment)
                 payment.checkout_total = request.POST['checkout_total']
-                notification = Notification.objects.create(
-                    message = "Appointments has been successfully paid for.",
-                    reference = payment.receipt_no,
-                    classification = "PAY"
-                )
                 payment.save(update_fields=["checkout_total", "stripe_pid"])
+                print("Updated payment")
                 return redirect(reverse('checkout_success',
                                 args=[payment.receipt_no]))
             else:
                 messages.error(request, ('There was an error with your form. '
                                          'Please double check your \
 information.'))
+                print(form.errors)
         else:
+            multiple = False
+            if request.method == "GET":
+                multiApps = request.GET.get('multiple')
+                if multiApps == "true":
+                    multiple = True
+                    appNums = request.GET.get('appId')
+                    appNums = appNums.split(" ")
+                    for num in appNums:
+                        app = Appointment.objects.get(appointment_number=num)
+                        rel_apps.append(app)
             if multiApps != "true":
                 total = appointment.appointment_price
                 stripe_total = round(total * 100)
@@ -134,6 +150,7 @@ def checkout_success(request, receipt_no):
     appNums = payment.appointment.all()
     apps = []
     appStr = ""
+    multiple = False
     for num in appNums:
         appointment = Appointment.objects.get(appointment_number=num)
         apps.append(appointment)

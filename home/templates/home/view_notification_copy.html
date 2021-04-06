@@ -22,23 +22,17 @@
                 {% if notification.classification == "PAY" %}
                 <div class="row">
                     <div class="col-12">
-                        <h5>{{ notification.date_created }} - New Payment For Booking:
-                            {% for app in apps %}
-                            {% if forloop.first %}
-                            <a href="{% url 'view_app' app.appointment_number %}" class="d-inline-block link-specs">{{ app.appointment_number }}</a>
-                            {% else %}
-                            , <a href="{% url 'view_app' app.appointment_number %}" class="d-inline-block link-specs">{{ app.appointment_number }}</a>
-                            {% endif %}
-                            {% endfor %}
-                        </h5>
+                        <h5>{{ notification.date_created }} - New Payment For Booking 
+                        <!-- {% for app in appointment %}
+                        <a href="{% url 'view_app' appointment.appointment_number %}" class="d-inline-block link-specs">{{ app.appointment_number }}</a></h5>
+                        {% endfor %} -->
                     </div>
                 </div>
                 {% else %}
                 <div class="row">
                     <div class="col-12">
                         <h5>{{ notification.date_created }} - New {{ notification.get_classification_display }} Registration
-                            <a href="{% url 'view_participant' participant.pk %}" class="d-inline-block link-specs">{{ participant.first_name }} {{ participant.last_name }}</a>
-                        </h5>
+                        <a href="{% url 'view_participant' participant.pk %}" class="d-inline-block link-specs">{{ participant.first_name }} {{ participant.last_name }}</a></h5>
                     </div>
                 </div>
                 {% endif %}
@@ -165,13 +159,9 @@
                         <p>Booking Number:</p>
                     </div>
                     <div class="col-6 font-futura-light">
-                        {% for app in apps %}
-                        {% if forloop.first %}
-                        <a href="{% url 'view_app' app.appointment_number %}" class="link-specs">{{ app.appointment_number }}</a>
-                        {% else %}
-                        , <a href="{% url 'view_app' app.appointment_number %}" class="link-specs">{{ app.appointment_number }}</a>
-                        {% endif %}
-                        {% endfor %}
+                        <!-- {% for app in appointment %}
+                        <a href="{% url 'view_app' appointment.appointment_number %}" class="link-specs">{{ app.appointment_number }}</a>
+                        {% endfor %} -->
                     </div>
                 </div>
                 <div class="row">
@@ -179,11 +169,7 @@
                         <p>Booking Name:</p>
                     </div>
                     <div class="col-6 font-futura-light">
-                        {% for app in apps %}
-                        {% if forloop.first %}
-                        <a class="link-specs" href="{% url 'view_client' app.client.pk %}">{{ app.client }}</a>
-                        {% endif %}
-                        {% endfor %}
+                        <a class="link-specs" href="{% url 'view_client' appointment.client.pk %}">{{ appointment.client }}</a>
                     </div>
                 </div>
                 <div class="row">
@@ -191,15 +177,7 @@
                         <p>Booking Date:</p>
                     </div>
                     <div class="col-6 font-futura-light">
-                        <p>
-                            {% for app in apps %}
-                            {% if forloop.first %}
-                            {{ app.appointment_date }}
-                            {% else %}
-                            , {{ app.appointment_date }}
-                            {% endif %}
-                            {% endfor %}
-                        </p>
+                        <p>{{ appointment.appointment_date }}</p>
                     </div>
                 </div>
                 <div class="row">
@@ -207,11 +185,7 @@
                         <p>Booking Time:</p>
                     </div>
                     <div class="col-6 font-futura-light">
-                        <p>{% for app in apps %}
-                        {% if forloop.first %}
-                        {{ app.appointment_time }}
-                        {% endif %}
-                        {% endfor %}</p>
+                        <p>{{ appointment.appointment_time }}</p>
                     </div>
                 </div>
                 <div class="row">

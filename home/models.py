@@ -15,8 +15,7 @@ class Notification(models.Model):
     reference = models.CharField(null=False, blank=False, max_length=32)
     classification = models.CharField(max_length=3,
                                       choices=Classification.choices)
-    appointment = models.ForeignKey(Appointment, null=True, blank=True,
-                                    on_delete=models.SET_NULL)
+    appointment = models.ManyToManyField(Appointment)
     payment = models.ForeignKey(Payment, null=True, blank=True,
                                 on_delete=models.SET_NULL)
     participant = models.ForeignKey(Participant, null=True, blank=True,
