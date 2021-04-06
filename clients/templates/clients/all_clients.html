@@ -55,56 +55,60 @@
                             <thead>
                                 <th></th>
                                 <th data-sort="last_name"
-                                class="thead-sort"
                                     {% if current_sorting == 'last_name' %}
+                                        class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    Last Name
+                                    Last Name<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                                 <th data-sort="first_name"
-                                class="thead-sort"
                                     {% if current_sorting == 'first_name' %}
+                                        class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    First Name
+                                    First Name<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                                 <th data-sort="email_address"
-                                class="thead-sort"
                                     {% if current_sorting == 'email_address' %}
+                                        class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    Email Address
+                                    Email Address<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                                 <th data-sort="phone_number"
-                                class="thead-sort"
                                     {% if current_sorting == 'phone_number' %}
+                                        class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    Phone No.
+                                    Phone No.<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                             </thead>
                             <tbody>
@@ -147,67 +151,70 @@
                             <thead>
                                 <th></th>
                                 <th data-sort="last_name"
-                                class="thead-sort"
                                     {% if current_sorting == 'last_name' %}
+                                        {class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    Last Name
+                                    Last Name<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                                 <th data-sort="first_name"
-                                class="thead-sort"
                                     {% if current_sorting == 'first_name' %}
+                                        class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    First Name
+                                    First Name<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                                 <th data-sort="abbreviation"
-                                class="thead-sort" 
                                     {% if current_sorting == 'abbreviation' %}
+                                        class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
-                                    {% endif %}>ABBR.</th>
+                                    {% endif %}>ABBR.<span class="float-right"><i class="fas fa-chevron-down"></i></span</th>
                                 <th data-sort="email_address"
-                                class="thead-sort"
-                                    {% if current_sorting == 'email_address' %}
+                                    {% if current_sorting == 'email_address' %}class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    Email Address
+                                    Email Address<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                                 <th data-sort="phone_number"
-                                class="thead-sort"
-                                    {% if current_sorting == 'phone_number' %}
+                                    {% if current_sorting == 'phone_number' %}class="thead-sort thead-curr"
                                         {% if current_direction == 'asc' %}
                                         data-dir="desc"
                                         {% else %}
                                         data-dir="asc"
                                         {% endif %}
                                     {% else %}
+                                        class="thead-sort"
                                         data-dir="desc"
                                     {% endif %}>
-                                    Phone No.
+                                    Phone No.<span class="float-right"><i class="fas fa-chevron-down"></i></span
                                 </th>
                                 <th>Next Appt.</th>
                                 <th>Delete?</th>

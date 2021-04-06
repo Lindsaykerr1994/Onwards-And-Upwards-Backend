@@ -1,0 +1,19 @@
+<div class="modal fade" id="deleteReadModal" tabindex="-1" aria-labelledby="delete all read notifications modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete All Read Notifications?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are You Sure You Wish To Delete All Unread Notifications?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+        <a href="{% url 'delete_all_read' %}" class="btn btn-dark" id="confirm-delete">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>

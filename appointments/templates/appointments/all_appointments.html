@@ -54,49 +54,53 @@
                     <thead>
                         <th></th>
                         <th data-sort="appNum"
-                        class="thead-sort"
                         {% if current_sorting == 'appNum' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
+                            class="thead-sort thead-curr"
+                            {% if current_direction == 'asc' %}
+                            data-dir="desc"
                             {% else %}
-                                data-dir="desc"
-                            {% endif %}>Ref. No.</th>
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Ref. No.<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
                         <th data-sort="date"
-                        class="thead-sort"
                         {% if current_sorting == 'date' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
+                            {% if current_direction == 'asc' %}
+                            class="thead-sort thead-curr"
+                            data-dir="desc"
                             {% else %}
-                                data-dir="desc"
-                            {% endif %}>Date</th>
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Date<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
                         <th data-sort="client"
-                        class="thead-sort"
                         {% if current_sorting == 'client' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
+                            class="thead-sort thead-curr"
+                            {% if current_direction == 'asc' %}
+                            data-dir="desc"
                             {% else %}
-                                data-dir="desc"
-                            {% endif %}>Client</th>
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Client<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
                         <th data-sort="activity"
-                        class="thead-sort"
                         {% if current_sorting == 'activity' %}
-                                {% if current_direction == 'asc' %}
-                                data-dir="desc"
-                                {% else %}
-                                data-dir="asc"
-                                {% endif %}
+                            class="thead-sort thead-curr"
+                            {% if current_direction == 'asc' %}
+                            data-dir="desc"
                             {% else %}
-                                data-dir="desc"
-                            {% endif %}>Activity</th>
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Activity<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
                         <th></th>
                     </thead>
                     <tbody>
@@ -128,10 +132,54 @@
                 <table class="table table-hover">
                     <thead>
                         <th></th>
-                        <th>Ref. No.</th>
-                        <th>Date</th>
-                        <th>Client</th>
-                        <th>Activity</th>
+                        <th data-sort="appNum"
+                        {% if current_sorting == 'appNum' %}
+                            class="thead-sort thead-curr"
+                            {% if current_direction == 'asc' %}
+                            data-dir="desc"
+                            {% else %}
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Ref. No.<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
+                        <th data-sort="date"
+                        {% if current_sorting == 'date' %}
+                            {% if current_direction == 'asc' %}
+                            class="thead-sort thead-curr"
+                            data-dir="desc"
+                            {% else %}
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Date<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
+                        <th data-sort="client"
+                        {% if current_sorting == 'client' %}
+                            class="thead-sort thead-curr"
+                            {% if current_direction == 'asc' %}
+                            data-dir="desc"
+                            {% else %}
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Client<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
+                        <th data-sort="activity"
+                        {% if current_sorting == 'activity' %}
+                            class="thead-sort thead-curr"
+                            {% if current_direction == 'asc' %}
+                            data-dir="desc"
+                            {% else %}
+                            data-dir="asc"
+                            {% endif %}
+                        {% else %}
+                            class="thead-sort"
+                            data-dir="desc"
+                        {% endif %}>Activity<span class="float-right"><i class="fas fa-chevron-down"></i></span></th>
                         <th></th>
                     </thead>
                     <tbody>

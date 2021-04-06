@@ -238,10 +238,11 @@
                                 <h4 class="text-underline">Participants Details:</h4>
                                 </div>
                                 <div class="col-3 text-right">
+                                    {% if remaining_parts != 0 %}
                                     <button class="btn btn-light" data-toggle="modal" data-target="#addParticipantModal">
                                         <i class="fas fa-user-plus"></i> 
                                     </button>
-                                    <!-- <a href="{% url 'manually_add_participant' appointment.appointment_number %}" class="icon-btn"><i class="fas fa-user-plus"></i></a> -->
+                                    {% endif %}
                                 </div>
                             </div>
                             {% if participants %}

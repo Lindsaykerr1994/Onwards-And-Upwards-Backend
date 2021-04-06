@@ -50,6 +50,8 @@ def all_appointments(request):
                 return redirect(reverse('all_appointments'))
             queries = Q(client__last_name__icontains=query) | Q(client__first_name__icontains=query) | Q(course__name__icontains=query) | Q(activity__name__icontains=query)
             appointments = appointments.filter(queries)
+    if not sort:
+        appointments = appointments.order_by('-appointment_date')
     today = datetime.date.today()
     up_apps = []
     past_apps = []
@@ -82,10 +84,14 @@ def view_appoinment(request, appointment_number):
         payments = all_payments.filter(appointment=appointment)
     all_parts = Participant.objects.all()
     participants = all_parts.filter(appointment=appointment)
+    app_parts = appointment.appointment_participants
+    remaining_parts = app_parts - len(participants)
+    print(remaining_parts)
     rel_apps = appointment.rel_apps.all()
     context = {
         'appointment': appointment,
         'participants': participants,
+        'remaining_parts': remaining_parts,
         'all_parts': all_parts,
         'payments': payments,
         'rel_apps': rel_apps
@@ -147,7 +153,7 @@ def add_app(request):
         # Founnd using the entered information
         # Created using the entered information
         form = AppointmentForm(request.POST)
-        multiple_dates = request.POST['multiple_dates']
+        multiple_dates = request.POST.get('multiple_dates')
         if multiple_dates:
             dates = request.POST['appointment_date']
             dates = dates.split(",")

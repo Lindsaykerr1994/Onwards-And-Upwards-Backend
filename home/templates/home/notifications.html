@@ -20,24 +20,28 @@
                         <th>Ref. No.</th>
                         <th>Date</th>
                         <th>Message</th>
-                        <th></th>
+                        <th>
+                            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteReadModal">
+                                <i class="fas fa-trash text-danger"></i>
+                            </button>
+                        </th>
                     </thead>
                     <tbody>
                         {% if notifications %}
                         {% for note in notifications %}
                         <tr>
                             {% if note.read %}
-                            <td><i class="far fa-dot-circle text-primary ml-2"></i></td>
+                            <td></td>
                             {% else %}
-                            <td><i class="fas fa-dot-circle text-primary ml-2"></i></td>
+                            <td><i class="fas fa-exclamation-circle text-primary ml-2"></i></td>
                             {% endif %}
                             <td>{{ note.reference }}</td>
                             <td>{{ note.date_created }}</td>
                             <td><a class="text-black" href="{% url 'view_notification' note.pk %}">{{ note.get_classification_display }} - {{ note.message }}</a></td>
-                            <td class="delete-btn" data-appid="{{ appointment.appointment_number }}">
-                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteAppModal">
+                            <td>
+                                <a href="{% url 'delete_note' note.pk %}" class="btn btn-light">
                                     <i class="fas fa-trash text-danger"></i>
-                                </button>
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -53,4 +57,5 @@
             </div>
         </div>
     </div>
+    {% include 'includes/modals/delete_read.html' %}
 {% endblock %}

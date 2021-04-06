@@ -43,8 +43,13 @@ def all_participants(request):
                 return redirect(reverse('all_participants'))
             queries = Q(participant__last_name__icontains=query) | Q(participant__first_name__icontains=query)
             participants = participants.filter(queries)
+    if not sort:
+        participants = participants.order_by('last_name')
     context = {
-        'participants': participants
+        'participants': participants,
+        'current_sorting': sort,
+        'current_direction': direction,
+        'search_term': query
     }
     return render(request, 'riskforms/all_participants.html', context)
 

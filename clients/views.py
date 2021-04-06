@@ -45,6 +45,8 @@ def all_clients(request):
                 return redirect(reverse('all_clients'))
             queries = Q(last_name__icontains=query) | Q(first_name__icontains=query) | Q(abbreviation__iexact=query.upper())
             clients = clients.filter(queries)
+    if not sort:
+        clients = clients.order_by('last_name')
     appointments = Appointment.objects.all()
     appointments = appointments.order_by('-appointment_date')
 

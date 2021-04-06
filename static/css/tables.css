@@ -24,6 +24,23 @@ tbody {
 tr {
     height: 50px !important;
 }
+th.thead-sort.thead-curr {
+    background-color: rgba(0,0,0,0.2);
+    color: white;
+}
+th.thead-sort span{
+    opacity: 0;
+    transition: 0.4s;
+}
+th.thead-sort:hover span{
+    opacity: 1;
+}
+th.thead-sort.thead-curr span{
+    opacity: 1;
+}
+th.thead-sort.thead-curr[data-dir="asc"] span{
+    transform: rotate(180deg);
+}
 td a {
     color: #000 !important;
 }
